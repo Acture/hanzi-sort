@@ -27,6 +27,8 @@
             pkgs.just
             pkgs.bash
             pkgs.curl
+            pkgs.python314
+            pkgs.python314Packages.pypinyin
           ];
 
           shellHook = ''
