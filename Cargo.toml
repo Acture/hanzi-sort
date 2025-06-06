@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }
+derive_builder = { version = "0.20.2", features = ["default", "clippy"] }
 phf = { version = "0.11.3", features = ["default"] }
 serde = { version = "1.0.219", features = ["default", "derive", "std", "alloc", "rc"] }
 toml = { version = "0.8.22", features = ["default"] }
