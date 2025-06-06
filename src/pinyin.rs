@@ -5,6 +5,11 @@ pub fn pinyin(s: &str) -> Vec<String> {
 	unimplemented!()
 }
 
+pub struct PinyinRecord {
+	pub pinyin: Vec<&'static str>,
+	pub character: char,
+}
+
 
 #[cfg(test)]
 mod tests {

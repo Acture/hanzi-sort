@@ -34,9 +34,9 @@ def convert_pinyin_to_csv(src: Path, dst: Path) -> None:
 			if line and not line.startswith("#"):
 				try:
 					codepoint, rest = map(str.strip, line.strip().split(":"))
-					pinyin, char = map(str.strip, rest.strip().split("#"))
-					pinyin = normalize_pinyin(pinyin)
-					fout.write(f"{codepoint},{pinyin},{char}\n")
+					pinyins, char = map(str.strip, rest.strip().split("#"))
+					pinyins = "|".join(map(normalize_pinyin, pinyins.split(",")))
+					fout.write(f"{codepoint},{pinyins},{char}\n")
 				except:
 					print(f"Error parsing line: {line}")
 					raise
