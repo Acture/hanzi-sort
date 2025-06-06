@@ -2,13 +2,17 @@ use phf_codegen::Map;
 use std::{fs::File, io::{BufReader, BufWriter, Write}, path::Path};
 
 fn main() {
-	println!("cargo:rerun-if-changed=data/pinyin.csv");
+	let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+	let project_root = Path::new(&manifest_dir);
+	let data_dir = project_root.join("data");
+	let data_csv = data_dir.join("pinyin.csv");
+	println!("cargo:rerun-if-changed={}", data_csv.display());
 
-	let out_path = Path::new("src/generated").join("pinyin_map.rs");
+	let src_dir = project_root.join("src");
+	let generated_dir = src_dir.join("generated");
+	let out_path = generated_dir.join("pinyin_map.rs");
 	let mut file = BufWriter::new(File::create(&out_path).unwrap());
-
-	let csv_path = Path::new("data/pinyin.csv");
-	let reader = BufReader::new(File::open(csv_path).unwrap());
+	let reader = BufReader::new(File::open(data_csv).unwrap());
 	let mut rdr = csv::Reader::from_reader(reader);
 
 	let mut map = Map::new();

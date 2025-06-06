@@ -1,8 +1,16 @@
+use crate::generated::pinyin_map::PINYIN_MAP;
 pub fn pinyin(s: &str) -> Vec<String> {
 	// This function should convert a string to its Pinyin representation.
 	// The implementation is not provided here, as it depends on external libraries or custom logic.
 	// You can use libraries like `pinyin` or `pinyin-rs` for this purpose.
-	unimplemented!()
+	s.chars()
+		.filter_map(|c| {
+			PINYIN_MAP.get(&(c as u32)).map(|(_, pinyin_vec)| {
+				pinyin_vec.iter().map(|&p| p.to_string()).collect::<Vec<String>>()
+			})
+		})
+		.flatten()
+		.collect()
 }
 
 pub struct PinyinRecord {
