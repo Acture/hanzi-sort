@@ -44,11 +44,9 @@
 			  lockFile = ./Cargo.lock;
 			};
 
-			# 若有多个二进制或复杂构建需求，也可配置 override
-			# postInstall = "mv $out/bin/xxx $out/bin/pinyin-sort";
 			};
-	  };
+		};
 
-	  flake = { };
+		flake = { };
 	};
 }
