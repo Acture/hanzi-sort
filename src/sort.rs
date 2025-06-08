@@ -19,8 +19,6 @@ pub fn compare_pinyin(a: Vec<PinYinRecord>, b: Vec<PinYinRecord>) -> Ordering {
 	let len = a.len().min(b.len());
 
 	for i in 0..len {
-		let temp_a = String::new();
-		let temp_b = String::new();
 		let pa = a[i].pinyin.first().unwrap_or(&"");
 		let pb = b[i].pinyin.first().unwrap_or(&"");
 

@@ -1,7 +1,7 @@
 use crate::generated::pinyin_map::PINYIN_MAP;
 use crate::PINYIN_OVERRIDE;
 use derive_builder::Builder;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 #[derive(Debug, Clone, PartialEq, Eq, Builder, Serialize)]
 pub struct PinYinRecord {
