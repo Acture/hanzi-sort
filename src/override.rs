@@ -1,10 +1,10 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct PinyinOverride {
-	pub char_override: HashMap<char, Vec<String>>,
+	pub char_override: HashMap<char, String>,
 	pub phrase_override: HashMap<String, Vec<String>>,
 }
 impl PinyinOverride {

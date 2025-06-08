@@ -1,7 +1,9 @@
 use crate::generated::pinyin_map::PINYIN_MAP;
+use crate::PINYIN_OVERRIDE;
 use derive_builder::Builder;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Eq, Builder)]
+#[derive(Debug, Clone, PartialEq, Eq, Builder, Serialize)]
 pub struct PinYinRecord {
 	pub pinyin: Vec<&'static str>,
 	pub character: char,
@@ -11,9 +13,33 @@ pub fn pinyin_of<T: ToString + ?Sized>(s: &T) -> Vec<PinYinRecord> {
 	// This function should convert a string to its Pinyin representation.
 	// The implementation is not provided here, as it depends on external libraries or custom logic.
 	// You can use libraries like `pinyin` or `pinyin-rs` for this purpose.
-	s.to_string()
+
+	let s_string = s.to_string();
+
+	if let Some(override_data) = PINYIN_OVERRIDE.get().and_then(|opt| opt.as_ref()) {
+		if let Some(pinyin) = override_data.phrase_override.get(&s_string) {
+			return s_string.chars().zip(pinyin.iter())
+				.map(|(c, pinyin)| PinYinRecord {
+					pinyin: vec![pinyin.as_str()],
+					character: c,
+				})
+				.collect();
+		}
+	}
+
+	s_string
 		.chars()
 		.filter_map(|c| {
+			if let Some(override_data) = PINYIN_OVERRIDE.get().and_then(|opt| opt.as_ref()) {
+				if override_data.char_override.contains_key(&c) {
+					return Some(
+						PinYinRecord {
+							pinyin: vec![override_data.char_override[&c].as_str()],
+							character: c,
+						}
+					);
+				}
+			}
 			PINYIN_MAP.get(&(c as u32)).map(|(_char, pinyin_vec)| {
 				PinYinRecord {
 					pinyin: pinyin_vec.to_vec(),
