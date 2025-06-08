@@ -1,4 +1,12 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
+
+#[derive(Copy, Clone, Debug, ValueEnum)]
+pub enum Align {
+	Left,
+	Center,
+	Right,
+	Even, // 可选：多字时均匀插入空格
+}
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -21,16 +29,20 @@ pub struct Args {
 	#[arg(long = "spaced-every", help = "Insert a blank line every N lines")]
 	pub spaced_every: Option<usize>,
 
-	#[arg(
-		long = "fixed-width",
-		help = "Set fixed width for each entry, useful for aligning columns"
-	)]
-	pub fixed_width: Option<usize>,
+	#[arg(long = "entry-width", help = "Pad each entry to this width (excluding spacing)")]
+	pub entry_width: Option<usize>,
 
 	#[arg(
 		long = "align",
-		default_value = "left",
-		help = "Alignment of entries: left, center, right"
+		value_enum,
+		default_value_t = Align::Left,
+		help = "Alignment strategy: left, center, right, even"
 	)]
-	pub align: String,
+	pub align: Align,
+
+	#[arg(long = "cell-width", help = "Total width of each output cell (entry + spacing)")]
+	pub cell_width: Option<usize>,
+
+	#[arg(long = "pad-char", default_value = " ", help = "Character used for padding")]
+	pub pad_char: char,
 }

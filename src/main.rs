@@ -7,6 +7,10 @@ mod generated;
 mod r#override;
 mod args;
 
+use crate::args::Args;
+use clap::Parser;
+
 fn main() {
-	println!("Hello, world!");
+	let args = Args::parse();
+	println!("Parsed arguments: {:?}", args);
 }
