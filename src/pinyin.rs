@@ -46,6 +46,7 @@ mod tests {
 				.expect("Failed to build PinYinRecord for 字"),
 		];
 		let result = pinyin_of(input);
+		println!("Result: {:?}", result);
 		assert_eq!(result, expected);
 	}
 
@@ -54,6 +55,7 @@ mod tests {
 		let input = "";
 		let expected = vec![];
 		let result = pinyin_of(input);
+		println!("Result: {:?}", result);
 		assert_eq!(result, expected);
 	}
 }
