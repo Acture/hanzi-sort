@@ -1,12 +1,5 @@
-use clap::{Parser, ValueEnum};
-
-#[derive(Copy, Clone, Debug, ValueEnum)]
-pub enum Align {
-	Left,
-	Center,
-	Right,
-	Even, // 可选：多字时均匀插入空格
-}
+use crate::format::Align;
+use clap::Parser;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -26,8 +19,8 @@ pub struct Args {
 	#[arg(long = "columns", help = "Number of entries per row")]
 	pub columns: Option<usize>,
 
-	#[arg(long = "spaced-every", help = "Insert a blank line every N lines")]
-	pub spaced_every: Option<usize>,
+	#[arg(long = "blank_every", help = "Insert a blank line every N lines")]
+	pub blank_every: Option<usize>,
 
 	#[arg(long = "entry-width", help = "Pad each entry to this width (excluding spacing)")]
 	pub entry_width: Option<usize>,
@@ -45,4 +38,7 @@ pub struct Args {
 
 	#[arg(long = "pad-char", default_value = " ", help = "Character used for padding")]
 	pub pad_char: char,
+
+	#[arg(long = "line-ending", default_value = "\n", help = "Line ending character")]
+	pub line_ending: char,
 }
