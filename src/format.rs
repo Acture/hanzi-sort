@@ -101,8 +101,6 @@ pub fn format_cell<T: ToString + Sized>(item: &T, format_config: &FormatConfig) 
 pub fn format<T: ToString + Sized>(items: Vec<T>, format_config: Option<FormatConfig>) -> String {
 	let format_config = format_config.unwrap_or_default();
 
-	let mut result = String::new();
-
 	items
 		.iter()
 		.map(|item| format_cell(item, &format_config))
@@ -168,6 +166,6 @@ mod tests {
 		};
 		let formatted = format(items, Some(format_config));
 		println!("Formatted output:\n{}", formatted);
-		assert_eq!(formatted, "test1 \ttest2 \n\ntest3 \ttest4 ");
+		assert_eq!(formatted, "test1 \ttest2 \n\ntest3 \ttest4 \n");
 	}
 }

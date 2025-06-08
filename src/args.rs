@@ -8,7 +8,8 @@ pub struct CliArgs {
 	#[arg(short = 'f', long = "file", help = "Input file or directory path (can be multiple)")]
 	pub input_files: Vec<String>,
 
-	#[arg(short = 't', long = "text", help = "Directly input text data (can be multiple)")]
+	#[arg(short = 't', long = "text", help = "Directly input text data (can be multiple)", num_args = 1..
+	)]
 	pub input_texts: Vec<String>,
 
 	#[arg(short = 'o', long = "output", help = "Output file path, defaults to stdout")]

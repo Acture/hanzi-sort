@@ -17,10 +17,23 @@ static PINYIN_OVERRIDE: OnceLock<Option<r#override::PinyinOverride>> = OnceLock:
 fn main() {
 	let args = CliArgs::parse();
 
-	if args.input_files.is_empty() && args.input_texts.is_empty() {
+	let input_data = if !args.input_files.is_empty() {
+		args.input_files
+			.iter()
+			.map(|file| std::fs::read_to_string(file).unwrap_or_else(|e| {
+				eprintln!("Error reading file {}: {}", file, e);
+				String::new()
+			}))
+			.collect::<Vec<_>>()
+	} else if !args.input_texts.is_empty() {
+		args.input_texts
+			.iter()
+			.map(|text| text.to_string())
+			.collect::<Vec<_>>()
+	} else {
 		CliArgs::command().print_help().unwrap();
 		std::process::exit(0);
-	}
+	};
 
 	let format_config = format::FormatConfig::with_overrides(&args);
 
@@ -41,5 +54,9 @@ fn main() {
 		eprintln!("Failed to set PINYIN_OVERRIDE");
 	});
 
-	println!("Format Config: {:?}", format_config);
+	let sorted_data = sort::sort_by_pinyin(input_data);
+
+	let formatted_output = format::format(sorted_data, Some(format_config));
+
+	println!("{}", formatted_output);
 }
