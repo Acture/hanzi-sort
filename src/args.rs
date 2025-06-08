@@ -1,9 +1,10 @@
 use crate::format::Align;
 use clap::Parser;
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
-pub struct Args {
+pub struct CliArgs {
 	#[arg(short = 'f', long = "file", help = "Input file or directory path (can be multiple)")]
 	pub input_files: Vec<String>,
 
@@ -14,13 +15,13 @@ pub struct Args {
 	pub output_path: Option<String>,
 
 	#[arg(short = 'c', long = "config", help = "Override PinYin configuration file path")]
-	pub config_path: Option<String>,
+	pub config_path: Option<PathBuf>,
 
 	#[arg(long = "columns", help = "Number of entries per row")]
-	pub columns: Option<usize>,
+	pub columns_per_row: Option<usize>,
 
-	#[arg(long = "blank_every", help = "Insert a blank line every N lines")]
-	pub blank_every: Option<usize>,
+	#[arg(long = "blank-every", help = "Insert a blank line every N lines")]
+	pub blank_per: Option<usize>,
 
 	#[arg(long = "entry-width", help = "Pad each entry to this width (excluding spacing)")]
 	pub entry_width: Option<usize>,
@@ -28,17 +29,16 @@ pub struct Args {
 	#[arg(
 		long = "align",
 		value_enum,
-		default_value_t = Align::Left,
 		help = "Alignment strategy: left, center, right, even"
 	)]
-	pub align: Align,
+	pub align: Option<Align>,
 
-	#[arg(long = "cell-width", help = "Total width of each output cell (entry + spacing)")]
-	pub cell_width: Option<usize>,
+	#[arg(long = "padding-char", default_value = " ", help = "Character used for padding")]
+	pub padding_char: Option<char>,
 
-	#[arg(long = "pad-char", default_value = " ", help = "Character used for padding")]
-	pub pad_char: char,
+	#[arg(long = "separator", default_value = "\t", help = "Character used to separate entries")]
+	pub separator: Option<char>,
 
 	#[arg(long = "line-ending", default_value = "\n", help = "Line ending character")]
-	pub line_ending: char,
+	pub line_ending: Option<char>,
 }

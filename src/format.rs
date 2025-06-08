@@ -1,3 +1,4 @@
+use crate::args::CliArgs;
 use clap::ValueEnum;
 
 #[derive(Copy, Clone, Debug, ValueEnum, Default)]
@@ -12,7 +13,7 @@ pub enum Align {
 #[derive(Copy, Clone, Debug)]
 pub struct FormatConfig {
 	pub columns_per_row: Option<usize>,
-	pub blank_every: Option<usize>,
+	pub blank_per: Option<usize>,
 	pub entry_width: Option<usize>,
 	pub align: Align,
 	pub padding_char: char,
@@ -20,17 +21,34 @@ pub struct FormatConfig {
 	pub line_ending: char,
 }
 
+
 impl Default for FormatConfig {
 	fn default() -> Self {
 		Self {
 			columns_per_row: Some(6),
-			blank_every: Some(7),
+			blank_per: Some(7),
 			entry_width: Some(4),
 			align: Align::Center,
 			padding_char: ' ',
 			separator: '\t',
 			line_ending: '\n',
 		}
+	}
+}
+
+impl FormatConfig {
+	pub fn with_overrides(args: &CliArgs) -> Self {
+		let mut config = FormatConfig::default();
+		if let Some(v) = args.columns_per_row { config.columns_per_row = Some(v); }
+		if let Some(v) = args.blank_per { config.blank_per = Some(v); }
+		if let Some(v) = args.entry_width { config.entry_width = Some(v); }
+		if let Some(v) = args.padding_char { config.padding_char = v; }
+		if let Some(v) = args.separator { config.separator = v; }
+		if let Some(v) = args.line_ending { config.line_ending = v; }
+		if let Some(align) = args.align {
+			config.align = align;
+		}
+		config
 	}
 }
 
@@ -93,7 +111,7 @@ pub fn format<T: ToString + Sized>(items: Vec<T>, format_config: Option<FormatCo
 		.enumerate()
 		.flat_map(|(i, chunk)| {
 			let mut row = vec![chunk.join(&format_config.separator.to_string())];
-			if let Some(n) = format_config.blank_every {
+			if let Some(n) = format_config.blank_per {
 				if n > 0 && (i + 1) % n == 0 {
 					row.push(String::new()); // 插入空行
 				}
@@ -145,7 +163,7 @@ mod tests {
 			columns_per_row: Some(2),
 			entry_width: Some(6),
 			align: Align::Center,
-			blank_every: Some(1),
+			blank_per: Some(1),
 			..Default::default()
 		};
 		let formatted = format(items, Some(format_config));
