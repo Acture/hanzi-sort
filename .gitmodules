@@ -1,3 +1,4 @@
 [submodule "vendor/pinyin-data"]
 	path = vendor/pinyin-data
 	url = https://github.com/mozillazg/pinyin-data.git
+	branch = master
