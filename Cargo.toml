@@ -5,9 +5,10 @@ edition = "2024"
 license = "AGPL-3.0-only"
 authors = ["Acture <acturea@gmail.com>"]
 readme = "README.md"
-documentation = "https://github.com/acture/d2typ"
-homepage = "https://github.com/acture/d2typ"
-repository = "https://github.com/acture/d2typ"
+description = "A tool to sort pinyin"
+documentation = "https://github.com/acture/pinyin-sort"
+homepage = "https://github.com/acture/pinyin-sort"
+repository = "https://github.com/acture/pinyin-sort"
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }
