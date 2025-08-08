@@ -2,13 +2,19 @@
 name = "pinyin-sort"
 version = "0.1.0"
 edition = "2024"
+license = "AGPL-3.0-only"
+authors = ["Acture <acturea@gmail.com>"]
+readme = "README.md"
+documentation = "https://github.com/acture/d2typ"
+homepage = "https://github.com/acture/d2typ"
+repository = "https://github.com/acture/d2typ"
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }
 derive_builder = { version = "0.20.2", features = ["default", "clippy"] }
-phf = { version = "0.11.3", features = ["default"] }
+phf = { version = "0.12.1", features = ["default"] }
 serde = { version = "1.0.219", features = ["default", "derive", "std", "alloc", "rc"] }
-toml = { version = "0.8.22", features = ["default"] }
+toml = { version = "0.9.5", features = ["default"] }
 lazy_static = "1.5.0"
 
 [build-dependencies]
