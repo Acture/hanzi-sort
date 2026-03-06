@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use crate::error::{PinyinSortError, Result};
 use crate::format::FormatConfig;
+use crate::r#override::PinyinOverride;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InputSource {
@@ -21,17 +22,15 @@ impl InputSource {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RuntimeConfig {
     pub input: InputSource,
-    pub output_path: Option<PathBuf>,
-    pub override_path: Option<PathBuf>,
     pub format: FormatConfig,
+    pub override_data: Option<PinyinOverride>,
 }
 
 impl RuntimeConfig {
     pub fn new(
         input: InputSource,
-        output_path: Option<PathBuf>,
-        override_path: Option<PathBuf>,
         format: FormatConfig,
+        override_data: Option<PinyinOverride>,
     ) -> Result<Self> {
         if input.is_empty() {
             return Err(PinyinSortError::InvalidArgument(
@@ -41,9 +40,8 @@ impl RuntimeConfig {
 
         Ok(Self {
             input,
-            output_path,
-            override_path,
             format: format.validate()?,
+            override_data,
         })
     }
 }
