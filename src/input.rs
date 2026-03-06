@@ -4,7 +4,7 @@ use std::io::{BufRead, BufReader};
 use crate::config::InputSource;
 use crate::error::{PinyinSortError, Result};
 
-pub fn read_input_lines(source: &InputSource) -> Result<Vec<String>> {
+pub(crate) fn read_input_lines(source: &InputSource) -> Result<Vec<String>> {
     match source {
         InputSource::Files(paths) => {
             let mut items = Vec::new();

@@ -1,9 +1,8 @@
-use clap::ValueEnum;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
 use crate::error::{PinyinSortError, Result};
 
-#[derive(Copy, Clone, Debug, ValueEnum, Default, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub enum Align {
     Left,
     #[default]
