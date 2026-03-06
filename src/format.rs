@@ -230,4 +230,34 @@ mod tests {
         .validate();
         assert!(result.is_err());
     }
+
+    #[test]
+    fn test_validate_rejects_zero_entry_width() {
+        let result = FormatConfig {
+            entry_width: 0,
+            ..Default::default()
+        }
+        .validate();
+        assert_eq!(
+            result
+                .expect_err("zero entry width should fail")
+                .to_string(),
+            "--entry-width must be greater than 0"
+        );
+    }
+
+    #[test]
+    fn test_validate_rejects_wide_padding_char() {
+        let result = FormatConfig {
+            padding_char: '汉',
+            ..Default::default()
+        }
+        .validate();
+        assert_eq!(
+            result
+                .expect_err("wide padding char should fail")
+                .to_string(),
+            "--padding-char must have display width 1"
+        );
+    }
 }
