@@ -1,0 +1,82 @@
+name: Sync Homebrew Tap
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to sync, for example v0.2.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    env:
+      TAP_REPOSITORY: Acture/homebrew-ac
+      FORMULA_DIR: Formula
+      FORMULA_NAME: hanzi-sort.rb
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            tag="${{ github.event.release.tag_name }}"
+          else
+            tag="${{ inputs.tag }}"
+          fi
+          version="${tag#v}"
+          tarball_url="https://github.com/Acture/hanzi-sort/archive/refs/tags/${tag}.tar.gz"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tarball_url=${tarball_url}" >> "$GITHUB_OUTPUT"
+
+      - name: Download source tarball
+        run: curl -fsSL "${{ steps.release.outputs.tarball_url }}" -o release.tar.gz
+
+      - name: Compute SHA-256
+        id: checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256=$(sha256sum release.tar.gz | awk '{print $1}')
+          echo "sha256=${sha256}" >> "$GITHUB_OUTPUT"
+
+      - name: Check out tap repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TAP_REPOSITORY }}
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Generate formula
+        run: |
+          mkdir -p "homebrew-tap/${{ env.FORMULA_DIR }}"
+          python3 scripts/update_homebrew_formula.py \
+            --version "${{ steps.release.outputs.version }}" \
+            --sha256 "${{ steps.checksum.outputs.sha256 }}" \
+            --output "homebrew-tap/${{ env.FORMULA_DIR }}/${{ env.FORMULA_NAME }}"
+
+      - name: Commit and push tap update
+        working-directory: homebrew-tap
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- "${{ env.FORMULA_DIR }}"; then
+            echo "No formula changes detected."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "${{ env.FORMULA_DIR }}/${{ env.FORMULA_NAME }}"
+          git commit -m "hanzi-sort ${{ steps.release.outputs.version }}"
+          git push
