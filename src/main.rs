@@ -1,62 +1,86 @@
-mod config;
-mod format;
-mod pinyin;
-mod sort;
-
-mod generated;
-mod r#override;
 mod args;
 
-use crate::args::CliArgs;
+use std::io::Write;
+
 use clap::{CommandFactory, Parser};
-use std::sync::OnceLock;
+use pinyin_sort::{
+    FormatConfig, InputSource, PinyinContext, PinyinOverride, Result, RuntimeConfig, format_items,
+    read_input_lines, sort_strings,
+};
 
-
-static PINYIN_OVERRIDE: OnceLock<Option<r#override::PinyinOverride>> = OnceLock::new();
+use crate::args::CliArgs;
 
 fn main() {
-	let args = CliArgs::parse();
+    if let Err(error) = run() {
+        eprintln!("{error}");
+        std::process::exit(1);
+    }
+}
 
-	let input_data = if !args.input_files.is_empty() {
-		args.input_files
-			.iter()
-			.map(|file| std::fs::read_to_string(file).unwrap_or_else(|e| {
-				eprintln!("Error reading file {}: {}", file, e);
-				String::new()
-			}))
-			.collect::<Vec<_>>()
-	} else if !args.input_texts.is_empty() {
-		args.input_texts
-			.iter()
-			.map(|text| text.to_string())
-			.collect::<Vec<_>>()
-	} else {
-		CliArgs::command().print_help().unwrap();
-		std::process::exit(0);
-	};
+fn run() -> Result<()> {
+    let args = CliArgs::parse();
+    if args.input_files.is_empty() && args.input_texts.is_empty() {
+        let mut command = CliArgs::command();
+        command
+            .print_help()
+            .map_err(|source| pinyin_sort::PinyinSortError::io("failed to print help", source))?;
+        println!();
+        return Ok(());
+    }
 
-	let format_config = format::FormatConfig::with_overrides(&args);
+    let input = if !args.input_files.is_empty() {
+        InputSource::Files(args.input_files)
+    } else {
+        InputSource::Text(args.input_texts)
+    };
 
-	let r#override = if let Some(config_path) = args.config_path {
-		let overrides = r#override::PinyinOverride::load_from_file(&config_path);
-		match overrides {
-			Ok(overrides) => Some(overrides),
-			Err(e) => {
-				eprintln!("Error loading override config: {}", e);
-				None
-			}
-		}
-	} else {
-		None
-	};
+    let mut format = FormatConfig::default();
+    if let Some(value) = args.columns_per_row {
+        format.columns_per_row = value;
+    }
+    if let Some(value) = args.blank_per {
+        format.blank_per = (value > 0).then_some(value);
+    }
+    if let Some(value) = args.entry_width {
+        format.entry_width = value;
+    }
+    if let Some(value) = args.align {
+        format.align = value;
+    }
+    if let Some(value) = args.padding_char {
+        format.padding_char = value;
+    }
+    if let Some(value) = args.separator {
+        format.separator = value;
+    }
+    if let Some(value) = args.line_ending {
+        format.line_ending = value;
+    }
 
-	PINYIN_OVERRIDE.set(r#override).unwrap_or_else(|_| {
-		eprintln!("Failed to set PINYIN_OVERRIDE");
-	});
+    let config = RuntimeConfig::new(input, args.output_path, args.config_path, format)?;
+    let override_data = if let Some(path) = config.override_path.as_ref() {
+        Some(PinyinOverride::load_from_file(path)?)
+    } else {
+        None
+    };
+    let context = PinyinContext::new(override_data);
+    let input_data = read_input_lines(&config.input)?;
+    let sorted = sort_strings(input_data, &context);
+    let output = format_items(&sorted, &config.format);
 
-	let sorted_data = sort::sort_by_pinyin(input_data);
+    if let Some(path) = config.output_path.as_ref() {
+        std::fs::write(path, output).map_err(|source| {
+            pinyin_sort::PinyinSortError::io(
+                format!("failed to write output file {}", path.display()),
+                source,
+            )
+        })?;
+    } else {
+        let mut stdout = std::io::stdout().lock();
+        stdout
+            .write_all(output.as_bytes())
+            .map_err(|source| pinyin_sort::PinyinSortError::io("failed to write stdout", source))?;
+    }
 
-	let formatted_output = format::format(sorted_data, Some(format_config));
-
-	println!("{}", formatted_output);
+    Ok(())
 }
