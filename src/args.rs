@@ -70,7 +70,7 @@ pub struct CliArgs {
     #[arg(
         short = 'c',
         long = "config",
-        help = "Override PinYin configuration file path"
+        help = "Override pronunciation configuration file path"
     )]
     pub config_path: Option<PathBuf>,
 
@@ -176,7 +176,7 @@ mod tests {
                 .expect("system time should be after UNIX_EPOCH")
                 .as_nanos();
             let path = std::env::temp_dir().join(format!(
-                "pinyin-sort-args-test-{}-{}",
+                "hanzi-sort-args-test-{}-{}",
                 std::process::id(),
                 unique
             ));
@@ -197,16 +197,16 @@ mod tests {
 
     #[test]
     fn detects_whether_any_input_was_provided() {
-        let args = CliArgs::parse_from(["pinyin-sort", "-t", "赵四"]);
+        let args = CliArgs::parse_from(["hanzi-sort", "-t", "赵四"]);
         assert!(args.has_input());
 
-        let args = CliArgs::parse_from(["pinyin-sort"]);
+        let args = CliArgs::parse_from(["hanzi-sort"]);
         assert!(!args.has_input());
     }
 
     #[test]
     fn converts_zero_blank_every_to_none() {
-        let args = CliArgs::parse_from(["pinyin-sort", "-t", "赵四", "--blank-every", "0"]);
+        let args = CliArgs::parse_from(["hanzi-sort", "-t", "赵四", "--blank-every", "0"]);
         let (config, output_path) = args
             .into_runtime_parts()
             .expect("runtime config should be created");
@@ -218,7 +218,7 @@ mod tests {
     #[test]
     fn applies_format_option_overrides() {
         let args = CliArgs::parse_from([
-            "pinyin-sort",
+            "hanzi-sort",
             "-t",
             "赵四",
             "--columns",
@@ -271,7 +271,7 @@ mod tests {
             .expect("override file should be written");
 
         let args = CliArgs::parse_from([
-            "pinyin-sort",
+            "hanzi-sort",
             "-t",
             "重要",
             "--config",
@@ -296,7 +296,7 @@ mod tests {
         let missing_path = temp.path().join("missing.toml");
 
         let args = CliArgs::parse_from([
-            "pinyin-sort",
+            "hanzi-sort",
             "-t",
             "重要",
             "--config",

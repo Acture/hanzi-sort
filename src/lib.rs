@@ -1,13 +1,13 @@
 //! ```compile_fail
-//! use pinyin_sort::SortKey;
+//! use hanzi_sort::SortKey;
 //! ```
 //!
 //! ```compile_fail
-//! use pinyin_sort::SortToken;
+//! use hanzi_sort::SortToken;
 //! ```
 //!
 //! ```compile_fail
-//! use pinyin_sort::compare_sort_key;
+//! use hanzi_sort::compare_sort_key;
 //! ```
 
 pub mod app;

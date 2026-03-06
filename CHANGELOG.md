@@ -9,6 +9,7 @@
 
 ### Changed
 
+- rename the project from `pinyin-sort` to `hanzi-sort`; this is a hard rename with no compatibility binary alias
 - make `--file` read one non-blank line per record and reject directory inputs
 - make `--file` and `--text` mutually exclusive
 - wire `-o/--output` to write to a file instead of stdout

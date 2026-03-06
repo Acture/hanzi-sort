@@ -1,5 +1,5 @@
 {
-	description = "Pinyin Sort CLI Tool with Sparse Checkout";
+	description = "Hanzi Sort CLI Tool with Sparse Checkout";
 	inputs = {
 		flake-parts.url = "github:hercules-ci/flake-parts";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -18,7 +18,7 @@
 
 		perSystem = { pkgs, system, ... }: {
 			devShells.default = pkgs.mkShell {
-			name = "pinyin-sort-dev";
+			name = "hanzi-sort-dev";
 			buildInputs = [
 				pkgs.rustup	# or pkgs.rustc + pkgs.cargo if you prefer static
 				pkgs.cargo
@@ -30,13 +30,13 @@
 				pkgs.python314Packages.pypinyin
 			];
 			shellHook = ''
-				echo "[*] Welcome to the pinyin-sort dev shell."
+				echo "[*] Welcome to the hanzi-sort dev shell."
 				export RUST_BACKTRACE=1
 			'';
 		};
 
 		packages.default = pkgs.rustPlatform.buildRustPackage  {
-			pname = "pinyin-sort";
+			pname = "hanzi-sort";
 			version = "0.1.0";
 
 			src = ./.;

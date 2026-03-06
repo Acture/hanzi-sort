@@ -1,87 +1,122 @@
-# pinyin-sort
+# hanzi-sort
 
-A Rust CLI and library for sorting Chinese strings by Hanyu Pinyin (tone3), with deterministic tie-breaking by the original character and configurable table-style output.
+Sort Chinese text the way Chinese readers expect.
+
+`hanzi-sort` is a Rust CLI and library for sorting Hanzi by Hanyu Pinyin or by stroke count, with deterministic tie-breaking, phrase-level override rules for polyphonic characters, and terminal-friendly tabular output.
+
+> Migration note  
+> `pinyin-sort` has been renamed to `hanzi-sort`. This is a hard rename: there is no compatibility binary alias.
+
+## Why it exists
+
+Unicode codepoint order is not Chinese sort order.
+
+If you want useful output for names, glossaries, study lists, or publishing workflows, you usually need more than plain lexical comparison:
+
+- pinyin order for alphabetic-style indexes
+- stroke order for dictionary-style or teaching workflows
+- phrase-level override rules for polyphonic characters like `重庆` or `银行`
+- stable tie-breaking so the same dataset always produces the same order
+
+## Quick examples
+
+Sort by pinyin:
+
+```bash
+hanzi-sort -t 汉字 张三 赵四
+```
+
+Sort by stroke count:
+
+```bash
+hanzi-sort -t 天 一 十 --sort-by strokes --columns 1 --entry-width 2 --blank-every 0
+```
+
+Resolve a polyphonic phrase with an override file:
+
+```bash
+hanzi-sort -t 重庆 银行 --config ./override.toml
+```
+
+Write the result to a file:
+
+```bash
+hanzi-sort -t 重庆 银行 -o ./sorted.txt
+```
 
 ## Features
 
-- Sort Chinese strings by pinyin while preserving unknown characters in the comparison key
-- Break ties by original character so same-pronunciation entries still sort deterministically
-- Read input from repeated `--text` arguments or from one or more files, one non-blank line per record
-- Apply character-level or phrase-level override rules from a TOML file
-- Format output with configurable columns, alignment, separators, padding, and blank-line cadence
-- Use the core functionality from Rust via an explicit `PinyinContext`
+- Sort by `pinyin` or `strokes`
+- Keep unknown characters in the comparison key instead of dropping them
+- Break ties by original character so output stays deterministic
+- Read repeated `--text` values or one non-blank record per line from `--file`
+- Override single characters or full phrases with TOML
+- Format output with configurable columns, alignment, padding, separators, and blank-line cadence
+- Use the same core sorter from Rust via `PinyinContext` and `SortMode`
 
-## Installation
+## Install and build
 
 ### From source
 
 Prerequisites:
 
-- Rust toolchain (`cargo`, `rustc`)
+- Rust toolchain
 - Python 3 and `pypinyin` if you need to regenerate `data/pinyin.csv`
 
-Build steps:
+Build:
 
-1. Regenerate CSV data if needed:
-   - `python3 scripts/convert_pinyin_to_csv.py`
-2. Build the binary:
-   - `cargo build --release`
-3. Run it from:
-   - `target/release/pinyin-sort`
+```bash
+cargo build --release
+target/release/hanzi-sort -h
+```
 
 ### With Nix
 
-- Enter the development shell:
-  - `nix develop`
-- Regenerate CSV data:
-  - `just prep-data`
-- Build:
-  - `just build`
-  - or `nix build`
+```bash
+nix develop
+just build
+```
 
 ## CLI usage
 
 Basic help:
 
-- `pinyin-sort -h`
+```bash
+hanzi-sort -h
+```
 
-Inputs:
+Input rules:
 
 - `--text` and `--file` are mutually exclusive
-- `--file` reads one record per non-blank line
+- `--file` reads one non-blank line per record
 - directory inputs are rejected
+- success exits with `0`; invalid args, bad override files, and I/O failures exit non-zero
 
-Examples:
+### Sort modes
 
-- Sort inline strings:
-  - `pinyin-sort -t 汉字 张三 赵四`
-- Sort lines from a file and print one item per line:
-  - `pinyin-sort -f ./names.txt --columns 1 --entry-width 2 --blank-every 0`
-- Write the result to a file:
-  - `pinyin-sort -t 重庆 银行 -o ./sorted.txt`
+- `--sort-by pinyin`
+  Default. Compares the primary tone3 pinyin for each mapped character, then falls back to the original character.
+- `--sort-by strokes`
+  Compares total stroke count per character, then falls back to the original character.
 
-Exit behavior:
-
-- `0` on success
-- non-zero on invalid arguments, file I/O failures, output write failures, or invalid override TOML
-
-## CLI options
+### CLI options
 
 - `-f, --file <FILE>`: input file path, can be repeated
 - `-t, --text <TEXT>...`: inline text input, can be repeated
 - `-o, --output <PATH>`: write output to a file instead of stdout
 - `-c, --config <PATH>`: TOML override file
-- `--columns <N>`: number of entries per row, must be greater than `0`
+- `--sort-by <MODE>`: `pinyin` or `strokes`
+- `--columns <N>`: entries per row, must be greater than `0`
 - `--blank-every <N>`: insert a blank line every `N` rows; use `0` to disable
-- `--entry-width <N>`: target display width for each entry, must be greater than `0`
+- `--entry-width <N>`: target display width per entry, must be greater than `0`
 - `--align <MODE>`: `left`, `center`, `right`, or `even`
-- `--padding-char <CHAR>`: padding character; must have display width `1`
+- `--padding-char <CHAR>`: padding character, must have display width `1`
 - `--separator <CHAR>`: separator between entries
 - `--line-ending <CHAR>`: line ending character
 
-## Override configuration
+## Override config
 
-`--config` accepts TOML with either or both sections below.
+`--config` accepts TOML with either or both sections:
 
 ```toml
 [char_override]
@@ -96,42 +131,51 @@ Exit behavior:
 Rules:
 
 - `phrase_override` takes precedence over `char_override`
-- `phrase_override` must provide exactly one pinyin syllable per character
-- missing sections default to empty maps
+- each `phrase_override` entry must provide exactly one pinyin syllable per character
+- omitted sections default to empty maps
 
 ## Library usage
 
-Core types are exposed from `src/lib.rs`.
+The CLI is the primary product, but the sorter is available as a Rust library.
 
 ```rust
-use pinyin_sort::{format_items, sort_strings, FormatConfig, PinyinContext};
+use hanzi_sort::{PinyinContext, SortMode, sort_strings_by};
 
 let context = PinyinContext::default();
-let sorted = sort_strings(vec!["张三".into(), "赵四".into()], &context);
-let output = format_items(&sorted, &FormatConfig::default());
+let sorted = sort_strings_by(
+    vec!["一".into(), "十".into(), "天".into()],
+    &context,
+    SortMode::Strokes,
+);
 ```
 
 Key APIs:
 
 - `PinyinContext::pinyin_of(&str) -> Vec<PinYinRecord>`
-- `PinyinContext::sort_key(&str) -> SortKey`
 - `sort_strings(Vec<String>, &PinyinContext) -> Vec<String>`
-- `format_items(&[impl AsRef<str>], &FormatConfig) -> String`
-- `read_input_lines(&InputSource) -> Result<Vec<String>>`
+- `sort_strings_by(Vec<String>, &PinyinContext, SortMode) -> Vec<String>`
 
-## Data and build process
+## Data pipeline
 
-- `scripts/convert_pinyin_to_csv.py` converts vendored `vendor/pinyin-data/pinyin.txt` into `data/pinyin.csv`
-- `build.rs` regenerates `src/generated/pinyin_map.rs` from `data/pinyin.csv`
-- the build now validates that representative codepoints such as `〇`, `汉`, and `重` exist in the generated data
+- `scripts/convert_pinyin_to_csv.py` builds `data/pinyin.csv` from the vendored pinyin dataset
+- `scripts/convert_strokes_to_csv.py` builds `data/strokes.csv` from Unicode `kTotalStrokes` data
+- `build.rs` generates static lookup tables in `src/generated/`
+- the build validates representative codepoints such as `〇`, `汉`, `重`, and `一`
 
 ## Development
 
-- `cargo test`
-- `cargo clippy --all-targets --all-features -- -D warnings`
-- `nix develop`
-- `just prep-data`
-- `just build`
+```bash
+cargo test
+cargo clippy --all-targets --all-features -- -D warnings
+```
+
+Nix helpers:
+
+```bash
+nix develop
+just prep-data
+just build
+```
 
 ## License
 

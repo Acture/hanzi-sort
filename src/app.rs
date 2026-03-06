@@ -35,7 +35,7 @@ mod tests {
                 .expect("system time should be after UNIX_EPOCH")
                 .as_nanos();
             let path = std::env::temp_dir().join(format!(
-                "pinyin-sort-app-test-{}-{}",
+                "hanzi-sort-app-test-{}-{}",
                 std::process::id(),
                 unique
             ));

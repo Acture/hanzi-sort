@@ -13,11 +13,8 @@ impl TempWorkspace {
             .duration_since(UNIX_EPOCH)
             .expect("system time should be after UNIX_EPOCH")
             .as_nanos();
-        let path = std::env::temp_dir().join(format!(
-            "pinyin-sort-test-{}-{}",
-            std::process::id(),
-            unique
-        ));
+        let path =
+            std::env::temp_dir().join(format!("hanzi-sort-test-{}-{}", std::process::id(), unique));
         fs::create_dir_all(&path).expect("temporary directory should be created");
         Self { path }
     }
@@ -34,7 +31,7 @@ impl Drop for TempWorkspace {
 }
 
 fn binary_command() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_pinyin-sort"))
+    Command::new(env!("CARGO_BIN_EXE_hanzi-sort"))
 }
 
 fn stdout(output: &Output) -> String {
@@ -50,7 +47,7 @@ fn shows_help_and_exits_successfully_when_no_input_is_given() {
     let output = binary_command().output().expect("CLI command should run");
 
     assert!(output.status.success());
-    assert!(stdout(&output).contains("Usage: pinyin-sort [OPTIONS]"));
+    assert!(stdout(&output).contains("Usage: hanzi-sort [OPTIONS]"));
 }
 
 #[test]

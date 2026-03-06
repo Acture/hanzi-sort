@@ -1,14 +1,14 @@
 [package]
-name = "pinyin-sort"
+name = "hanzi-sort"
 version = "0.1.1"
 edition = "2024"
 license = "AGPL-3.0-only"
 authors = ["Acture <acturea@gmail.com>"]
 readme = "README.md"
-description = "A tool to sort pinyin"
-documentation = "https://github.com/acture/pinyin-sort"
-homepage = "https://github.com/acture/pinyin-sort"
-repository = "https://github.com/acture/pinyin-sort"
+description = "A CLI for sorting Chinese text by pinyin or stroke count"
+documentation = "https://github.com/Acture/hanzi-sort"
+homepage = "https://github.com/Acture/hanzi-sort"
+repository = "https://github.com/Acture/hanzi-sort"
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }

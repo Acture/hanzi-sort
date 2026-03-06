@@ -126,6 +126,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
+name = "hanzi-sort"
+version = "0.1.1"
+dependencies = [
+ "clap",
+ "csv",
+ "phf",
+ "phf_codegen",
+ "serde",
+ "smallvec",
+ "toml",
+ "unicode-width",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.15.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -217,20 +231,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06005508882fb681fd97892ecff4b7fd0fee13ef1aa569f8695dae7ab9099981"
 dependencies = [
  "siphasher",
-]
-
-[[package]]
-name = "pinyin-sort"
-version = "0.1.1"
-dependencies = [
- "clap",
- "csv",
- "phf",
- "phf_codegen",
- "serde",
- "smallvec",
- "toml",
- "unicode-width",
 ]
 
 [[package]]
