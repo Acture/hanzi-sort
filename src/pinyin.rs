@@ -1,5 +1,12 @@
+use std::collections::HashMap;
+
+use smallvec::SmallVec;
+
 use crate::generated::pinyin_map::PINYIN_MAP;
 use crate::r#override::PinyinOverride;
+
+const INLINE_SORT_KEY_LEN: usize = 8;
+const MAX_ENCODED_PINYIN_LEN: usize = 16;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PinYinRecord {
@@ -21,14 +28,66 @@ pub struct SortToken {
 
 pub type SortKey = Vec<SortToken>;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct EncodedSortToken {
+    pub character: char,
+    pub primary_pinyin: Option<u128>,
+}
+
+pub(crate) type EncodedSortKey = SmallVec<[EncodedSortToken; INLINE_SORT_KEY_LEN]>;
+
 #[derive(Debug, Clone, Default)]
+struct EncodedOverride {
+    char_override: HashMap<char, u128>,
+    phrase_override: HashMap<String, SmallVec<[u128; INLINE_SORT_KEY_LEN]>>,
+}
+
+impl From<&PinyinOverride> for EncodedOverride {
+    fn from(value: &PinyinOverride) -> Self {
+        let char_override = value
+            .char_override
+            .iter()
+            .map(|(character, pinyin)| (*character, encode_primary_pinyin(pinyin)))
+            .collect();
+
+        let phrase_override = value
+            .phrase_override
+            .iter()
+            .map(|(phrase, pinyins)| {
+                let encoded = pinyins
+                    .iter()
+                    .map(|pinyin| encode_primary_pinyin(pinyin))
+                    .collect();
+                (phrase.clone(), encoded)
+            })
+            .collect();
+
+        Self {
+            char_override,
+            phrase_override,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct PinyinContext {
     override_data: Option<PinyinOverride>,
+    encoded_override: Option<EncodedOverride>,
+}
+
+impl Default for PinyinContext {
+    fn default() -> Self {
+        Self::new(None)
+    }
 }
 
 impl PinyinContext {
     pub fn new(override_data: Option<PinyinOverride>) -> Self {
-        Self { override_data }
+        let encoded_override = override_data.as_ref().map(EncodedOverride::from);
+        Self {
+            override_data,
+            encoded_override,
+        }
     }
 
     pub fn pinyin_of(&self, value: &str) -> Vec<PinYinRecord> {
@@ -52,11 +111,24 @@ impl PinyinContext {
     }
 
     pub fn sort_key(&self, value: &str) -> SortKey {
-        self.pinyin_of(value)
-            .into_iter()
-            .map(|record| SortToken {
-                character: record.character,
-                primary_pinyin: record.primary_pinyin().map(str::to_string),
+        if let Some(override_data) = &self.override_data
+            && let Some(pinyins) = override_data.phrase_override.get(value)
+        {
+            return value
+                .chars()
+                .zip(pinyins.iter())
+                .map(|(character, pinyin)| SortToken {
+                    character,
+                    primary_pinyin: Some(pinyin.clone()),
+                })
+                .collect();
+        }
+
+        value
+            .chars()
+            .map(|character| SortToken {
+                character,
+                primary_pinyin: self.primary_pinyin_for_char(character).map(str::to_string),
             })
             .collect()
     }
@@ -78,12 +150,75 @@ impl PinyinContext {
 
         PinYinRecord { pinyin, character }
     }
+
+    pub(crate) fn encoded_sort_key(&self, value: &str) -> EncodedSortKey {
+        if let Some(encoded_override) = &self.encoded_override
+            && let Some(pinyins) = encoded_override.phrase_override.get(value)
+        {
+            return value
+                .chars()
+                .zip(pinyins.iter().copied())
+                .map(|(character, primary_pinyin)| EncodedSortToken {
+                    character,
+                    primary_pinyin: Some(primary_pinyin),
+                })
+                .collect();
+        }
+
+        value
+            .chars()
+            .map(|character| self.encoded_sort_token(character))
+            .collect()
+    }
+
+    fn encoded_sort_token(&self, character: char) -> EncodedSortToken {
+        if let Some(encoded_override) = &self.encoded_override
+            && let Some(primary_pinyin) = encoded_override.char_override.get(&character)
+        {
+            return EncodedSortToken {
+                character,
+                primary_pinyin: Some(*primary_pinyin),
+            };
+        }
+
+        EncodedSortToken {
+            character,
+            primary_pinyin: self
+                .primary_pinyin_for_char(character)
+                .map(encode_primary_pinyin),
+        }
+    }
+
+    fn primary_pinyin_for_char(&self, character: char) -> Option<&str> {
+        if let Some(override_data) = &self.override_data
+            && let Some(pinyin) = override_data.char_override.get(&character)
+        {
+            return Some(pinyin.as_str());
+        }
+
+        PINYIN_MAP
+            .get(&(character as u32))
+            .and_then(|(_, pinyin_vec)| pinyin_vec.first().copied())
+    }
+}
+
+fn encode_primary_pinyin(pinyin: &str) -> u128 {
+    assert!(
+        pinyin.len() <= MAX_ENCODED_PINYIN_LEN,
+        "pinyin syllable exceeds {MAX_ENCODED_PINYIN_LEN} bytes: {pinyin}"
+    );
+
+    let mut encoded = 0_u128;
+    for byte in pinyin.bytes() {
+        encoded = (encoded << 8) | byte as u128;
+    }
+
+    encoded << ((MAX_ENCODED_PINYIN_LEN - pinyin.len()) * 8)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::HashMap;
 
     #[test]
     fn test_pinyin_of_known_characters() {
@@ -139,5 +274,43 @@ mod tests {
         }));
         let records = context.pinyin_of("重庆");
         assert_eq!(records[0].primary_pinyin(), Some("chong2"));
+    }
+
+    #[test]
+    fn test_char_override_applies_without_phrase_override() {
+        let context = PinyinContext::new(Some(PinyinOverride {
+            char_override: HashMap::from([('重', "chong2".to_string())]),
+            phrase_override: HashMap::new(),
+        }));
+        let records = context.pinyin_of("重要");
+        assert_eq!(records[0].primary_pinyin(), Some("chong2"));
+    }
+
+    #[test]
+    fn test_encode_primary_pinyin_preserves_lexicographic_order() {
+        assert!(encode_primary_pinyin("a") < encode_primary_pinyin("aa"));
+        assert!(encode_primary_pinyin("chong2") < encode_primary_pinyin("qing4"));
+        assert!(encode_primary_pinyin("zhong4") < encode_primary_pinyin("zhong5"));
+    }
+
+    #[test]
+    fn test_encoded_sort_key_uses_phrase_override_without_allocating_strings() {
+        let context = PinyinContext::new(Some(PinyinOverride {
+            char_override: HashMap::new(),
+            phrase_override: HashMap::from([(
+                "重庆".to_string(),
+                vec!["chong2".to_string(), "qing4".to_string()],
+            )]),
+        }));
+        let encoded = context.encoded_sort_key("重庆");
+        assert_eq!(encoded.len(), 2);
+        assert_eq!(
+            encoded[0].primary_pinyin,
+            Some(encode_primary_pinyin("chong2"))
+        );
+        assert_eq!(
+            encoded[1].primary_pinyin,
+            Some(encode_primary_pinyin("qing4"))
+        );
     }
 }

@@ -46,6 +46,14 @@ fn stderr(output: &Output) -> String {
 }
 
 #[test]
+fn shows_help_and_exits_successfully_when_no_input_is_given() {
+    let output = binary_command().output().expect("CLI command should run");
+
+    assert!(output.status.success());
+    assert!(stdout(&output).contains("Usage: pinyin-sort [OPTIONS]"));
+}
+
+#[test]
 fn reads_file_inputs_line_by_line_and_ignores_blank_lines() {
     let temp = TempWorkspace::new();
     let input_path = temp.path().join("names.txt");
@@ -59,6 +67,22 @@ fn reads_file_inputs_line_by_line_and_ignores_blank_lines() {
 
     assert!(output.status.success());
     assert_eq!(stdout(&output), "汉字\n张三\n赵四");
+}
+
+#[test]
+fn rejects_mixing_file_and_text_inputs() {
+    let temp = TempWorkspace::new();
+    let input_path = temp.path().join("names.txt");
+    fs::write(&input_path, "张三\n").expect("input file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&input_path);
+    command.args(["-t", "赵四"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(!output.status.success());
+    assert!(stderr(&output).contains("cannot be used with"));
 }
 
 #[test]
@@ -120,6 +144,21 @@ fn writes_output_to_file_when_requested() {
 }
 
 #[test]
+fn rejects_output_path_that_is_a_directory() {
+    let temp = TempWorkspace::new();
+    let output_dir = temp.path().join("out");
+    fs::create_dir_all(&output_dir).expect("output directory should be created");
+
+    let mut command = binary_command();
+    command.args(["-t", "乙", "甲", "-o"]);
+    command.arg(&output_dir);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(!output.status.success());
+    assert!(stderr(&output).contains("failed to write output file"));
+}
+
+#[test]
 fn rejects_invalid_override_config() {
     let temp = TempWorkspace::new();
     let override_path = temp.path().join("override.toml");
@@ -173,4 +212,21 @@ fn phrase_override_changes_sort_order() {
 
     assert!(output.status.success());
     assert_eq!(stdout(&output), "重庆\n银行");
+}
+
+#[test]
+fn char_override_changes_single_character_sort_order() {
+    let temp = TempWorkspace::new();
+    let override_path = temp.path().join("override.toml");
+    fs::write(&override_path, "[char_override]\n'重' = 'chong2'\n")
+        .expect("override file should be written");
+
+    let mut command = binary_command();
+    command.args(["-t", "重要", "银行", "--config"]);
+    command.arg(&override_path);
+    command.args(["--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success());
+    assert_eq!(stdout(&output), "重要\n银行");
 }

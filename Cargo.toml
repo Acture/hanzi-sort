@@ -14,6 +14,7 @@ repository = "https://github.com/acture/pinyin-sort"
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }
 phf = { version = "0.12.1", features = ["default"] }
 serde = { version = "1.0.219", features = ["derive"] }
+smallvec = "1.13.2"
 toml = { version = "0.9.5", features = ["default"] }
 unicode-width = "0.2.0"
 
