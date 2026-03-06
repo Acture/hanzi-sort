@@ -1,7 +1,9 @@
 use clap::{Parser, ValueEnum};
 use std::path::PathBuf;
 
-use pinyin_sort::{Align, FormatConfig, InputSource, PinyinOverride, Result, RuntimeConfig};
+use hanzi_sort::{
+    Align, FormatConfig, InputSource, PinyinOverride, Result, RuntimeConfig, SortMode,
+};
 
 #[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq)]
 pub enum CliAlign {
@@ -18,6 +20,21 @@ impl From<CliAlign> for Align {
             CliAlign::Center => Self::Center,
             CliAlign::Right => Self::Right,
             CliAlign::Even => Self::Even,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq)]
+pub enum CliSortMode {
+    Pinyin,
+    Strokes,
+}
+
+impl From<CliSortMode> for SortMode {
+    fn from(value: CliSortMode) -> Self {
+        match value {
+            CliSortMode::Pinyin => Self::Pinyin,
+            CliSortMode::Strokes => Self::Strokes,
         }
     }
 }
@@ -84,6 +101,13 @@ pub struct CliArgs {
 
     #[arg(long = "line-ending", help = "Line ending character")]
     pub line_ending: Option<char>,
+
+    #[arg(
+        long = "sort-by",
+        value_enum,
+        help = "Sort strategy: pinyin or strokes"
+    )]
+    pub sort_by: Option<CliSortMode>,
 }
 
 impl CliArgs {
@@ -127,7 +151,8 @@ impl CliArgs {
             .map(PinyinOverride::load_from_file)
             .transpose()?;
 
-        let config = RuntimeConfig::new(input, format, override_data)?;
+        let sort_mode = self.sort_by.map(Into::into).unwrap_or(SortMode::Pinyin);
+        let config = RuntimeConfig::with_sort_mode(input, format, override_data, sort_mode)?;
         Ok((config, self.output_path))
     }
 }
@@ -224,7 +249,18 @@ mod tests {
         assert_eq!(config.format.padding_char, '.');
         assert_eq!(config.format.separator, ',');
         assert_eq!(config.format.line_ending, ';');
+        assert_eq!(config.sort_mode, SortMode::Pinyin);
         assert_eq!(output_path, Some(PathBuf::from("sorted.txt")));
+    }
+
+    #[test]
+    fn supports_stroke_sort_mode() {
+        let args = CliArgs::parse_from(["hanzi-sort", "-t", "十", "一", "--sort-by", "strokes"]);
+        let (config, _) = args
+            .into_runtime_parts()
+            .expect("runtime config should be created");
+
+        assert_eq!(config.sort_mode, SortMode::Strokes);
     }
 
     #[test]

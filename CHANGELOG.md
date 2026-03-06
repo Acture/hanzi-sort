@@ -5,6 +5,7 @@
 - expose the core sorter as a library with `PinyinContext`, `sort_strings`, and `format_items`
 - add CI to run `cargo test` and `cargo clippy --all-targets --all-features -- -D warnings`
 - add integration coverage for CLI behavior, file input, override validation, and output writing
+- add stroke-count sorting alongside pinyin sorting
 
 ### Changed
 

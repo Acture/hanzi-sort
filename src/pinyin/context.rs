@@ -182,6 +182,16 @@ mod tests {
     }
 
     #[test]
+    fn polyphonic_characters_expose_all_readings() {
+        let context = PinyinContext::default();
+        let records = context.pinyin_of("乐");
+        assert_eq!(records.len(), 1);
+        assert!(records[0].pinyin.len() > 1);
+        assert!(records[0].pinyin.iter().any(|item| item == "le4"));
+        assert!(records[0].pinyin.iter().any(|item| item == "yue4"));
+    }
+
+    #[test]
     fn encoded_sort_key_uses_phrase_override() {
         let context = PinyinContext::new(Some(PinyinOverride {
             char_override: HashMap::new(),

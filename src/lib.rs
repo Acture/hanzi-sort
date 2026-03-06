@@ -20,10 +20,11 @@ mod input;
 mod r#override;
 mod pinyin;
 mod sort;
+mod stroke;
 
 pub use config::{InputSource, RuntimeConfig};
 pub use error::{PinyinSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
 pub use pinyin::{PinYinRecord, PinyinContext};
-pub use sort::sort_strings;
+pub use sort::{SortMode, sort_strings, sort_strings_by};

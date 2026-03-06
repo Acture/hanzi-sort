@@ -3,12 +3,12 @@ use crate::error::Result;
 use crate::format::format_items;
 use crate::input::read_input_lines;
 use crate::pinyin::PinyinContext;
-use crate::sort::sort_strings;
+use crate::sort::sort_strings_by;
 
 pub fn render(config: RuntimeConfig) -> Result<String> {
     let input = read_input_lines(&config.input)?;
     let context = PinyinContext::new(config.override_data);
-    let sorted = sort_strings(input, &context);
+    let sorted = sort_strings_by(input, &context, config.sort_mode);
     Ok(format_items(&sorted, &config.format))
 }
 
@@ -18,6 +18,7 @@ mod tests {
     use crate::config::{InputSource, RuntimeConfig};
     use crate::format::{Align, FormatConfig};
     use crate::r#override::PinyinOverride;
+    use crate::sort::SortMode;
     use std::collections::HashMap;
     use std::fs;
     use std::path::{Path, PathBuf};
@@ -136,5 +137,19 @@ mod tests {
 
         let rendered = render(config).expect("render should succeed");
         assert_eq!(rendered, "..丙,..甲;;..乙;");
+    }
+
+    #[test]
+    fn renders_stroke_sorted_output() {
+        let config = RuntimeConfig::with_sort_mode(
+            InputSource::Text(vec!["天".to_string(), "一".to_string(), "十".to_string()]),
+            single_column_format(),
+            None,
+            SortMode::Strokes,
+        )
+        .expect("runtime config should be created");
+
+        let rendered = render(config).expect("render should succeed");
+        assert_eq!(rendered, "一\n十\n天");
     }
 }

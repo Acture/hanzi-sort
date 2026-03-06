@@ -1,6 +1,39 @@
+use std::cmp::Ordering;
+
+use smallvec::SmallVec;
+
 use crate::pinyin::{EncodedSortKey, PinyinContext, compare_encoded_sort_key};
+use crate::stroke::stroke_count_for_char;
+
+const INLINE_STROKE_KEY_LEN: usize = 8;
+
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub enum SortMode {
+    #[default]
+    Pinyin,
+    Strokes,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct StrokeSortToken {
+    character: char,
+    strokes: Option<u16>,
+}
+
+type StrokeSortKey = SmallVec<[StrokeSortToken; INLINE_STROKE_KEY_LEN]>;
 
 pub fn sort_strings(input: Vec<String>, context: &PinyinContext) -> Vec<String> {
+    sort_strings_by(input, context, SortMode::Pinyin)
+}
+
+pub fn sort_strings_by(input: Vec<String>, context: &PinyinContext, mode: SortMode) -> Vec<String> {
+    match mode {
+        SortMode::Pinyin => sort_by_pinyin(input, context),
+        SortMode::Strokes => sort_by_strokes(input),
+    }
+}
+
+fn sort_by_pinyin(input: Vec<String>, context: &PinyinContext) -> Vec<String> {
     let mut with_keys: Vec<(EncodedSortKey, String)> = input
         .into_iter()
         .map(|item| {
@@ -12,6 +45,52 @@ pub fn sort_strings(input: Vec<String>, context: &PinyinContext) -> Vec<String> 
     with_keys.sort_unstable_by(|a, b| compare_encoded_sort_key(&a.0, &b.0));
 
     with_keys.into_iter().map(|(_, item)| item).collect()
+}
+
+fn sort_by_strokes(input: Vec<String>) -> Vec<String> {
+    let mut with_keys: Vec<(StrokeSortKey, String)> = input
+        .into_iter()
+        .map(|item| {
+            let key = stroke_sort_key(&item);
+            (key, item)
+        })
+        .collect();
+
+    with_keys.sort_unstable_by(|a, b| compare_stroke_sort_key(&a.0, &b.0));
+
+    with_keys.into_iter().map(|(_, item)| item).collect()
+}
+
+fn stroke_sort_key(value: &str) -> StrokeSortKey {
+    value
+        .chars()
+        .map(|character| StrokeSortToken {
+            character,
+            strokes: stroke_count_for_char(character),
+        })
+        .collect()
+}
+
+fn compare_stroke_sort_key(a: &StrokeSortKey, b: &StrokeSortKey) -> Ordering {
+    let len = a.len().min(b.len());
+
+    for index in 0..len {
+        let ordering = compare_stroke_token(&a[index], &b[index]);
+        if ordering != Ordering::Equal {
+            return ordering;
+        }
+    }
+
+    a.len().cmp(&b.len())
+}
+
+fn compare_stroke_token(a: &StrokeSortToken, b: &StrokeSortToken) -> Ordering {
+    match (a.strokes, b.strokes) {
+        (Some(sa), Some(sb)) => sa.cmp(&sb).then_with(|| a.character.cmp(&b.character)),
+        (Some(_), None) => Ordering::Less,
+        (None, Some(_)) => Ordering::Greater,
+        (None, None) => a.character.cmp(&b.character),
+    }
 }
 
 #[cfg(test)]
@@ -65,5 +144,40 @@ mod tests {
         let context = PinyinContext::default();
         let sorted = sort_strings(vec!["张三丰".to_string(), "张三".to_string()], &context);
         assert_eq!(sorted, vec!["张三", "张三丰"]);
+    }
+
+    #[test]
+    fn sorts_by_stroke_count_when_requested() {
+        let sorted = sort_strings_by(
+            vec![
+                "天".to_string(),
+                "一".to_string(),
+                "十".to_string(),
+                "大".to_string(),
+            ],
+            &PinyinContext::default(),
+            SortMode::Strokes,
+        );
+        assert_eq!(sorted, vec!["一", "十", "大", "天"]);
+    }
+
+    #[test]
+    fn stroke_sort_uses_original_character_as_tiebreak() {
+        let sorted = sort_strings_by(
+            vec!["七".to_string(), "十".to_string()],
+            &PinyinContext::default(),
+            SortMode::Strokes,
+        );
+        assert_eq!(sorted, vec!["七", "十"]);
+    }
+
+    #[test]
+    fn stroke_sort_places_unknown_characters_after_known_ones() {
+        let sorted = sort_strings_by(
+            vec!["abc".to_string(), "十".to_string(), "1".to_string()],
+            &PinyinContext::default(),
+            SortMode::Strokes,
+        );
+        assert_eq!(sorted, vec!["十", "1", "abc"]);
     }
 }

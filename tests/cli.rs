@@ -144,6 +144,29 @@ fn writes_output_to_file_when_requested() {
 }
 
 #[test]
+fn supports_stroke_sorting_from_cli() {
+    let mut command = binary_command();
+    command.args([
+        "-t",
+        "天",
+        "一",
+        "十",
+        "--sort-by",
+        "strokes",
+        "--columns",
+        "1",
+        "--entry-width",
+        "2",
+        "--blank-every",
+        "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success());
+    assert_eq!(stdout(&output), "一\n十\n天");
+}
+
+#[test]
 fn rejects_output_path_that_is_a_directory() {
     let temp = TempWorkspace::new();
     let output_dir = temp.path().join("out");
