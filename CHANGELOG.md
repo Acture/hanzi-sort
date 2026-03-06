@@ -1,3 +1,25 @@
+## [Unreleased]
+
+### Added
+
+- expose the core sorter as a library with `PinyinContext`, `sort_strings`, and `format_items`
+- add CI to run `cargo test` and `cargo clippy --all-targets --all-features -- -D warnings`
+- add integration coverage for CLI behavior, file input, override validation, and output writing
+
+### Changed
+
+- make `--file` read one non-blank line per record and reject directory inputs
+- make `--file` and `--text` mutually exclusive
+- wire `-o/--output` to write to a file instead of stdout
+- switch formatting width calculations to terminal display width
+- correct `left` and `right` alignment semantics
+
+### Fixed
+
+- preserve unknown characters in sort keys instead of dropping them
+- return non-zero exits for invalid input, invalid override config, and write failures
+- include the first CSV record in the generated pinyin map so `〇` resolves correctly
+
 ## [0.1.1] - 2025-08-08
 
 ### 🚀 Features
