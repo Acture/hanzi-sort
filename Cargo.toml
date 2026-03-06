@@ -4,11 +4,13 @@ version = "0.1.1"
 edition = "2024"
 license = "AGPL-3.0-only"
 authors = ["Acture <acturea@gmail.com>"]
-readme = "README.md"
-description = "A CLI for sorting Chinese text by pinyin or stroke count"
-documentation = "https://github.com/Acture/hanzi-sort"
+readme = "README.crates.md"
+description = "Sort Chinese text by pinyin or stroke count, with polyphonic overrides and terminal-friendly output"
+documentation = "https://docs.rs/hanzi-sort"
 homepage = "https://github.com/Acture/hanzi-sort"
 repository = "https://github.com/Acture/hanzi-sort"
+keywords = ["hanzi", "pinyin", "sorting", "cli", "strokes"]
+categories = ["command-line-utilities", "text-processing"]
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }
