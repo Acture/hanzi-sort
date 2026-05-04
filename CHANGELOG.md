@@ -6,6 +6,11 @@
 - add CI to run `cargo test` and `cargo clippy --all-targets --all-features -- -D warnings`
 - add integration coverage for CLI behavior, file input, override validation, and output writing
 - add stroke-count sorting alongside pinyin sorting
+- `PinyinContext::with_override` constructor for fallible override loading
+- `PinyinOverride::validate` now rejects empty phrase keys, empty syllables, non-ASCII syllables, and tone3 shapes outside `^[a-z]+[1-5]?$`
+- `build.rs` validates that the primary pinyin syllable for every codepoint is ASCII and ≤16 bytes, so the encoded sort key path is safe by construction
+- `build.rs` enforces exact column counts and verifies that the `char` column matches its codepoint
+- preserve original input order for duplicate or equal-key entries via an index tiebreak in both pinyin and stroke sort
 
 ### Changed
 
@@ -15,6 +20,9 @@
 - wire `-o/--output` to write to a file instead of stdout
 - switch formatting width calculations to terminal display width
 - correct `left` and `right` alignment semantics
+- `PinyinContext::new()` is now infallible and creates an empty context; pass overrides via `PinyinContext::with_override`
+- `encode_primary_pinyin` returns a `Result` instead of panicking on invalid input
+- `build.rs` reports row/codepoint context on failure and re-runs when the build script itself changes
 
 ### Fixed
 
