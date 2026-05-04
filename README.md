@@ -139,21 +139,27 @@ Rules:
 The CLI is the primary product, but the sorter is available as a Rust library.
 
 ```rust
-use hanzi_sort::{PinyinContext, SortMode, sort_strings_by};
+use hanzi_sort::{StrokesCollator, sort_strings_with};
 
-let context = PinyinContext::default();
-let sorted = sort_strings_by(
+let sorted = sort_strings_with(
     vec!["一".into(), "十".into(), "天".into()],
-    &context,
-    SortMode::Strokes,
+    &StrokesCollator,
 );
+```
+
+```rust
+use hanzi_sort::AnyCollator;
+
+let sorted = AnyCollator::pinyin().sort(vec!["赵四".into(), "汉字".into()]);
 ```
 
 Key APIs:
 
-- `PinyinContext::pinyin_of(&str) -> Vec<PinYinRecord>`
-- `sort_strings(Vec<String>, &PinyinContext) -> Vec<String>`
-- `sort_strings_by(Vec<String>, &PinyinContext, SortMode) -> Vec<String>`
+- `PinyinCollator::pinyin_of(&str) -> Vec<PinYinRecord>`
+- `PinyinCollator::with_override(PinyinOverride) -> Result<PinyinCollator>`
+- `StrokesCollator` (zero-sized, just construct it)
+- `sort_strings_with<C: Collator>(Vec<String>, &C) -> Vec<String>`
+- `AnyCollator::pinyin() / strokes() / pinyin_with_override(...)` and `AnyCollator::sort(...)`
 
 ## Data pipeline
 

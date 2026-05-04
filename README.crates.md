@@ -56,16 +56,18 @@ hanzi-sort -t 重庆 银行 --config ./override.toml
 ## Library usage
 
 ```rust
-use hanzi_sort::{sort_strings_by, PinyinContext, SortMode};
+use hanzi_sort::{StrokesCollator, sort_strings_with};
 
-let context = PinyinContext::default();
-let sorted = sort_strings_by(
+let sorted = sort_strings_with(
     vec!["一".into(), "十".into(), "天".into()],
-    &context,
-    SortMode::Strokes,
+    &StrokesCollator,
 );
+```
 
-assert_eq!(sorted, vec!["一", "十", "天"]);
+```rust
+use hanzi_sort::AnyCollator;
+
+let sorted = AnyCollator::pinyin().sort(vec!["赵四".into(), "汉字".into()]);
 ```
 
 ## Learn more
