@@ -4,27 +4,33 @@
 //! Rust library for pipelines, tests, and small embedding use cases.
 //!
 //! ```rust
-//! use hanzi_sort::{sort_strings_by, PinyinContext, SortMode};
+//! use hanzi_sort::{AnyCollator, sort_strings_with, StrokesCollator};
 //!
-//! let context = PinyinContext::default();
-//! let sorted = sort_strings_by(
+//! let collator = StrokesCollator;
+//! let sorted = sort_strings_with(
 //!     vec!["一".into(), "十".into(), "天".into()],
-//!     &context,
-//!     SortMode::Strokes,
+//!     &collator,
 //! );
-//!
 //! assert_eq!(sorted, vec!["一", "十", "天"]);
+//!
+//! // Or dispatch through `AnyCollator` when the strategy is chosen at runtime.
+//! let sorted = AnyCollator::pinyin().sort(vec!["赵四".into(), "汉字".into()]);
+//! assert_eq!(sorted, vec!["汉字", "赵四"]);
 //! ```
 //!
-//! `phrase_override` rules let you resolve polyphonic phrases like `重庆` or
-//! `银行` without rewriting the core lookup tables.
+//! Phrase-level overrides for polyphonic phrases like `重庆` or `银行` are
+//! supplied through [`PinyinOverride`] and [`AnyCollator::pinyin_with_override`].
 //!
 //! ```compile_fail
-//! use hanzi_sort::SortToken;
+//! use hanzi_sort::PinyinContext;
 //! ```
 //!
 //! ```compile_fail
-//! use hanzi_sort::compare_sort_key;
+//! use hanzi_sort::SortMode;
+//! ```
+//!
+//! ```compile_fail
+//! use hanzi_sort::sort_strings_by;
 //! ```
 
 pub mod app;
@@ -37,16 +43,12 @@ mod generated;
 mod input;
 mod r#override;
 mod pinyin;
-mod sort;
 mod stroke;
 
-pub use collator::{
-    AnyCollator, CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with,
-};
+pub use collator::{AnyCollator, CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with};
 pub use config::{InputSource, RuntimeConfig};
 pub use error::{PinyinSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
-pub use pinyin::{PinYinRecord, PinyinContext};
-pub use sort::{SortMode, sort_strings, sort_strings_by};
+pub use pinyin::{PinYinRecord, PinyinCollator};
 pub use stroke::StrokesCollator;

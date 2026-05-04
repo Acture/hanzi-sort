@@ -120,14 +120,14 @@ pub fn sort_strings_with<C: Collator>(input: Vec<String>, collator: &C) -> Vec<S
 /// call [`sort_strings_with`] directly to keep the dispatch monomorphic.
 #[derive(Debug, Clone)]
 pub enum AnyCollator {
-    Pinyin(crate::pinyin::PinyinContext),
+    Pinyin(crate::pinyin::PinyinCollator),
     Strokes(crate::stroke::StrokesCollator),
 }
 
 impl AnyCollator {
     /// Pinyin collator with no override data.
     pub fn pinyin() -> Self {
-        Self::Pinyin(crate::pinyin::PinyinContext::new())
+        Self::Pinyin(crate::pinyin::PinyinCollator::new())
     }
 
     /// Pinyin collator that honors the supplied override table.
@@ -138,7 +138,7 @@ impl AnyCollator {
         overrides: crate::r#override::PinyinOverride,
     ) -> crate::error::Result<Self> {
         Ok(Self::Pinyin(
-            crate::pinyin::PinyinContext::with_override(overrides)?,
+            crate::pinyin::PinyinCollator::with_override(overrides)?,
         ))
     }
 

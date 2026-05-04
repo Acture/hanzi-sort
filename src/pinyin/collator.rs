@@ -1,34 +1,34 @@
-use super::key::{EncodedOverride, EncodedSortKey, EncodedSortToken, encode_primary_pinyin_unchecked};
+use super::key::{EncodedOverride, encode_primary_pinyin_unchecked};
 use super::lookup::{all_pinyin_for_char, primary_pinyin_for_char};
 use super::model::PinYinRecord;
 use crate::collator::Collator;
 use crate::error::Result;
 use crate::r#override::PinyinOverride;
 
+/// Sorts Hanzi by Mandarin pinyin (tone3 lowercase) using a static lookup
+/// table generated at build time from the upstream pinyin dataset.
+///
+/// Optional [`PinyinOverride`] data can supply phrase-level and per-character
+/// pronunciations to handle polyphonic phrases like `重庆` or `银行`.
 #[derive(Debug, Clone, Default)]
-pub struct PinyinContext {
+pub struct PinyinCollator {
     override_data: Option<PinyinOverride>,
     encoded_override: Option<EncodedOverride>,
 }
 
-impl PinyinContext {
-    /// Build a context with no override data.
-    ///
-    /// This constructor is infallible. Callers that want to apply an override
-    /// table should use [`PinyinContext::with_override`].
+impl PinyinCollator {
+    /// Build a collator with no override data.
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Build a context that applies the given override table.
+    /// Build a collator that honors the supplied override table.
     ///
-    /// Override data must already pass [`PinyinOverride::validate`]. This
-    /// constructor performs an additional defensive check: if any syllable
-    /// cannot be encoded for fast comparisons (only possible if the caller
-    /// skipped validation and passed non-ASCII or oversized syllables), the
-    /// constructor returns [`PinyinSortError::InvalidOverride`].
-    ///
-    /// [`PinyinSortError::InvalidOverride`]: crate::PinyinSortError::InvalidOverride
+    /// Override data must already pass [`PinyinOverride::validate`]. As a
+    /// defensive second check, this constructor returns
+    /// [`crate::HanziSortError::InvalidOverride`] if any syllable cannot be
+    /// encoded for the fast comparison path (only possible if the caller
+    /// skipped validation and passed non-ASCII or oversized syllables).
     pub fn with_override(override_data: PinyinOverride) -> Result<Self> {
         let encoded_override = Some(EncodedOverride::try_from(&override_data)?);
         Ok(Self {
@@ -37,6 +37,11 @@ impl PinyinContext {
         })
     }
 
+    /// Inspect the pinyin readings the collator would use for `value`.
+    ///
+    /// Phrase override has the highest precedence, then per-character
+    /// override, then the bundled lookup table. Useful for diagnostics or
+    /// for building dictionary-style displays.
     pub fn pinyin_of(&self, value: &str) -> Vec<PinYinRecord> {
         if let Some(override_data) = &self.override_data
             && let Some(pinyins) = override_data.phrase_override.get(value)
@@ -57,26 +62,6 @@ impl PinyinContext {
             .collect()
     }
 
-    pub(crate) fn encoded_sort_key(&self, value: &str) -> EncodedSortKey {
-        if let Some(encoded_override) = &self.encoded_override
-            && let Some(pinyins) = encoded_override.phrase_override(value)
-        {
-            return value
-                .chars()
-                .zip(pinyins.iter().copied())
-                .map(|(character, primary_pinyin)| EncodedSortToken {
-                    character,
-                    primary_pinyin: Some(primary_pinyin),
-                })
-                .collect();
-        }
-
-        value
-            .chars()
-            .map(|character| self.encoded_sort_token(character))
-            .collect()
-    }
-
     fn lookup_char(&self, character: char) -> PinYinRecord {
         if let Some(override_data) = &self.override_data
             && let Some(pinyin) = override_data.char_override.get(&character)
@@ -92,37 +77,9 @@ impl PinyinContext {
             character,
         }
     }
-
-    fn encoded_sort_token(&self, character: char) -> EncodedSortToken {
-        if let Some(encoded_override) = &self.encoded_override
-            && let Some(primary_pinyin) = encoded_override.char_override(character)
-        {
-            return EncodedSortToken {
-                character,
-                primary_pinyin: Some(primary_pinyin),
-            };
-        }
-
-        EncodedSortToken {
-            character,
-            primary_pinyin: self
-                .primary_pinyin_for_char(character)
-                .map(encode_primary_pinyin_unchecked),
-        }
-    }
-
-    fn primary_pinyin_for_char(&self, character: char) -> Option<&str> {
-        if let Some(override_data) = &self.override_data
-            && let Some(pinyin) = override_data.char_override.get(&character)
-        {
-            return Some(pinyin.as_str());
-        }
-
-        primary_pinyin_for_char(character)
-    }
 }
 
-impl Collator for PinyinContext {
+impl Collator for PinyinCollator {
     type Data = u128;
 
     fn data_for(&self, character: char) -> Option<u128> {
@@ -145,12 +102,13 @@ impl Collator for PinyinContext {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::collator::sort_strings_with;
     use crate::r#override::PinyinOverride;
     use std::collections::HashMap;
 
     #[test]
     fn pinyin_of_known_characters() {
-        let context = PinyinContext::default();
+        let collator = PinyinCollator::default();
         let expected = vec![
             PinYinRecord {
                 pinyin: vec!["han4".to_string()],
@@ -161,21 +119,21 @@ mod tests {
                 character: '字',
             },
         ];
-        assert_eq!(context.pinyin_of("汉字"), expected);
+        assert_eq!(collator.pinyin_of("汉字"), expected);
     }
 
     #[test]
     fn includes_generated_first_record() {
-        let context = PinyinContext::default();
-        let records = context.pinyin_of("〇");
+        let collator = PinyinCollator::default();
+        let records = collator.pinyin_of("〇");
         assert_eq!(records.len(), 1);
         assert_eq!(records[0].primary_pinyin(), Some("ling2"));
     }
 
     #[test]
     fn unknown_characters_are_preserved() {
-        let context = PinyinContext::default();
-        let records = context.pinyin_of("a1");
+        let collator = PinyinCollator::default();
+        let records = collator.pinyin_of("a1");
         assert_eq!(
             records,
             vec![
@@ -193,7 +151,7 @@ mod tests {
 
     #[test]
     fn phrase_override_takes_precedence() {
-        let context = PinyinContext::with_override(PinyinOverride {
+        let collator = PinyinCollator::with_override(PinyinOverride {
             char_override: HashMap::from([('重', "zhong4".to_string())]),
             phrase_override: HashMap::from([(
                 "重庆".to_string(),
@@ -201,25 +159,25 @@ mod tests {
             )]),
         })
         .expect("valid override should construct");
-        let records = context.pinyin_of("重庆");
+        let records = collator.pinyin_of("重庆");
         assert_eq!(records[0].primary_pinyin(), Some("chong2"));
     }
 
     #[test]
     fn char_override_applies_without_phrase_override() {
-        let context = PinyinContext::with_override(PinyinOverride {
+        let collator = PinyinCollator::with_override(PinyinOverride {
             char_override: HashMap::from([('重', "chong2".to_string())]),
             phrase_override: HashMap::new(),
         })
         .expect("valid override should construct");
-        let records = context.pinyin_of("重要");
+        let records = collator.pinyin_of("重要");
         assert_eq!(records[0].primary_pinyin(), Some("chong2"));
     }
 
     #[test]
     fn polyphonic_characters_expose_all_readings() {
-        let context = PinyinContext::default();
-        let records = context.pinyin_of("乐");
+        let collator = PinyinCollator::default();
+        let records = collator.pinyin_of("乐");
         assert_eq!(records.len(), 1);
         assert!(records[0].pinyin.len() > 1);
         assert!(records[0].pinyin.iter().any(|item| item == "le4"));
@@ -227,8 +185,8 @@ mod tests {
     }
 
     #[test]
-    fn encoded_sort_key_uses_phrase_override() {
-        let context = PinyinContext::with_override(PinyinOverride {
+    fn collator_returns_phrase_data_for_known_phrase() {
+        let collator = PinyinCollator::with_override(PinyinOverride {
             char_override: HashMap::new(),
             phrase_override: HashMap::from([(
                 "重庆".to_string(),
@@ -236,15 +194,13 @@ mod tests {
             )]),
         })
         .expect("valid override should construct");
-        let encoded = context.encoded_sort_key("重庆");
-        assert_eq!(encoded.len(), 2);
+        let phrase = collator.phrase_data("重庆").expect("phrase override should hit");
         assert_eq!(
-            encoded[0].primary_pinyin,
-            Some(encode_primary_pinyin_unchecked("chong2"))
-        );
-        assert_eq!(
-            encoded[1].primary_pinyin,
-            Some(encode_primary_pinyin_unchecked("qing4"))
+            phrase,
+            vec![
+                encode_primary_pinyin_unchecked("chong2"),
+                encode_primary_pinyin_unchecked("qing4"),
+            ]
         );
     }
 
@@ -256,12 +212,31 @@ mod tests {
             char_override: HashMap::from([('女', "nü3".to_string())]),
             phrase_override: HashMap::new(),
         };
-        let err = PinyinContext::with_override(bad).expect_err("non-ASCII should fail");
+        let err = PinyinCollator::with_override(bad).expect_err("non-ASCII should fail");
         assert!(err.to_string().contains("ASCII"), "got: {err}");
     }
 
     #[test]
     fn new_is_infallible_for_no_override_case() {
-        let _context = PinyinContext::new();
+        let _collator = PinyinCollator::new();
+    }
+
+    #[test]
+    fn library_users_can_call_sort_strings_with_directly() {
+        // Smoke test: a downstream library user can use PinyinCollator
+        // through the generic sort entry point without going through
+        // AnyCollator dispatch.
+        let collator = PinyinCollator::new();
+        let sorted = sort_strings_with(
+            vec![
+                "汉字".to_string(),
+                "照相".to_string(),
+                "赵云".to_string(),
+                "赵四".to_string(),
+                "张三".to_string(),
+            ],
+            &collator,
+        );
+        assert_eq!(sorted, vec!["汉字", "张三", "照相", "赵四", "赵云"]);
     }
 }

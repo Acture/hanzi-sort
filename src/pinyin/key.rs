@@ -1,4 +1,3 @@
-use std::cmp::Ordering;
 use std::collections::HashMap;
 
 use smallvec::SmallVec;
@@ -6,21 +5,15 @@ use smallvec::SmallVec;
 use crate::error::{PinyinSortError, Result};
 use crate::r#override::PinyinOverride;
 
-const INLINE_SORT_KEY_LEN: usize = 8;
+const INLINE_OVERRIDE_LEN: usize = 8;
 const MAX_ENCODED_PINYIN_LEN: usize = 16;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) struct EncodedSortToken {
-    pub(crate) character: char,
-    pub(crate) primary_pinyin: Option<u128>,
-}
-
-pub(crate) type EncodedSortKey = SmallVec<[EncodedSortToken; INLINE_SORT_KEY_LEN]>;
-
+/// Override table whose syllables have been pre-encoded into `u128` for the
+/// fast comparison path. Built from a [`PinyinOverride`] via [`TryFrom`].
 #[derive(Debug, Clone, Default)]
 pub(crate) struct EncodedOverride {
     char_override: HashMap<char, u128>,
-    phrase_override: HashMap<String, SmallVec<[u128; INLINE_SORT_KEY_LEN]>>,
+    phrase_override: HashMap<String, SmallVec<[u128; INLINE_OVERRIDE_LEN]>>,
 }
 
 impl EncodedOverride {
@@ -49,7 +42,7 @@ impl TryFrom<&PinyinOverride> for EncodedOverride {
 
         let mut phrase_override = HashMap::with_capacity(value.phrase_override.len());
         for (phrase, pinyins) in &value.phrase_override {
-            let mut encoded: SmallVec<[u128; INLINE_SORT_KEY_LEN]> =
+            let mut encoded: SmallVec<[u128; INLINE_OVERRIDE_LEN]> =
                 SmallVec::with_capacity(pinyins.len());
             for pinyin in pinyins {
                 let value = encode_primary_pinyin(pinyin).map_err(|reason| {
@@ -68,19 +61,6 @@ impl TryFrom<&PinyinOverride> for EncodedOverride {
             phrase_override,
         })
     }
-}
-
-pub(crate) fn compare_encoded_sort_key(a: &EncodedSortKey, b: &EncodedSortKey) -> Ordering {
-    let len = a.len().min(b.len());
-
-    for index in 0..len {
-        let ordering = compare_encoded_token(&a[index], &b[index]);
-        if ordering != Ordering::Equal {
-            return ordering;
-        }
-    }
-
-    a.len().cmp(&b.len())
 }
 
 /// Pack a pinyin syllable into a `u128` such that `u128::cmp` agrees with the
@@ -113,11 +93,11 @@ pub(crate) fn encode_primary_pinyin(pinyin: &str) -> std::result::Result<u128, &
 
 /// Encode a syllable that the caller already knows is well-formed.
 ///
-/// Used on the hot path inside `PinyinContext` where the syllable comes from
-/// either the generated PHF table (always ASCII, short, non-empty) or from an
-/// `EncodedOverride` that has already validated its syllables. Callers must
-/// guarantee `pinyin` is non-empty, ASCII, and at most
-/// [`MAX_ENCODED_PINYIN_LEN`] bytes.
+/// Used on the hot path inside [`crate::pinyin::PinyinCollator`] where the
+/// syllable comes from either the generated PHF table (always ASCII, short,
+/// non-empty, validated by `build.rs`) or from an [`EncodedOverride`] that
+/// has already validated its syllables. Callers must guarantee `pinyin` is
+/// non-empty, ASCII, and at most [`MAX_ENCODED_PINYIN_LEN`] bytes.
 pub(crate) fn encode_primary_pinyin_unchecked(pinyin: &str) -> u128 {
     debug_assert!(
         !pinyin.is_empty()
@@ -132,24 +112,13 @@ pub(crate) fn encode_primary_pinyin_unchecked(pinyin: &str) -> u128 {
     encoded << ((MAX_ENCODED_PINYIN_LEN - pinyin.len()) * 8)
 }
 
-fn compare_encoded_token(a: &EncodedSortToken, b: &EncodedSortToken) -> Ordering {
-    match (a.primary_pinyin, b.primary_pinyin) {
-        (Some(pa), Some(pb)) => pa.cmp(&pb).then_with(|| a.character.cmp(&b.character)),
-        (Some(_), None) => Ordering::Less,
-        (None, Some(_)) => Ordering::Greater,
-        (None, None) => a.character.cmp(&b.character),
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::{encode_primary_pinyin, encode_primary_pinyin_unchecked};
 
     #[test]
     fn encode_primary_pinyin_preserves_lexicographic_order() {
-        assert!(
-            encode_primary_pinyin("a").unwrap() < encode_primary_pinyin("aa").unwrap()
-        );
+        assert!(encode_primary_pinyin("a").unwrap() < encode_primary_pinyin("aa").unwrap());
         assert!(
             encode_primary_pinyin("chong2").unwrap() < encode_primary_pinyin("qing4").unwrap()
         );
