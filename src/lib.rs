@@ -47,7 +47,7 @@ mod stroke;
 
 pub use collator::{AnyCollator, CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with};
 pub use config::{InputSource, RuntimeConfig};
-pub use error::{PinyinSortError, Result};
+pub use error::{HanziSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
 pub use pinyin::{PinYinRecord, PinyinCollator};

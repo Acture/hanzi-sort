@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::Path;
 
-use crate::error::{PinyinSortError, Result};
+use crate::error::{HanziSortError, Result};
 
 #[derive(Debug, Clone, Default, Deserialize, PartialEq, Eq)]
 pub struct PinyinOverride {
@@ -15,13 +15,13 @@ pub struct PinyinOverride {
 impl PinyinOverride {
     pub fn load_from_file(path: &Path) -> Result<Self> {
         let file_content = std::fs::read_to_string(path).map_err(|source| {
-            PinyinSortError::io(
+            HanziSortError::io(
                 format!("failed to read override config {}", path.display()),
                 source,
             )
         })?;
         let overrides: Self =
-            toml::from_str(&file_content).map_err(|source| PinyinSortError::OverrideParse {
+            toml::from_str(&file_content).map_err(|source| HanziSortError::OverrideParse {
                 path: path.to_path_buf(),
                 source,
             })?;
@@ -32,7 +32,7 @@ impl PinyinOverride {
     pub fn validate(&self) -> Result<()> {
         for (character, syllable) in &self.char_override {
             validate_syllable(syllable).map_err(|reason| {
-                PinyinSortError::InvalidOverride(format!(
+                HanziSortError::InvalidOverride(format!(
                     "char_override entry '{character}' has invalid pinyin '{syllable}': {reason}"
                 ))
             })?;
@@ -40,13 +40,13 @@ impl PinyinOverride {
 
         for (phrase, pinyins) in &self.phrase_override {
             if phrase.is_empty() {
-                return Err(PinyinSortError::InvalidOverride(
+                return Err(HanziSortError::InvalidOverride(
                     "phrase_override key cannot be empty".to_string(),
                 ));
             }
             let char_count = phrase.chars().count();
             if char_count != pinyins.len() {
-                return Err(PinyinSortError::InvalidOverride(format!(
+                return Err(HanziSortError::InvalidOverride(format!(
                     "phrase_override entry '{}' has {} characters but {} pinyin values",
                     phrase,
                     char_count,
@@ -55,7 +55,7 @@ impl PinyinOverride {
             }
             for syllable in pinyins {
                 validate_syllable(syllable).map_err(|reason| {
-                    PinyinSortError::InvalidOverride(format!(
+                    HanziSortError::InvalidOverride(format!(
                         "phrase_override entry '{phrase}' has invalid pinyin '{syllable}': {reason}"
                     ))
                 })?;

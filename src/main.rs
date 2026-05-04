@@ -21,7 +21,7 @@ fn run() -> Result<()> {
         let mut command = CliArgs::command();
         command
             .print_help()
-            .map_err(|source| hanzi_sort::PinyinSortError::io("failed to print help", source))?;
+            .map_err(|source| hanzi_sort::HanziSortError::io("failed to print help", source))?;
         println!();
         return Ok(());
     }
@@ -34,7 +34,7 @@ fn run() -> Result<()> {
 fn write_output(path: Option<&Path>, output: &str) -> Result<()> {
     if let Some(path) = path {
         std::fs::write(path, output).map_err(|source| {
-            hanzi_sort::PinyinSortError::io(
+            hanzi_sort::HanziSortError::io(
                 format!("failed to write output file {}", path.display()),
                 source,
             )
@@ -43,7 +43,7 @@ fn write_output(path: Option<&Path>, output: &str) -> Result<()> {
         let mut stdout = std::io::stdout().lock();
         stdout
             .write_all(output.as_bytes())
-            .map_err(|source| hanzi_sort::PinyinSortError::io("failed to write stdout", source))?;
+            .map_err(|source| hanzi_sort::HanziSortError::io("failed to write stdout", source))?;
     }
 
     Ok(())

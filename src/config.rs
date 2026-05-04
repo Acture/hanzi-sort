@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use crate::collator::AnyCollator;
-use crate::error::{PinyinSortError, Result};
+use crate::error::{HanziSortError, Result};
 use crate::format::FormatConfig;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -31,7 +31,7 @@ pub struct RuntimeConfig {
 impl RuntimeConfig {
     pub fn new(input: InputSource, format: FormatConfig, collator: AnyCollator) -> Result<Self> {
         if input.is_empty() {
-            return Err(PinyinSortError::InvalidArgument(
+            return Err(HanziSortError::InvalidArgument(
                 "at least one input file or text item is required".to_string(),
             ));
         }

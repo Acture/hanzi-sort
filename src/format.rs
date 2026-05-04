@@ -1,6 +1,6 @@
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
-use crate::error::{PinyinSortError, Result};
+use crate::error::{HanziSortError, Result};
 
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub enum Align {
@@ -39,19 +39,19 @@ impl Default for FormatConfig {
 impl FormatConfig {
     pub fn validate(self) -> Result<Self> {
         if self.columns_per_row == 0 {
-            return Err(PinyinSortError::InvalidArgument(
+            return Err(HanziSortError::InvalidArgument(
                 "--columns must be greater than 0".to_string(),
             ));
         }
 
         if self.entry_width == 0 {
-            return Err(PinyinSortError::InvalidArgument(
+            return Err(HanziSortError::InvalidArgument(
                 "--entry-width must be greater than 0".to_string(),
             ));
         }
 
         if UnicodeWidthChar::width(self.padding_char).unwrap_or(0) != 1 {
-            return Err(PinyinSortError::InvalidArgument(
+            return Err(HanziSortError::InvalidArgument(
                 "--padding-char must have display width 1".to_string(),
             ));
         }

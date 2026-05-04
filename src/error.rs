@@ -1,10 +1,10 @@
 use std::fmt::{Display, Formatter};
 use std::path::PathBuf;
 
-pub type Result<T> = std::result::Result<T, PinyinSortError>;
+pub type Result<T> = std::result::Result<T, HanziSortError>;
 
 #[derive(Debug)]
-pub enum PinyinSortError {
+pub enum HanziSortError {
     InvalidArgument(String),
     Io {
         context: String,
@@ -17,7 +17,7 @@ pub enum PinyinSortError {
     InvalidOverride(String),
 }
 
-impl PinyinSortError {
+impl HanziSortError {
     pub fn io(context: impl Into<String>, source: std::io::Error) -> Self {
         Self::Io {
             context: context.into(),
@@ -26,7 +26,7 @@ impl PinyinSortError {
     }
 }
 
-impl Display for PinyinSortError {
+impl Display for HanziSortError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::InvalidArgument(message) => write!(f, "{message}"),
@@ -43,7 +43,7 @@ impl Display for PinyinSortError {
     }
 }
 
-impl std::error::Error for PinyinSortError {
+impl std::error::Error for HanziSortError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::Io { source, .. } => Some(source),

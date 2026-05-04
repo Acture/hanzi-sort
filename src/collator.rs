@@ -132,7 +132,7 @@ impl AnyCollator {
 
     /// Pinyin collator that honors the supplied override table.
     ///
-    /// Returns [`crate::PinyinSortError::InvalidOverride`] if any syllable
+    /// Returns [`crate::HanziSortError::InvalidOverride`] if any syllable
     /// in the override cannot be encoded for fast comparisons.
     pub fn pinyin_with_override(
         overrides: crate::r#override::PinyinOverride,

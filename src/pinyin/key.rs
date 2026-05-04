@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use smallvec::SmallVec;
 
-use crate::error::{PinyinSortError, Result};
+use crate::error::{HanziSortError, Result};
 use crate::r#override::PinyinOverride;
 
 const INLINE_OVERRIDE_LEN: usize = 8;
@@ -27,13 +27,13 @@ impl EncodedOverride {
 }
 
 impl TryFrom<&PinyinOverride> for EncodedOverride {
-    type Error = PinyinSortError;
+    type Error = HanziSortError;
 
     fn try_from(value: &PinyinOverride) -> Result<Self> {
         let mut char_override = HashMap::with_capacity(value.char_override.len());
         for (character, pinyin) in &value.char_override {
             let encoded = encode_primary_pinyin(pinyin).map_err(|reason| {
-                PinyinSortError::InvalidOverride(format!(
+                HanziSortError::InvalidOverride(format!(
                     "char_override entry '{character}' has unencodable pinyin '{pinyin}': {reason}"
                 ))
             })?;
@@ -46,7 +46,7 @@ impl TryFrom<&PinyinOverride> for EncodedOverride {
                 SmallVec::with_capacity(pinyins.len());
             for pinyin in pinyins {
                 let value = encode_primary_pinyin(pinyin).map_err(|reason| {
-                    PinyinSortError::InvalidOverride(format!(
+                    HanziSortError::InvalidOverride(format!(
                         "phrase_override entry '{phrase}' has unencodable pinyin '{pinyin}': \
                          {reason}"
                     ))

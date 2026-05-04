@@ -2,7 +2,7 @@ use clap::{Parser, ValueEnum};
 use std::path::PathBuf;
 
 use hanzi_sort::{
-    Align, AnyCollator, FormatConfig, InputSource, PinyinOverride, PinyinSortError, Result,
+    Align, AnyCollator, FormatConfig, InputSource, PinyinOverride, HanziSortError, Result,
     RuntimeConfig,
 };
 
@@ -161,7 +161,7 @@ fn build_collator(
         },
         CliSortMode::Strokes => {
             if override_data.is_some() {
-                return Err(PinyinSortError::InvalidArgument(
+                return Err(HanziSortError::InvalidArgument(
                     "--config is only supported with --sort-by pinyin".to_string(),
                 ));
             }
