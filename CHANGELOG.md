@@ -3,6 +3,10 @@
 ### Added
 
 - expose the core sorter as a library with `PinyinContext`, `sort_strings`, and `format_items`
+- `Collator` trait, `Mapped<T>`, `CharToken<T>`, `SortKey<T>`, `sort_key_of`, and `sort_strings_with` for pluggable per-character sort strategy abstraction
+- `AnyCollator` enum for runtime collator selection (Pinyin / Strokes)
+- `PinyinCollator` and `StrokesCollator` types implementing `Collator`
+- CLI rejects `--config` together with `--sort-by strokes` (the override is pinyin-specific)
 - add CI to run `cargo test` and `cargo clippy --all-targets --all-features -- -D warnings`
 - add integration coverage for CLI behavior, file input, override validation, and output writing
 - add stroke-count sorting alongside pinyin sorting
@@ -15,6 +19,9 @@
 ### Changed
 
 - rename the project from `pinyin-sort` to `hanzi-sort`; this is a hard rename with no compatibility binary alias
+- renamed `PinyinContext` to `PinyinCollator` (public API break)
+- `RuntimeConfig` constructor signature changed: now takes `(input, format, collator: AnyCollator)` instead of `(input, format, override_data, sort_mode)` — the old `RuntimeConfig::new` and `RuntimeConfig::with_sort_mode` are gone
+- `app::render` dispatches via `AnyCollator::sort` instead of `sort_strings_by`
 - make `--file` read one non-blank line per record and reject directory inputs
 - make `--file` and `--text` mutually exclusive
 - wire `-o/--output` to write to a file instead of stdout
@@ -23,6 +30,12 @@
 - `PinyinContext::new()` is now infallible and creates an empty context; pass overrides via `PinyinContext::with_override`
 - `encode_primary_pinyin` returns a `Result` instead of panicking on invalid input
 - `build.rs` reports row/codepoint context on failure and re-runs when the build script itself changes
+
+### Removed
+
+- public `SortMode` enum (replaced by `AnyCollator` variants)
+- public `sort_strings` / `sort_strings_by` (use `sort_strings_with` or `AnyCollator::sort`)
+- internal `EncodedSortToken` / `EncodedSortKey` / `compare_encoded_sort_key` (subsumed by the trait-based key infrastructure)
 
 ### Fixed
 
