@@ -20,10 +20,6 @@
 //! `银行` without rewriting the core lookup tables.
 //!
 //! ```compile_fail
-//! use hanzi_sort::SortKey;
-//! ```
-//!
-//! ```compile_fail
 //! use hanzi_sort::SortToken;
 //! ```
 //!
@@ -33,6 +29,7 @@
 
 pub mod app;
 
+mod collator;
 mod config;
 mod error;
 mod format;
@@ -43,9 +40,13 @@ mod pinyin;
 mod sort;
 mod stroke;
 
+pub use collator::{
+    CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with,
+};
 pub use config::{InputSource, RuntimeConfig};
 pub use error::{PinyinSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
 pub use pinyin::{PinYinRecord, PinyinContext};
 pub use sort::{SortMode, sort_strings, sort_strings_by};
+pub use stroke::StrokesCollator;

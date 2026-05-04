@@ -1,6 +1,7 @@
 use super::key::{EncodedOverride, EncodedSortKey, EncodedSortToken, encode_primary_pinyin_unchecked};
 use super::lookup::{all_pinyin_for_char, primary_pinyin_for_char};
 use super::model::PinYinRecord;
+use crate::collator::Collator;
 use crate::error::Result;
 use crate::r#override::PinyinOverride;
 
@@ -118,6 +119,26 @@ impl PinyinContext {
         }
 
         primary_pinyin_for_char(character)
+    }
+}
+
+impl Collator for PinyinContext {
+    type Data = u128;
+
+    fn data_for(&self, character: char) -> Option<u128> {
+        if let Some(encoded_override) = &self.encoded_override
+            && let Some(primary_pinyin) = encoded_override.char_override(character)
+        {
+            return Some(primary_pinyin);
+        }
+        primary_pinyin_for_char(character).map(encode_primary_pinyin_unchecked)
+    }
+
+    fn phrase_data(&self, phrase: &str) -> Option<Vec<u128>> {
+        self.encoded_override
+            .as_ref()?
+            .phrase_override(phrase)
+            .map(<[u128]>::to_vec)
     }
 }
 
