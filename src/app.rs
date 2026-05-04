@@ -7,7 +7,10 @@ use crate::sort::sort_strings_by;
 
 pub fn render(config: RuntimeConfig) -> Result<String> {
     let input = read_input_lines(&config.input)?;
-    let context = PinyinContext::new(config.override_data);
+    let context = match config.override_data {
+        Some(override_data) => PinyinContext::with_override(override_data)?,
+        None => PinyinContext::new(),
+    };
     let sorted = sort_strings_by(input, &context, config.sort_mode);
     Ok(format_items(&sorted, &config.format))
 }

@@ -1,27 +1,39 @@
-use super::key::{EncodedOverride, EncodedSortKey, EncodedSortToken, encode_primary_pinyin};
+use super::key::{EncodedOverride, EncodedSortKey, EncodedSortToken, encode_primary_pinyin_unchecked};
 use super::lookup::{all_pinyin_for_char, primary_pinyin_for_char};
 use super::model::PinYinRecord;
+use crate::error::Result;
 use crate::r#override::PinyinOverride;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct PinyinContext {
     override_data: Option<PinyinOverride>,
     encoded_override: Option<EncodedOverride>,
 }
 
-impl Default for PinyinContext {
-    fn default() -> Self {
-        Self::new(None)
-    }
-}
-
 impl PinyinContext {
-    pub fn new(override_data: Option<PinyinOverride>) -> Self {
-        let encoded_override = override_data.as_ref().map(EncodedOverride::from);
-        Self {
-            override_data,
+    /// Build a context with no override data.
+    ///
+    /// This constructor is infallible. Callers that want to apply an override
+    /// table should use [`PinyinContext::with_override`].
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Build a context that applies the given override table.
+    ///
+    /// Override data must already pass [`PinyinOverride::validate`]. This
+    /// constructor performs an additional defensive check: if any syllable
+    /// cannot be encoded for fast comparisons (only possible if the caller
+    /// skipped validation and passed non-ASCII or oversized syllables), the
+    /// constructor returns [`PinyinSortError::InvalidOverride`].
+    ///
+    /// [`PinyinSortError::InvalidOverride`]: crate::PinyinSortError::InvalidOverride
+    pub fn with_override(override_data: PinyinOverride) -> Result<Self> {
+        let encoded_override = Some(EncodedOverride::try_from(&override_data)?);
+        Ok(Self {
+            override_data: Some(override_data),
             encoded_override,
-        }
+        })
     }
 
     pub fn pinyin_of(&self, value: &str) -> Vec<PinYinRecord> {
@@ -94,7 +106,7 @@ impl PinyinContext {
             character,
             primary_pinyin: self
                 .primary_pinyin_for_char(character)
-                .map(encode_primary_pinyin),
+                .map(encode_primary_pinyin_unchecked),
         }
     }
 
@@ -160,23 +172,25 @@ mod tests {
 
     #[test]
     fn phrase_override_takes_precedence() {
-        let context = PinyinContext::new(Some(PinyinOverride {
+        let context = PinyinContext::with_override(PinyinOverride {
             char_override: HashMap::from([('重', "zhong4".to_string())]),
             phrase_override: HashMap::from([(
                 "重庆".to_string(),
                 vec!["chong2".to_string(), "qing4".to_string()],
             )]),
-        }));
+        })
+        .expect("valid override should construct");
         let records = context.pinyin_of("重庆");
         assert_eq!(records[0].primary_pinyin(), Some("chong2"));
     }
 
     #[test]
     fn char_override_applies_without_phrase_override() {
-        let context = PinyinContext::new(Some(PinyinOverride {
+        let context = PinyinContext::with_override(PinyinOverride {
             char_override: HashMap::from([('重', "chong2".to_string())]),
             phrase_override: HashMap::new(),
-        }));
+        })
+        .expect("valid override should construct");
         let records = context.pinyin_of("重要");
         assert_eq!(records[0].primary_pinyin(), Some("chong2"));
     }
@@ -193,22 +207,40 @@ mod tests {
 
     #[test]
     fn encoded_sort_key_uses_phrase_override() {
-        let context = PinyinContext::new(Some(PinyinOverride {
+        let context = PinyinContext::with_override(PinyinOverride {
             char_override: HashMap::new(),
             phrase_override: HashMap::from([(
                 "重庆".to_string(),
                 vec!["chong2".to_string(), "qing4".to_string()],
             )]),
-        }));
+        })
+        .expect("valid override should construct");
         let encoded = context.encoded_sort_key("重庆");
         assert_eq!(encoded.len(), 2);
         assert_eq!(
             encoded[0].primary_pinyin,
-            Some(encode_primary_pinyin("chong2"))
+            Some(encode_primary_pinyin_unchecked("chong2"))
         );
         assert_eq!(
             encoded[1].primary_pinyin,
-            Some(encode_primary_pinyin("qing4"))
+            Some(encode_primary_pinyin_unchecked("qing4"))
         );
+    }
+
+    #[test]
+    fn with_override_rejects_unencodable_syllable() {
+        // Bypass PinyinOverride::validate (which would reject non-ASCII)
+        // to make sure the encoding layer is also defensive.
+        let bad = PinyinOverride {
+            char_override: HashMap::from([('女', "nü3".to_string())]),
+            phrase_override: HashMap::new(),
+        };
+        let err = PinyinContext::with_override(bad).expect_err("non-ASCII should fail");
+        assert!(err.to_string().contains("ASCII"), "got: {err}");
+    }
+
+    #[test]
+    fn new_is_infallible_for_no_override_case() {
+        let _context = PinyinContext::new();
     }
 }
