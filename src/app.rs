@@ -2,26 +2,20 @@ use crate::config::RuntimeConfig;
 use crate::error::Result;
 use crate::format::format_items;
 use crate::input::read_input_lines;
-use crate::pinyin::PinyinContext;
-use crate::sort::sort_strings_by;
 
 pub fn render(config: RuntimeConfig) -> Result<String> {
     let input = read_input_lines(&config.input)?;
-    let context = match config.override_data {
-        Some(override_data) => PinyinContext::with_override(override_data)?,
-        None => PinyinContext::new(),
-    };
-    let sorted = sort_strings_by(input, &context, config.sort_mode);
+    let sorted = config.collator.sort(input);
     Ok(format_items(&sorted, &config.format))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::collator::AnyCollator;
     use crate::config::{InputSource, RuntimeConfig};
     use crate::format::{Align, FormatConfig};
     use crate::r#override::PinyinOverride;
-    use crate::sort::SortMode;
     use std::collections::HashMap;
     use std::fs;
     use std::path::{Path, PathBuf};
@@ -76,7 +70,7 @@ mod tests {
                 "汉字".to_string(),
             ]),
             single_column_format(),
-            None,
+            AnyCollator::pinyin(),
         )
         .expect("runtime config should be created");
 
@@ -93,7 +87,7 @@ mod tests {
         let config = RuntimeConfig::new(
             InputSource::Files(vec![input_path]),
             single_column_format(),
-            None,
+            AnyCollator::pinyin(),
         )
         .expect("runtime config should be created");
 
@@ -103,16 +97,18 @@ mod tests {
 
     #[test]
     fn renders_with_overrides() {
+        let collator = AnyCollator::pinyin_with_override(PinyinOverride {
+            char_override: HashMap::new(),
+            phrase_override: HashMap::from([(
+                "重庆".to_string(),
+                vec!["chong2".to_string(), "qing4".to_string()],
+            )]),
+        })
+        .expect("override collator should construct");
         let config = RuntimeConfig::new(
             InputSource::Text(vec!["银行".to_string(), "重庆".to_string()]),
             single_column_format(),
-            Some(PinyinOverride {
-                char_override: HashMap::new(),
-                phrase_override: HashMap::from([(
-                    "重庆".to_string(),
-                    vec!["chong2".to_string(), "qing4".to_string()],
-                )]),
-            }),
+            collator,
         )
         .expect("runtime config should be created");
 
@@ -134,7 +130,7 @@ mod tests {
         let config = RuntimeConfig::new(
             InputSource::Text(vec!["乙".to_string(), "甲".to_string(), "丙".to_string()]),
             format,
-            None,
+            AnyCollator::pinyin(),
         )
         .expect("runtime config should be created");
 
@@ -144,11 +140,10 @@ mod tests {
 
     #[test]
     fn renders_stroke_sorted_output() {
-        let config = RuntimeConfig::with_sort_mode(
+        let config = RuntimeConfig::new(
             InputSource::Text(vec!["天".to_string(), "一".to_string(), "十".to_string()]),
             single_column_format(),
-            None,
-            SortMode::Strokes,
+            AnyCollator::strokes(),
         )
         .expect("runtime config should be created");
 

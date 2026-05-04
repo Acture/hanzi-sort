@@ -2,7 +2,8 @@ use clap::{Parser, ValueEnum};
 use std::path::PathBuf;
 
 use hanzi_sort::{
-    Align, FormatConfig, InputSource, PinyinOverride, Result, RuntimeConfig, SortMode,
+    Align, AnyCollator, FormatConfig, InputSource, PinyinOverride, PinyinSortError, Result,
+    RuntimeConfig,
 };
 
 #[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq)]
@@ -24,19 +25,11 @@ impl From<CliAlign> for Align {
     }
 }
 
-#[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq, Default)]
 pub enum CliSortMode {
+    #[default]
     Pinyin,
     Strokes,
-}
-
-impl From<CliSortMode> for SortMode {
-    fn from(value: CliSortMode) -> Self {
-        match value {
-            CliSortMode::Pinyin => Self::Pinyin,
-            CliSortMode::Strokes => Self::Strokes,
-        }
-    }
 }
 
 #[derive(Parser, Debug)]
@@ -151,9 +144,29 @@ impl CliArgs {
             .map(PinyinOverride::load_from_file)
             .transpose()?;
 
-        let sort_mode = self.sort_by.map(Into::into).unwrap_or(SortMode::Pinyin);
-        let config = RuntimeConfig::with_sort_mode(input, format, override_data, sort_mode)?;
+        let collator = build_collator(self.sort_by.unwrap_or_default(), override_data)?;
+        let config = RuntimeConfig::new(input, format, collator)?;
         Ok((config, self.output_path))
+    }
+}
+
+fn build_collator(
+    sort_by: CliSortMode,
+    override_data: Option<PinyinOverride>,
+) -> Result<AnyCollator> {
+    match sort_by {
+        CliSortMode::Pinyin => match override_data {
+            Some(override_data) => AnyCollator::pinyin_with_override(override_data),
+            None => Ok(AnyCollator::pinyin()),
+        },
+        CliSortMode::Strokes => {
+            if override_data.is_some() {
+                return Err(PinyinSortError::InvalidArgument(
+                    "--config is only supported with --sort-by pinyin".to_string(),
+                ));
+            }
+            Ok(AnyCollator::strokes())
+        }
     }
 }
 
@@ -249,7 +262,7 @@ mod tests {
         assert_eq!(config.format.padding_char, '.');
         assert_eq!(config.format.separator, ',');
         assert_eq!(config.format.line_ending, ';');
-        assert_eq!(config.sort_mode, SortMode::Pinyin);
+        assert!(matches!(config.collator, AnyCollator::Pinyin(_)));
         assert_eq!(output_path, Some(PathBuf::from("sorted.txt")));
     }
 
@@ -260,7 +273,7 @@ mod tests {
             .into_runtime_parts()
             .expect("runtime config should be created");
 
-        assert_eq!(config.sort_mode, SortMode::Strokes);
+        assert!(matches!(config.collator, AnyCollator::Strokes(_)));
     }
 
     #[test]
@@ -281,12 +294,36 @@ mod tests {
             .into_runtime_parts()
             .expect("override data should load");
 
-        assert_eq!(
-            config
-                .override_data
-                .as_ref()
-                .and_then(|data| data.char_override.get(&'重')),
-            Some(&"chong2".to_string())
+        // Behavior assertion: with the override, "重" sorts as "chong2", so
+        // pairing it with a "y..." input would put "重要" before. We confirm
+        // load by checking the constructed collator type and exercising it.
+        assert!(matches!(config.collator, AnyCollator::Pinyin(_)));
+        let sorted = config.collator.sort(vec!["银行".to_string(), "重要".to_string()]);
+        assert_eq!(sorted, vec!["重要", "银行"]);
+    }
+
+    #[test]
+    fn rejects_override_with_stroke_mode() {
+        let temp = TempWorkspace::new();
+        let override_path = temp.path().join("override.toml");
+        fs::write(&override_path, "[char_override]\n'重' = 'chong2'\n")
+            .expect("override file should be written");
+
+        let args = CliArgs::parse_from([
+            "hanzi-sort",
+            "-t",
+            "重",
+            "--sort-by",
+            "strokes",
+            "--config",
+            override_path.to_str().expect("path should be valid UTF-8"),
+        ]);
+        let error = args
+            .into_runtime_parts()
+            .expect_err("override + strokes should fail");
+        assert!(
+            error.to_string().contains("--sort-by pinyin"),
+            "unexpected: {error}"
         );
     }
 

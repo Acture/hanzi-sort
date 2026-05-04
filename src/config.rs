@@ -1,9 +1,8 @@
 use std::path::PathBuf;
 
+use crate::collator::AnyCollator;
 use crate::error::{PinyinSortError, Result};
 use crate::format::FormatConfig;
-use crate::r#override::PinyinOverride;
-use crate::sort::SortMode;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InputSource {
@@ -20,29 +19,17 @@ impl InputSource {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+/// Owns everything needed to drive [`crate::app::render`]: where to read
+/// input, how to format the output, and which collator to sort with.
+#[derive(Debug, Clone)]
 pub struct RuntimeConfig {
     pub input: InputSource,
     pub format: FormatConfig,
-    pub override_data: Option<PinyinOverride>,
-    pub sort_mode: SortMode,
+    pub collator: AnyCollator,
 }
 
 impl RuntimeConfig {
-    pub fn new(
-        input: InputSource,
-        format: FormatConfig,
-        override_data: Option<PinyinOverride>,
-    ) -> Result<Self> {
-        Self::with_sort_mode(input, format, override_data, SortMode::Pinyin)
-    }
-
-    pub fn with_sort_mode(
-        input: InputSource,
-        format: FormatConfig,
-        override_data: Option<PinyinOverride>,
-        sort_mode: SortMode,
-    ) -> Result<Self> {
+    pub fn new(input: InputSource, format: FormatConfig, collator: AnyCollator) -> Result<Self> {
         if input.is_empty() {
             return Err(PinyinSortError::InvalidArgument(
                 "at least one input file or text item is required".to_string(),
@@ -52,8 +39,7 @@ impl RuntimeConfig {
         Ok(Self {
             input,
             format: format.validate()?,
-            override_data,
-            sort_mode,
+            collator,
         })
     }
 }

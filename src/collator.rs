@@ -113,6 +113,49 @@ pub fn sort_strings_with<C: Collator>(input: Vec<String>, collator: &C) -> Vec<S
     with_keys.into_iter().map(|(_, _, item)| item).collect()
 }
 
+/// Type-erased dispatch over the built-in collators.
+///
+/// Used by the CLI and [`crate::RuntimeConfig`] to select a sort strategy
+/// at runtime. Library users with a known concrete collator type should
+/// call [`sort_strings_with`] directly to keep the dispatch monomorphic.
+#[derive(Debug, Clone)]
+pub enum AnyCollator {
+    Pinyin(crate::pinyin::PinyinContext),
+    Strokes(crate::stroke::StrokesCollator),
+}
+
+impl AnyCollator {
+    /// Pinyin collator with no override data.
+    pub fn pinyin() -> Self {
+        Self::Pinyin(crate::pinyin::PinyinContext::new())
+    }
+
+    /// Pinyin collator that honors the supplied override table.
+    ///
+    /// Returns [`crate::PinyinSortError::InvalidOverride`] if any syllable
+    /// in the override cannot be encoded for fast comparisons.
+    pub fn pinyin_with_override(
+        overrides: crate::r#override::PinyinOverride,
+    ) -> crate::error::Result<Self> {
+        Ok(Self::Pinyin(
+            crate::pinyin::PinyinContext::with_override(overrides)?,
+        ))
+    }
+
+    /// Stroke-count collator (no overrides).
+    pub fn strokes() -> Self {
+        Self::Strokes(crate::stroke::StrokesCollator)
+    }
+
+    /// Sort `input` under the selected collator.
+    pub fn sort(&self, input: Vec<String>) -> Vec<String> {
+        match self {
+            Self::Pinyin(c) => sort_strings_with(input, c),
+            Self::Strokes(c) => sort_strings_with(input, c),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
