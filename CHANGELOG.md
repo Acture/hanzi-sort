@@ -30,6 +30,7 @@
 - `RadicalCollator` and `--sort-by radical` (Phase 3.1 Stream C); sorts Hanzi by their Kangxi radical and residual stroke count from Unihan kRSUnicode. Off by default; enable with `--features collator-radical`.
 - `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator and a worktree-parallel workflow note
 - `ZhuyinCollator` and `--sort-by zhuyin` (Phase 3.1 Stream B); sorts Hanzi by their Mandarin Zhuyin / Bopomofo reading derived from the bundled pinyin data. Off by default; enable with `--features collator-zhuyin`.
+- `JyutpingCollator` and `--sort-by jyutping` (Phase 3.1 Stream A); sorts Hanzi by their Cantonese Jyutping reading from Unihan kCantonese (~30k characters covered in the latest Unihan data). Off by default; enable with `--features collator-jyutping`.
 
 ### Changed
 

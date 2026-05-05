@@ -21,6 +21,7 @@ target
 #.idea/
 
 data/*
+!data/jyutping.csv
 !data/pinyin.csv
 !data/strokes.csv
 !data/radical.csv

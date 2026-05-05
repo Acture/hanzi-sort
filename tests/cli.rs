@@ -360,6 +360,30 @@ fn supports_zhuyin_sorting_from_cli() {
     assert_eq!(stdout(&output), "汉\n中\n一");
 }
 
+#[cfg(feature = "collator-jyutping")]
+#[test]
+fn supports_jyutping_sorting_from_cli() {
+    let mut command = binary_command();
+    command.args([
+        "-t",
+        "中",
+        "汉",
+        "香",
+        "--sort-by",
+        "jyutping",
+        "--columns",
+        "1",
+        "--entry-width",
+        "2",
+        "--blank-every",
+        "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "香\n汉\n中");
+}
+
 #[test]
 fn rejects_output_path_that_is_a_directory() {
     let temp = TempWorkspace::new();
