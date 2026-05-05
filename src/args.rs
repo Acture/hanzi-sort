@@ -210,13 +210,7 @@ impl CliArgs {
             line_ending: self.line_ending.unwrap_or(defaults.line_ending),
         };
 
-        let override_data = self
-            .config_path
-            .as_deref()
-            .map(PinyinOverride::load_from_file)
-            .transpose()?;
-
-        let collator = build_collator(self.sort_by, override_data)?;
+        let collator = build_collator(self.sort_by, self.config_path.as_deref())?;
         let config = RuntimeConfig::new(input, format, collator)?
             .with_unique(self.unique)
             .with_reverse(self.reverse);
@@ -226,41 +220,45 @@ impl CliArgs {
 
 fn build_collator(
     sort_by: CliSortMode,
-    override_data: Option<PinyinOverride>,
+    config_path: Option<&std::path::Path>,
 ) -> Result<AnyCollator> {
     let reject_override = |scheme: &str| -> HanziSortError {
         HanziSortError::InvalidArgument(format!(
-            "--config is only supported with --sort-by pinyin (not {scheme})",
+            "--config is not supported with --sort-by {scheme}",
         ))
     };
     match sort_by {
-        CliSortMode::Pinyin => match override_data {
-            Some(override_data) => AnyCollator::pinyin_with_override(override_data),
+        CliSortMode::Pinyin => match config_path {
+            Some(path) => {
+                let override_data = PinyinOverride::load_from_file(path)?;
+                AnyCollator::pinyin_with_override(override_data)
+            }
             None => Ok(AnyCollator::pinyin()),
         },
         CliSortMode::Strokes => {
-            if override_data.is_some() {
+            if config_path.is_some() {
                 return Err(reject_override("strokes"));
             }
             Ok(AnyCollator::strokes())
         }
         #[cfg(feature = "collator-jyutping")]
-        CliSortMode::Jyutping => {
-            if override_data.is_some() {
-                return Err(reject_override("jyutping"));
+        CliSortMode::Jyutping => match config_path {
+            Some(path) => {
+                let override_data = hanzi_sort::JyutpingOverride::load_from_file(path)?;
+                AnyCollator::jyutping_with_override(override_data)
             }
-            Ok(AnyCollator::jyutping())
-        }
+            None => Ok(AnyCollator::jyutping()),
+        },
         #[cfg(feature = "collator-zhuyin")]
         CliSortMode::Zhuyin => {
-            if override_data.is_some() {
+            if config_path.is_some() {
                 return Err(reject_override("zhuyin"));
             }
             Ok(AnyCollator::zhuyin())
         }
         #[cfg(feature = "collator-radical")]
         CliSortMode::Radical => {
-            if override_data.is_some() {
+            if config_path.is_some() {
                 return Err(reject_override("radical"));
             }
             Ok(AnyCollator::radical())
@@ -420,7 +418,7 @@ mod tests {
             .into_runtime_parts()
             .expect_err("override + strokes should fail");
         assert!(
-            error.to_string().contains("--sort-by pinyin"),
+            error.to_string().contains("--config is not supported with --sort-by strokes"),
             "unexpected: {error}"
         );
     }

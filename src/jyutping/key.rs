@@ -1,8 +1,71 @@
+use std::collections::HashMap;
+
+use smallvec::SmallVec;
+
+use crate::error::{HanziSortError, Result};
+use crate::r#override::JyutpingOverride;
+
 const MAX_ENCODED_JYUTPING_LEN: usize = 16;
+const INLINE_OVERRIDE_LEN: usize = 8;
+
+/// Override table whose syllables have been pre-encoded into `u128` for the
+/// fast comparison path. Built from a [`JyutpingOverride`] via [`TryFrom`].
+#[derive(Debug, Clone, Default)]
+pub(crate) struct EncodedJyutpingOverride {
+    char_override: HashMap<char, u128>,
+    phrase_override: HashMap<String, SmallVec<[u128; INLINE_OVERRIDE_LEN]>>,
+}
+
+impl EncodedJyutpingOverride {
+    pub(crate) fn phrase_override(&self, phrase: &str) -> Option<&[u128]> {
+        self.phrase_override.get(phrase).map(SmallVec::as_slice)
+    }
+
+    pub(crate) fn char_override(&self, character: char) -> Option<u128> {
+        self.char_override.get(&character).copied()
+    }
+}
+
+impl TryFrom<&JyutpingOverride> for EncodedJyutpingOverride {
+    type Error = HanziSortError;
+
+    fn try_from(value: &JyutpingOverride) -> Result<Self> {
+        let mut char_override = HashMap::with_capacity(value.char_override.len());
+        for (character, syllable) in &value.char_override {
+            let encoded = encode_primary_jyutping(syllable).map_err(|reason| {
+                HanziSortError::InvalidOverride(format!(
+                    "char_override entry '{character}' has unencodable jyutping \
+                     '{syllable}': {reason}"
+                ))
+            })?;
+            char_override.insert(*character, encoded);
+        }
+
+        let mut phrase_override = HashMap::with_capacity(value.phrase_override.len());
+        for (phrase, syllables) in &value.phrase_override {
+            let mut encoded: SmallVec<[u128; INLINE_OVERRIDE_LEN]> =
+                SmallVec::with_capacity(syllables.len());
+            for syllable in syllables {
+                let value = encode_primary_jyutping(syllable).map_err(|reason| {
+                    HanziSortError::InvalidOverride(format!(
+                        "phrase_override entry '{phrase}' has unencodable jyutping \
+                         '{syllable}': {reason}"
+                    ))
+                })?;
+                encoded.push(value);
+            }
+            phrase_override.insert(phrase.clone(), encoded);
+        }
+
+        Ok(Self {
+            char_override,
+            phrase_override,
+        })
+    }
+}
 
 /// Pack a Jyutping syllable into a `u128` such that `u128::cmp` agrees with
 /// the lexicographic order on the original byte sequence.
-#[cfg(test)]
 pub(crate) fn encode_primary_jyutping(jyutping: &str) -> std::result::Result<u128, &'static str> {
     if jyutping.is_empty() {
         return Err("jyutping syllable is empty");

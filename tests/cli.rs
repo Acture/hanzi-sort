@@ -399,6 +399,32 @@ fn rejects_output_path_that_is_a_directory() {
     assert!(stderr(&output).contains("failed to write output file"));
 }
 
+#[cfg(feature = "collator-jyutping")]
+#[test]
+fn jyutping_override_via_cli() {
+    let temp = TempWorkspace::new();
+    let override_path = temp.path().join("override.toml");
+    fs::write(
+        &override_path,
+        "[char_override]\n'中' = 'zung3'\n",
+    )
+    .expect("override file should be written");
+
+    let mut command = binary_command();
+    command.args([
+        "-t", "中", "汉",
+        "--sort-by", "jyutping",
+        "--config",
+    ]);
+    command.arg(&override_path);
+    command.args(["--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    // 汉 (hon3) sorts before 中 (now zung3 via override) because 'h' < 'z'.
+    assert_eq!(stdout(&output), "汉\n中");
+}
+
 #[test]
 fn rejects_invalid_override_config() {
     let temp = TempWorkspace::new();

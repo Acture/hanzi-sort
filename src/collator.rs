@@ -163,10 +163,20 @@ impl AnyCollator {
         Self::Strokes(crate::stroke::StrokesCollator)
     }
 
-    /// Cantonese Jyutping collator (Phase 3.1 Stream A; placeholder until implemented).
+    /// Cantonese Jyutping collator with no override data.
     #[cfg(feature = "collator-jyutping")]
     pub fn jyutping() -> Self {
         Self::Jyutping(crate::jyutping::JyutpingCollator::new())
+    }
+
+    /// Cantonese Jyutping collator that honors the supplied override table.
+    #[cfg(feature = "collator-jyutping")]
+    pub fn jyutping_with_override(
+        overrides: crate::r#override::JyutpingOverride,
+    ) -> crate::error::Result<Self> {
+        Ok(Self::Jyutping(
+            crate::jyutping::JyutpingCollator::with_override(overrides)?,
+        ))
     }
 
     /// Mandarin Zhuyin collator (Phase 3.1 Stream B; placeholder until implemented).

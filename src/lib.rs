@@ -58,6 +58,8 @@ pub use config::{InputSource, RuntimeConfig};
 pub use error::{HanziSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
+#[cfg(feature = "collator-jyutping")]
+pub use r#override::JyutpingOverride;
 #[cfg(feature = "collator-pinyin")]
 pub use pinyin::{PinYinRecord, PinyinCollator};
 #[cfg(feature = "collator-strokes")]
