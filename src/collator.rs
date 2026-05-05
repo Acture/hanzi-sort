@@ -113,6 +113,27 @@ pub fn sort_strings_with<C: Collator>(input: Vec<String>, collator: &C) -> Vec<S
     with_keys.into_iter().map(|(_, _, item)| item).collect()
 }
 
+/// Sort `input` under `collator`, returning the permutation as a list of
+/// original input indices.
+///
+/// Equivalent to [`sort_strings_with`] but exposes the index ordering, which
+/// callers can use to:
+///
+/// - apply the same order to parallel collections (without re-sorting),
+/// - verify the stability guarantee for inputs with equal sort keys
+///   (including exact duplicates), since the index discriminates them even
+///   though the strings themselves are observationally identical.
+pub fn sort_indices_with<C: Collator>(input: &[String], collator: &C) -> Vec<usize> {
+    let mut with_keys: Vec<(SortKey<C::Data>, usize)> = input
+        .iter()
+        .enumerate()
+        .map(|(index, item)| (sort_key_of(collator, item), index))
+        .collect();
+
+    with_keys.sort_unstable_by(|a, b| a.0.cmp(&b.0).then_with(|| a.1.cmp(&b.1)));
+    with_keys.into_iter().map(|(_, index)| index).collect()
+}
+
 /// Type-erased dispatch over the built-in collators.
 ///
 /// Used by the CLI and [`crate::RuntimeConfig`] to select a sort strategy
@@ -280,6 +301,26 @@ mod tests {
         // z-first has phrase data → mapped → sorts before unmapped a-default.
         assert_eq!(sorted, vec!["z-first", "a-default"]);
     }
+
+    #[test]
+    fn sort_indices_preserves_input_order_for_duplicates() {
+        // Three observationally identical strings — the ONLY thing that
+        // distinguishes them is their original input index. The index
+        // tiebreak in sort_indices_with must preserve [0, 1, 2], proving
+        // that the unstable backend has been promoted to stable behavior.
+        let input: Vec<String> = vec!["dup".into(), "dup".into(), "dup".into()];
+        let indices = sort_indices_with(&input, &AsciiLetterCollator);
+        assert_eq!(indices, vec![0, 1, 2]);
+    }
+
+    #[test]
+    fn sort_indices_breaks_ties_by_input_order() {
+        // 12 indistinguishable strings; if the index tiebreak were dropped,
+        // the unstable sort could return them in any permutation.
+        let input: Vec<String> = (0..12).map(|_| "x".to_string()).collect();
+        let indices = sort_indices_with(&input, &AsciiLetterCollator);
+        assert_eq!(indices, (0..12).collect::<Vec<_>>());
+    }
 }
 
 #[cfg(test)]
@@ -362,6 +403,51 @@ mod proptests {
             let collator = crate::stroke::StrokesCollator;
             let sorted = sort_strings_with(items.clone(), &collator);
             prop_assert_eq!(sorted.len(), items.len());
+        }
+
+        /// Property: `sort_indices_with` returns a permutation of `0..n`.
+        /// Each input index appears exactly once in the output.
+        #[test]
+        fn sort_indices_is_a_permutation(items in small_vec_of_strings()) {
+            let indices = sort_indices_with(&items, &AsciiLetterCollator);
+            prop_assert_eq!(indices.len(), items.len());
+            let mut sorted_indices = indices.clone();
+            sorted_indices.sort();
+            prop_assert_eq!(sorted_indices, (0..items.len()).collect::<Vec<_>>());
+        }
+
+        /// Property: stability — for any pair of consecutive output indices
+        /// (i, j) where i appears before j in the sorted permutation, either
+        /// items[i]'s sort key is strictly less than items[j]'s, OR the keys
+        /// are equal and i < j. Equivalently, equal-key inputs preserve
+        /// their input-order relative position.
+        ///
+        /// This is the property that the rubber-duck Phase 1 review pointed
+        /// out the previous duplicate-string tests could not actually verify
+        /// (because swapping observationally identical strings is invisible
+        /// at the String level). Exposing the index-level permutation lets
+        /// proptest prove stability directly.
+        #[test]
+        fn sort_breaks_ties_by_input_order(items in small_vec_of_strings()) {
+            let indices = sort_indices_with(&items, &AsciiLetterCollator);
+            for window in indices.windows(2) {
+                let a_idx = window[0];
+                let b_idx = window[1];
+                let a_key = sort_key_of(&AsciiLetterCollator, &items[a_idx]);
+                let b_key = sort_key_of(&AsciiLetterCollator, &items[b_idx]);
+                match a_key.cmp(&b_key) {
+                    std::cmp::Ordering::Less => {}
+                    std::cmp::Ordering::Equal => prop_assert!(
+                        a_idx < b_idx,
+                        "stability: equal-key items must preserve input order; \
+                         got [{a_idx}] before [{b_idx}]"
+                    ),
+                    std::cmp::Ordering::Greater => prop_assert!(
+                        false,
+                        "ordering broken at indices {a_idx} -> {b_idx}"
+                    ),
+                }
+            }
         }
     }
 }

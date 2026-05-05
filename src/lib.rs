@@ -53,7 +53,10 @@ mod zhuyin;
 #[cfg(feature = "collator-radical")]
 mod radical;
 
-pub use collator::{AnyCollator, CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with};
+pub use collator::{
+    AnyCollator, CharToken, Collator, Mapped, SortKey, sort_indices_with, sort_key_of,
+    sort_strings_with,
+};
 pub use config::{InputSource, RuntimeConfig};
 pub use error::{HanziSortError, Result};
 pub use format::{Align, FormatConfig};
