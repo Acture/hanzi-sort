@@ -31,6 +31,15 @@ pub enum CliSortMode {
     #[default]
     Pinyin,
     Strokes,
+    /// Cantonese Jyutping (Phase 3.1 Stream A; placeholder until implemented).
+    #[cfg(feature = "collator-jyutping")]
+    Jyutping,
+    /// Mandarin Zhuyin / Bopomofo (Phase 3.1 Stream B; placeholder until implemented).
+    #[cfg(feature = "collator-zhuyin")]
+    Zhuyin,
+    /// Radical / Kangxi index (Phase 3.1 Stream C; placeholder until implemented).
+    #[cfg(feature = "collator-radical")]
+    Radical,
 }
 
 #[derive(Subcommand, Debug)]
@@ -219,6 +228,11 @@ fn build_collator(
     sort_by: CliSortMode,
     override_data: Option<PinyinOverride>,
 ) -> Result<AnyCollator> {
+    let reject_override = |scheme: &str| -> HanziSortError {
+        HanziSortError::InvalidArgument(format!(
+            "--config is only supported with --sort-by pinyin (not {scheme})",
+        ))
+    };
     match sort_by {
         CliSortMode::Pinyin => match override_data {
             Some(override_data) => AnyCollator::pinyin_with_override(override_data),
@@ -226,11 +240,30 @@ fn build_collator(
         },
         CliSortMode::Strokes => {
             if override_data.is_some() {
-                return Err(HanziSortError::InvalidArgument(
-                    "--config is only supported with --sort-by pinyin".to_string(),
-                ));
+                return Err(reject_override("strokes"));
             }
             Ok(AnyCollator::strokes())
+        }
+        #[cfg(feature = "collator-jyutping")]
+        CliSortMode::Jyutping => {
+            if override_data.is_some() {
+                return Err(reject_override("jyutping"));
+            }
+            Ok(AnyCollator::jyutping())
+        }
+        #[cfg(feature = "collator-zhuyin")]
+        CliSortMode::Zhuyin => {
+            if override_data.is_some() {
+                return Err(reject_override("zhuyin"));
+            }
+            Ok(AnyCollator::zhuyin())
+        }
+        #[cfg(feature = "collator-radical")]
+        CliSortMode::Radical => {
+            if override_data.is_some() {
+                return Err(reject_override("radical"));
+            }
+            Ok(AnyCollator::radical())
         }
     }
 }

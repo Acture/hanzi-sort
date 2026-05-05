@@ -118,14 +118,28 @@ pub fn sort_strings_with<C: Collator>(input: Vec<String>, collator: &C) -> Vec<S
 /// Used by the CLI and [`crate::RuntimeConfig`] to select a sort strategy
 /// at runtime. Library users with a known concrete collator type should
 /// call [`sort_strings_with`] directly to keep the dispatch monomorphic.
+///
+/// Variants are gated by their `collator-*` cargo features so that disabling
+/// a collator both removes the code and shrinks the binary. New collators
+/// can plug in by adding a feature in `Cargo.toml` and a variant + match
+/// arm here. See `CONTRIBUTING.md`.
 #[derive(Debug, Clone)]
 pub enum AnyCollator {
+    #[cfg(feature = "collator-pinyin")]
     Pinyin(crate::pinyin::PinyinCollator),
+    #[cfg(feature = "collator-strokes")]
     Strokes(crate::stroke::StrokesCollator),
+    #[cfg(feature = "collator-jyutping")]
+    Jyutping(crate::jyutping::JyutpingCollator),
+    #[cfg(feature = "collator-zhuyin")]
+    Zhuyin(crate::zhuyin::ZhuyinCollator),
+    #[cfg(feature = "collator-radical")]
+    Radical(crate::radical::RadicalCollator),
 }
 
 impl AnyCollator {
     /// Pinyin collator with no override data.
+    #[cfg(feature = "collator-pinyin")]
     pub fn pinyin() -> Self {
         Self::Pinyin(crate::pinyin::PinyinCollator::new())
     }
@@ -134,6 +148,7 @@ impl AnyCollator {
     ///
     /// Returns [`crate::HanziSortError::InvalidOverride`] if any syllable
     /// in the override cannot be encoded for fast comparisons.
+    #[cfg(feature = "collator-pinyin")]
     pub fn pinyin_with_override(
         overrides: crate::r#override::PinyinOverride,
     ) -> crate::error::Result<Self> {
@@ -143,15 +158,42 @@ impl AnyCollator {
     }
 
     /// Stroke-count collator (no overrides).
+    #[cfg(feature = "collator-strokes")]
     pub fn strokes() -> Self {
         Self::Strokes(crate::stroke::StrokesCollator)
+    }
+
+    /// Cantonese Jyutping collator (Phase 3.1 Stream A; placeholder until implemented).
+    #[cfg(feature = "collator-jyutping")]
+    pub fn jyutping() -> Self {
+        Self::Jyutping(crate::jyutping::JyutpingCollator::new())
+    }
+
+    /// Mandarin Zhuyin collator (Phase 3.1 Stream B; placeholder until implemented).
+    #[cfg(feature = "collator-zhuyin")]
+    pub fn zhuyin() -> Self {
+        Self::Zhuyin(crate::zhuyin::ZhuyinCollator::new())
+    }
+
+    /// Radical (部首) collator (Phase 3.1 Stream C; placeholder until implemented).
+    #[cfg(feature = "collator-radical")]
+    pub fn radical() -> Self {
+        Self::Radical(crate::radical::RadicalCollator::new())
     }
 
     /// Sort `input` under the selected collator.
     pub fn sort(&self, input: Vec<String>) -> Vec<String> {
         match self {
+            #[cfg(feature = "collator-pinyin")]
             Self::Pinyin(c) => sort_strings_with(input, c),
+            #[cfg(feature = "collator-strokes")]
             Self::Strokes(c) => sort_strings_with(input, c),
+            #[cfg(feature = "collator-jyutping")]
+            Self::Jyutping(c) => sort_strings_with(input, c),
+            #[cfg(feature = "collator-zhuyin")]
+            Self::Zhuyin(c) => sort_strings_with(input, c),
+            #[cfg(feature = "collator-radical")]
+            Self::Radical(c) => sort_strings_with(input, c),
         }
     }
 }

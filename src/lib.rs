@@ -42,13 +42,29 @@ mod format;
 mod generated;
 mod input;
 mod r#override;
+#[cfg(feature = "collator-pinyin")]
 mod pinyin;
+#[cfg(feature = "collator-strokes")]
 mod stroke;
+#[cfg(feature = "collator-jyutping")]
+mod jyutping;
+#[cfg(feature = "collator-zhuyin")]
+mod zhuyin;
+#[cfg(feature = "collator-radical")]
+mod radical;
 
 pub use collator::{AnyCollator, CharToken, Collator, Mapped, SortKey, sort_key_of, sort_strings_with};
 pub use config::{InputSource, RuntimeConfig};
 pub use error::{HanziSortError, Result};
 pub use format::{Align, FormatConfig};
 pub use r#override::PinyinOverride;
+#[cfg(feature = "collator-pinyin")]
 pub use pinyin::{PinYinRecord, PinyinCollator};
+#[cfg(feature = "collator-strokes")]
 pub use stroke::StrokesCollator;
+#[cfg(feature = "collator-jyutping")]
+pub use jyutping::JyutpingCollator;
+#[cfg(feature = "collator-zhuyin")]
+pub use zhuyin::ZhuyinCollator;
+#[cfg(feature = "collator-radical")]
+pub use radical::RadicalCollator;
