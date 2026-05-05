@@ -28,6 +28,7 @@
 - `proptest`-based property tests covering: encoded sort key preserves byte-wise lex order (for arbitrary ASCII and for tone3-shaped inputs), unchecked vs checked encoding agree on valid input, sort is idempotent, sort produces a permutation, sort key induces a total order (reflexive / antisymmetric / transitive)
 - cargo features `collator-pinyin`, `collator-strokes` (default) and placeholders `collator-jyutping`, `collator-zhuyin`, `collator-radical` (off by default) for upcoming Phase 3.1 streams; `AnyCollator` variants and `CliSortMode` variants are gated accordingly
 - `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator and a worktree-parallel workflow note
+- `JyutpingCollator` and `--sort-by jyutping` (Phase 3.1 Stream A); sorts Hanzi by their Cantonese Jyutping reading from Unihan kCantonese (~30k characters covered in the latest Unihan data). Off by default; enable with `--features collator-jyutping`.
 
 ### Changed
 

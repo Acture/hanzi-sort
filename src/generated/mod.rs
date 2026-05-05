@@ -1,2 +1,4 @@
+#[cfg(feature = "collator-jyutping")]
+pub mod jyutping_map;
 pub mod pinyin_map;
 pub mod stroke_map;
