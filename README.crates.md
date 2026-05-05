@@ -46,12 +46,32 @@ hanzi-sort -t 重庆 银行 --config ./override.toml
 
 ## Features
 
-- Sort by `pinyin` or `strokes`
+- Sort by `pinyin` or `strokes` (default), or opt in to `jyutping`, `zhuyin`, `radical` via cargo features
+- Read from stdin when no input flags are given (`cat names.txt | hanzi-sort`)
 - Keep unknown characters in the comparison key instead of dropping them
 - Break ties by original character so output stays deterministic
 - Override single characters or full phrases with TOML
 - Format output with configurable columns, alignment, padding, separators, and blank-line cadence
-- Reuse the same core sorter from Rust via `PinyinContext` and `SortMode`
+- Reuse the same core sorter from Rust via `PinyinCollator`, `StrokesCollator`, and the `Collator` trait
+
+## Opt-in collators
+
+```bash
+# pinyin + strokes only (default)
+cargo install hanzi-sort
+
+# add Cantonese Jyutping (Unihan kCantonese)
+cargo install hanzi-sort --features collator-jyutping
+
+# add Mandarin Zhuyin / Bopomofo
+cargo install hanzi-sort --features collator-zhuyin
+
+# add Kangxi radical sort (Unihan kRSUnicode)
+cargo install hanzi-sort --features collator-radical
+
+# everything
+cargo install hanzi-sort --all-features
+```
 
 ## Library usage
 

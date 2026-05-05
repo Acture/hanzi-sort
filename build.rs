@@ -305,6 +305,7 @@ fn generate_pinyin_map(data_csv: &Path, out_path: &Path) {
     }
 }
 
+#[cfg(feature = "collator-jyutping")]
 fn generate_jyutping_map(data_csv: &Path, out_path: &Path) {
     let mut writer = create_output(out_path);
     let mut rdr = open_csv(data_csv);

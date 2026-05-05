@@ -1,64 +1,141 @@
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-05
+
+A major release. Project rebrand from `pinyin-sort` → `hanzi-sort`, the public
+library API was reshaped around a pluggable `Collator` trait, three new
+opt-in collators (Cantonese Jyutping, Mandarin Zhuyin, Kangxi Radical) joined
+Pinyin and Strokes, and the CLI grew Unix-friendly stdin / `-r` / `-u`
+behavior plus shell completions. Tone3 data normalization now treats
+neutral tone as `5`, fixing a long-standing dictionary-order bug for
+characters like `了`. See breakdown below.
+
+### Highlights
+
+- **5 sort schemes**: Pinyin, Strokes, Jyutping, Zhuyin, Radical (all but
+  Pinyin/Strokes are opt-in `cargo features`).
+- **Stable sort guarantee**: equal-key inputs preserve input order in every
+  collator.
+- **Stdin-friendly CLI**: `cat names.txt | hanzi-sort` works the way Unix
+  users expect.
+- **Pluggable collator API**: the trait is exposed; downstream Rust code can
+  add its own collators without forking the crate.
+
 ### Added
 
-- expose the core sorter as a library with `PinyinContext`, `sort_strings`, and `format_items`
-- `Collator` trait, `Mapped<T>`, `CharToken<T>`, `SortKey<T>`, `sort_key_of`, and `sort_strings_with` for pluggable per-character sort strategy abstraction
-- `AnyCollator` enum for runtime collator selection (Pinyin / Strokes)
-- `PinyinCollator` and `StrokesCollator` types implementing `Collator`
-- CLI rejects `--config` together with `--sort-by strokes` (the override is pinyin-specific)
-- add CI to run `cargo test` and `cargo clippy --all-targets --all-features -- -D warnings`
-- add integration coverage for CLI behavior, file input, override validation, and output writing
-- add stroke-count sorting alongside pinyin sorting
-- `PinyinContext::with_override` constructor for fallible override loading
-- `PinyinOverride::validate` now rejects empty phrase keys, empty syllables, non-ASCII syllables, and tone3 shapes outside `^[a-z]+[1-5]?$`
-- `build.rs` validates that the primary pinyin syllable for every codepoint is ASCII and ≤16 bytes, so the encoded sort key path is safe by construction
-- `build.rs` enforces exact column counts and verifies that the `char` column matches its codepoint
-- preserve original input order for duplicate or equal-key entries via an index tiebreak in both pinyin and stroke sort
-- read input from stdin when neither `--file` nor `--text` is provided and stdin is not a TTY (`cat names.txt | hanzi-sort` now works)
-- accept `-f -` as an alias for reading stdin in addition to or interleaved with file inputs
-- `InputSource::Stdin` variant on the public `InputSource` enum
-- `criterion` benchmark suite (`cargo bench`) covering `sort_strings_with`, stroke sort, `pinyin_of`, and `format_items` at multiple input sizes
-- `-r/--reverse` flag to reverse the sorted output
-- `-u/--unique` flag to remove adjacent duplicates from the sorted output (like `sort -u`); ordering is `unique` then `reverse`
-- `RuntimeConfig::with_unique` and `RuntimeConfig::with_reverse` builder-style setters
-- `hanzi-sort completions <shell>` subcommand that prints a shell completion script (bash/zsh/fish/powershell/elvish), via `clap_complete`
-- usage examples in `--help` output (after the options list)
-- `--help` now displays default values for `--columns`, `--entry-width`, `--align`, `--padding-char`, and `--sort-by` (those whose defaults are printable); `--blank-every`, `--separator`, `--line-ending` keep their `Option` types because their defaults are non-printable or have semantic conversion (`0 → disabled`)
-- `proptest`-based property tests covering: encoded sort key preserves byte-wise lex order (for arbitrary ASCII and for tone3-shaped inputs), unchecked vs checked encoding agree on valid input, sort is idempotent, sort produces a permutation, sort key induces a total order (reflexive / antisymmetric / transitive)
-- cargo features `collator-pinyin`, `collator-strokes` (default) and placeholders `collator-jyutping`, `collator-zhuyin`, `collator-radical` (off by default) for upcoming Phase 3.1 streams; `AnyCollator` variants and `CliSortMode` variants are gated accordingly
-- `RadicalCollator` and `--sort-by radical` (Phase 3.1 Stream C); sorts Hanzi by their Kangxi radical and residual stroke count from Unihan kRSUnicode. Off by default; enable with `--features collator-radical`.
-- `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator and a worktree-parallel workflow note
-- `ZhuyinCollator` and `--sort-by zhuyin` (Phase 3.1 Stream B); sorts Hanzi by their Mandarin Zhuyin / Bopomofo reading derived from the bundled pinyin data. Off by default; enable with `--features collator-zhuyin`.
-- `JyutpingCollator` and `--sort-by jyutping` (Phase 3.1 Stream A); sorts Hanzi by their Cantonese Jyutping reading from Unihan kCantonese (~30k characters covered in the latest Unihan data). Off by default; enable with `--features collator-jyutping`.
+#### Library
+
+- `Collator` trait, `Mapped<T>`, `CharToken<T>`, `SortKey<T>`, `sort_key_of`,
+  and `sort_strings_with` — a pluggable per-character sort strategy
+  abstraction.
+- `AnyCollator` enum for runtime collator selection across all enabled
+  schemes.
+- `PinyinCollator` (renamed from `PinyinContext`), `StrokesCollator`,
+  `JyutpingCollator`, `ZhuyinCollator`, `RadicalCollator`.
+- `PinyinCollator::with_override` (and the analogous fallible builder for
+  any future override-aware collators) for explicit override loading.
+- `RuntimeConfig::with_unique` and `RuntimeConfig::with_reverse`
+  builder-style setters.
+- `InputSource::Stdin` variant on the public `InputSource` enum.
+
+#### CLI
+
+- `-r/--reverse` flag.
+- `-u/--unique` flag (adjacent dedup; `unique` is applied before `reverse`).
+- `hanzi-sort completions <shell>` subcommand emitting a completion script
+  for bash / zsh / fish / powershell / elvish (via `clap_complete`).
+- `--help` examples block (after the options list).
+- `--help` displays default values for every printable option.
+- Stdin fallback when neither `--file` nor `--text` is provided and stdin
+  is non-TTY; `-f -` accepted as a stdin alias.
+- CLI rejects `--config` together with any non-pinyin `--sort-by` (override
+  is pinyin-specific).
+
+#### New collators (opt-in)
+
+- `--sort-by jyutping` / `--features collator-jyutping` — Cantonese Jyutping
+  from Unihan `kCantonese` (~30k characters covered).
+- `--sort-by zhuyin` / `--features collator-zhuyin` — Mandarin Zhuyin /
+  Bopomofo derived from the bundled pinyin data.
+- `--sort-by radical` / `--features collator-radical` — Kangxi radical
+  index + residual stroke count from Unihan `kRSUnicode`.
+
+#### Build / testing / docs
+
+- `criterion` benchmark suite (`cargo bench`) covering every collator's
+  sort path plus `pinyin_of` and `format_items` at 1k / 10k / 100k inputs.
+- `proptest`-based property tests verifying: encoded sort key preserves
+  byte-wise lex order, unchecked vs checked encoders agree on valid input,
+  sort is idempotent, sort is a permutation, sort key induces a total order.
+- `build.rs` validates exact column counts, codepoint↔char correspondence,
+  primary syllable ASCII / `≤16` bytes / mandatory tone digit, on every
+  generated map.
+- `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator
+  and a worktree-parallel workflow note.
+- CI now runs `cargo test --all-features` in addition to default features
+  and verifies all benchmarks compile under all features.
+- `PinyinOverride::validate` rejects empty phrase keys, empty syllables,
+  non-ASCII syllables, and tone3 shapes outside `^[a-z]+[1-5]$`.
+- Integration coverage for stdin behavior, `-r/-u` composition, completions
+  output, override correctness, and per-collator CLI invocation.
 
 ### Changed
 
-- rename the project from `pinyin-sort` to `hanzi-sort`; this is a hard rename with no compatibility binary alias
-- renamed `PinyinContext` to `PinyinCollator` (public API break)
-- `RuntimeConfig` constructor signature changed: now takes `(input, format, collator: AnyCollator)` instead of `(input, format, override_data, sort_mode)` — the old `RuntimeConfig::new` and `RuntimeConfig::with_sort_mode` are gone
-- `app::render` dispatches via `AnyCollator::sort` instead of `sort_strings_by`
-- make `--file` read one non-blank line per record and reject directory inputs
-- make `--file` and `--text` mutually exclusive
-- wire `-o/--output` to write to a file instead of stdout
-- switch formatting width calculations to terminal display width
-- correct `left` and `right` alignment semantics
-- `PinyinContext::new()` is now infallible and creates an empty context; pass overrides via `PinyinContext::with_override`
-- `encode_primary_pinyin` returns a `Result` instead of panicking on invalid input
-- `build.rs` reports row/codepoint context on failure and re-runs when the build script itself changes
-- toneless primary syllables in `data/pinyin.csv` are now normalized to neutral tone `5` (e.g. `了 → le5` instead of `了 → le`); `validate_syllable` and `build.rs` enforce that every syllable ends in a tone digit `1-5`, so neutral-tone characters now sort *after* tone-4 variants instead of *before* tone-1 variants. Override files using toneless syllables (e.g. `'了' = 'le'`) must update to `'le5'`
+#### Breaking (library)
+
+- Renamed crate / binary from `pinyin-sort` to `hanzi-sort`. No
+  compatibility alias.
+- Renamed `PinyinContext` to `PinyinCollator`.
+- Renamed `PinyinSortError` to `HanziSortError`.
+- `RuntimeConfig::new` signature is now `(input, format, collator: AnyCollator)`
+  instead of `(input, format, override_data, sort_mode)`. The old
+  `RuntimeConfig::new` and `RuntimeConfig::with_sort_mode` are gone.
+- `app::render` dispatches via `AnyCollator::sort` instead of `sort_strings_by`.
+- `PinyinCollator::new()` is now infallible (no override); use
+  `PinyinCollator::with_override(PinyinOverride)` for override-aware
+  construction.
+- `encode_primary_pinyin` returns a `Result` instead of panicking on
+  invalid input.
+
+#### Breaking (data semantics)
+
+- Toneless primary syllables in `data/pinyin.csv` are now normalized to
+  neutral tone `5` (e.g. `了 → le5` instead of `了 → le`). Override
+  validation and build-time checks both enforce that every syllable ends
+  in a tone digit `1-5`, so neutral-tone characters now sort *after*
+  tone-4 variants instead of *before* tone-1 variants — matching
+  conventional Chinese dictionary ordering. Override files using toneless
+  syllables (e.g. `'了' = 'le'`) must update to `'le5'`.
+
+#### Behavior (non-breaking)
+
+- `--file` / `--text` are mutually exclusive at parse time; `--file` reads
+  one non-blank line per record and rejects directory inputs.
+- `-o/--output` writes to a file instead of stdout (instead of being
+  silently ignored as in `0.1.1`).
+- Formatting width calculations use terminal display width
+  (`unicode-width`), and `left` / `right` alignment semantics are
+  corrected.
+- `build.rs` reports row / codepoint context on failure and re-runs when
+  the build script itself changes.
 
 ### Removed
 
-- public `SortMode` enum (replaced by `AnyCollator` variants)
-- public `sort_strings` / `sort_strings_by` (use `sort_strings_with` or `AnyCollator::sort`)
-- internal `EncodedSortToken` / `EncodedSortKey` / `compare_encoded_sort_key` (subsumed by the trait-based key infrastructure)
+- public `SortMode` enum (replaced by `AnyCollator` variants).
+- public `sort_strings` / `sort_strings_by` (use `sort_strings_with` or
+  `AnyCollator::sort`).
+- internal `EncodedSortToken` / `EncodedSortKey` / `compare_encoded_sort_key`
+  (subsumed by the trait-based key infrastructure).
 
 ### Fixed
 
-- preserve unknown characters in sort keys instead of dropping them
-- return non-zero exits for invalid input, invalid override config, and write failures
-- include the first CSV record in the generated pinyin map so `〇` resolves correctly
+- preserve unknown characters in sort keys instead of dropping them.
+- return non-zero exits for invalid input, invalid override config, and
+  write failures.
+- include the first CSV record in the generated pinyin map so `〇`
+  resolves correctly.
+- preserve original input order for duplicate or equal-key entries via an
+  index tiebreak in both pinyin and stroke sort.
 
 ## [0.1.1] - 2025-08-08
 

@@ -13,7 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Run tests
+      - name: Run tests (default features)
         run: cargo test
+      - name: Run tests (all features)
+        run: cargo test --all-features
       - name: Run clippy
         run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Verify benchmarks compile (all features)
+        run: cargo bench --all-features --no-run

@@ -52,9 +52,25 @@ hanzi-sort -t 重庆 银行 -o ./sorted.txt
 - Read repeated `--text` values or one non-blank record per line from `--file`
 - Override single characters or full phrases with TOML
 - Format output with configurable columns, alignment, padding, separators, and blank-line cadence
-- Use the same core sorter from Rust via `PinyinContext` and `SortMode`
+- Use the same core sorter from Rust via `PinyinCollator`, `StrokesCollator`, and the generic `Collator` trait
+- Opt in to additional collators (Cantonese Jyutping, Mandarin Zhuyin, Kangxi Radical) via cargo features
 
 ## Install and build
+
+### From crates.io
+
+```bash
+# default: pinyin + strokes
+cargo install hanzi-sort
+
+# enable extra collators selectively
+cargo install hanzi-sort --features collator-jyutping
+cargo install hanzi-sort --features collator-zhuyin
+cargo install hanzi-sort --features collator-radical
+
+# everything on
+cargo install hanzi-sort --all-features
+```
 
 ### From source
 
@@ -88,24 +104,38 @@ hanzi-sort -h
 Input rules:
 
 - `--text` and `--file` are mutually exclusive
-- `--file` reads one non-blank line per record
+- `--file` reads one non-blank line per record (`-f -` reads from stdin)
+- when neither `--file` nor `--text` is given and stdin is piped, hanzi-sort reads stdin (`cat names.txt | hanzi-sort` works)
 - directory inputs are rejected
 - success exits with `0`; invalid args, bad override files, and I/O failures exit non-zero
 
 ### Sort modes
+
+Always available:
 
 - `--sort-by pinyin`
   Default. Compares the primary tone3 pinyin for each mapped character, then falls back to the original character.
 - `--sort-by strokes`
   Compares total stroke count per character, then falls back to the original character.
 
+Opt-in via cargo features (see Install above):
+
+- `--sort-by jyutping` (`--features collator-jyutping`)
+  Compares the primary Cantonese Jyutping reading per character (Unihan `kCantonese`).
+- `--sort-by zhuyin` (`--features collator-zhuyin`)
+  Compares the Mandarin Zhuyin / Bopomofo reading per character (derived from the bundled pinyin data).
+- `--sort-by radical` (`--features collator-radical`)
+  Compares the Kangxi radical index plus residual stroke count per character (Unihan `kRSUnicode`).
+
 ### CLI options
 
-- `-f, --file <FILE>`: input file path, can be repeated
+- `-f, --file <FILE>`: input file path, can be repeated; `-` reads stdin
 - `-t, --text <TEXT>...`: inline text input, can be repeated
 - `-o, --output <PATH>`: write output to a file instead of stdout
-- `-c, --config <PATH>`: TOML override file
-- `--sort-by <MODE>`: `pinyin` or `strokes`
+- `-c, --config <PATH>`: TOML override file (pinyin only)
+- `-r, --reverse`: reverse the sorted output
+- `-u, --unique`: remove adjacent duplicates after sorting (like `sort -u`)
+- `--sort-by <MODE>`: see "Sort modes" above
 - `--columns <N>`: entries per row, must be greater than `0`
 - `--blank-every <N>`: insert a blank line every `N` rows; use `0` to disable
 - `--entry-width <N>`: target display width per entry, must be greater than `0`
