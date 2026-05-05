@@ -155,3 +155,59 @@ mod tests {
         assert!(err.contains("empty"));
     }
 }
+
+#[cfg(test)]
+mod proptests {
+    use super::*;
+    use proptest::prelude::*;
+
+    /// Strategy that generates valid tone3 syllables: 1-15 lowercase ASCII
+    /// letters followed by a tone digit `1..=5`. Total length ≤16 bytes.
+    fn tone3_syllable() -> impl Strategy<Value = String> {
+        ("[a-z]{1,15}", "[1-5]").prop_map(|(letters, tone)| format!("{letters}{tone}"))
+    }
+
+    /// Strategy for arbitrary ASCII strings up to 16 bytes (covers the full
+    /// domain `encode_primary_pinyin` accepts, including pre-validation
+    /// inputs that may not be tone3-shaped).
+    fn ascii_string_up_to_16() -> impl Strategy<Value = String> {
+        prop::string::string_regex("[\\x21-\\x7e]{1,16}").unwrap()
+    }
+
+    proptest! {
+        /// Property: byte-wise lexicographic order on ASCII inputs is exactly
+        /// preserved by the u128 encoding. This is the foundational
+        /// correctness guarantee of the whole crate's pinyin sort path.
+        #[test]
+        fn encoding_preserves_lex_order_for_arbitrary_ascii(
+            a in ascii_string_up_to_16(),
+            b in ascii_string_up_to_16(),
+        ) {
+            let ea = encode_primary_pinyin(&a).expect("ASCII ≤16 bytes is valid");
+            let eb = encode_primary_pinyin(&b).expect("ASCII ≤16 bytes is valid");
+            prop_assert_eq!(ea.cmp(&eb), a.cmp(&b));
+        }
+
+        /// Property: tone3-shaped syllables specifically (the actual data
+        /// domain) are total-ordered identically by string and u128 cmp.
+        #[test]
+        fn encoding_preserves_lex_order_for_tone3(
+            a in tone3_syllable(),
+            b in tone3_syllable(),
+        ) {
+            let ea = encode_primary_pinyin(&a).expect("valid tone3");
+            let eb = encode_primary_pinyin(&b).expect("valid tone3");
+            prop_assert_eq!(ea.cmp(&eb), a.cmp(&b));
+        }
+
+        /// Property: the unchecked hot-path encoding agrees with the checked
+        /// fallible encoding for every valid input (debug_assert protects in
+        /// debug, this proptest catches release-mode regressions).
+        #[test]
+        fn unchecked_agrees_with_checked_on_valid_input(s in tone3_syllable()) {
+            let checked = encode_primary_pinyin(&s).expect("valid tone3");
+            let unchecked = encode_primary_pinyin_unchecked(&s);
+            prop_assert_eq!(checked, unchecked);
+        }
+    }
+}

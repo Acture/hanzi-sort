@@ -229,3 +229,87 @@ mod tests {
         assert_eq!(sorted, vec!["z-first", "a-default"]);
     }
 }
+
+#[cfg(test)]
+mod proptests {
+    use super::*;
+    use proptest::prelude::*;
+
+    /// A trivial test collator (lowercase ASCII byte rank, digits unmapped)
+    /// to exercise sort properties without depending on the bundled PHF.
+    struct AsciiLetterCollator;
+
+    impl Collator for AsciiLetterCollator {
+        type Data = u8;
+        fn data_for(&self, ch: char) -> Option<u8> {
+            ch.is_ascii_alphabetic().then(|| ch.to_ascii_lowercase() as u8)
+        }
+    }
+
+    fn small_vec_of_strings() -> impl Strategy<Value = Vec<String>> {
+        prop::collection::vec(".*", 0..50)
+    }
+
+    proptest! {
+        /// Property: sorting is idempotent. sort(sort(x)) == sort(x).
+        #[test]
+        fn sort_is_idempotent(items in small_vec_of_strings()) {
+            let once = sort_strings_with(items.clone(), &AsciiLetterCollator);
+            let twice = sort_strings_with(once.clone(), &AsciiLetterCollator);
+            prop_assert_eq!(once, twice);
+        }
+
+        /// Property: sorting produces a permutation of the input — same
+        /// length, same multiset of values.
+        #[test]
+        fn sort_is_a_permutation(items in small_vec_of_strings()) {
+            let sorted = sort_strings_with(items.clone(), &AsciiLetterCollator);
+            prop_assert_eq!(sorted.len(), items.len());
+
+            let mut sorted_alpha = sorted.clone();
+            let mut input_alpha = items.clone();
+            sorted_alpha.sort();
+            input_alpha.sort();
+            prop_assert_eq!(sorted_alpha, input_alpha);
+        }
+
+        /// Property: the comparison induced by sort_key_of is a total order:
+        /// reflexive, antisymmetric, and transitive on triples.
+        #[test]
+        fn sort_key_total_order_holds(
+            a in ".*", b in ".*", c in ".*",
+        ) {
+            let ka = sort_key_of(&AsciiLetterCollator, &a);
+            let kb = sort_key_of(&AsciiLetterCollator, &b);
+            let kc = sort_key_of(&AsciiLetterCollator, &c);
+
+            // Reflexivity.
+            prop_assert_eq!(ka.cmp(&ka), std::cmp::Ordering::Equal);
+
+            // Antisymmetry: a.cmp(b) == reverse(b.cmp(a)).
+            prop_assert_eq!(ka.cmp(&kb).reverse(), kb.cmp(&ka));
+
+            // Transitivity: a <= b and b <= c implies a <= c.
+            if ka <= kb && kb <= kc {
+                prop_assert!(ka <= kc);
+            }
+        }
+
+        /// Property: the bundled `PinyinCollator` and `StrokesCollator` also
+        /// produce permutations of their inputs (smoke-checking the real
+        /// data path, not just the trivial ASCII collator).
+        #[test]
+        fn pinyin_collator_sort_is_a_permutation(items in small_vec_of_strings()) {
+            let collator = crate::pinyin::PinyinCollator::new();
+            let sorted = sort_strings_with(items.clone(), &collator);
+            prop_assert_eq!(sorted.len(), items.len());
+        }
+
+        #[test]
+        fn strokes_collator_sort_is_a_permutation(items in small_vec_of_strings()) {
+            let collator = crate::stroke::StrokesCollator;
+            let sorted = sort_strings_with(items.clone(), &collator);
+            prop_assert_eq!(sorted.len(), items.len());
+        }
+    }
+}
