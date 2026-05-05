@@ -149,6 +149,57 @@ fn unique_and_reverse_compose_correctly() {
 }
 
 #[test]
+fn completions_subcommand_emits_bash_script() {
+    let mut command = binary_command();
+    command.args(["completions", "bash"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    let body = stdout(&output);
+    assert!(
+        body.contains("_hanzi-sort()"),
+        "bash completion should define _hanzi-sort function: {body}"
+    );
+    assert!(
+        body.contains("--reverse") && body.contains("--unique"),
+        "completion should mention all top-level flags"
+    );
+}
+
+#[test]
+fn completions_subcommand_emits_zsh_script() {
+    let mut command = binary_command();
+    command.args(["completions", "zsh"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    let body = stdout(&output);
+    assert!(
+        body.contains("#compdef hanzi-sort"),
+        "zsh completion should declare compdef header: {body}"
+    );
+}
+
+#[test]
+fn help_includes_examples_section() {
+    let mut command = binary_command();
+    command.arg("--help");
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success());
+    let help = stdout(&output);
+    assert!(help.contains("EXAMPLES:"), "help should include examples section");
+    assert!(
+        help.contains("cat names.txt | hanzi-sort"),
+        "help should show stdin example"
+    );
+    assert!(
+        help.contains("hanzi-sort completions bash"),
+        "help should advertise the completions subcommand"
+    );
+}
+
+#[test]
 fn reads_file_inputs_line_by_line_and_ignores_blank_lines() {
     let temp = TempWorkspace::new();
     let input_path = temp.path().join("names.txt");

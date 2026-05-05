@@ -22,6 +22,8 @@
 - `-r/--reverse` flag to reverse the sorted output
 - `-u/--unique` flag to remove adjacent duplicates from the sorted output (like `sort -u`); ordering is `unique` then `reverse`
 - `RuntimeConfig::with_unique` and `RuntimeConfig::with_reverse` builder-style setters
+- `hanzi-sort completions <shell>` subcommand that prints a shell completion script (bash/zsh/fish/powershell/elvish), via `clap_complete`
+- usage examples in `--help` output (after the options list)
 
 ### Changed
 

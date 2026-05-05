@@ -1,8 +1,9 @@
-use clap::{Parser, ValueEnum};
+use clap::{Parser, Subcommand, ValueEnum};
+use clap_complete::Shell;
 use std::path::PathBuf;
 
 use hanzi_sort::{
-    Align, AnyCollator, FormatConfig, InputSource, PinyinOverride, HanziSortError, Result,
+    Align, AnyCollator, FormatConfig, HanziSortError, InputSource, PinyinOverride, Result,
     RuntimeConfig,
 };
 
@@ -32,9 +33,47 @@ pub enum CliSortMode {
     Strokes,
 }
 
+#[derive(Subcommand, Debug)]
+pub enum CliCommand {
+    /// Generate a shell completion script for the given shell to stdout.
+    Completions {
+        /// The target shell (bash, zsh, fish, powershell, elvish).
+        #[arg(value_enum)]
+        shell: Shell,
+    },
+}
+
+const AFTER_HELP: &str = "EXAMPLES:
+  Sort by pinyin (default):
+    hanzi-sort -t 汉字 张三 赵四
+
+  Sort piped input:
+    cat names.txt | hanzi-sort
+
+  Sort by stroke count, single column:
+    hanzi-sort -t 天 一 十 --sort-by strokes --columns 1 --entry-width 2 --blank-every 0
+
+  Resolve a polyphonic phrase via override:
+    hanzi-sort -t 重庆 银行 --config ./override.toml
+
+  Reverse + dedup:
+    hanzi-sort -f names.txt -u -r
+
+  Generate shell completions:
+    hanzi-sort completions bash > /usr/local/etc/bash_completion.d/hanzi-sort";
+
 #[derive(Parser, Debug)]
-#[command(author, version, about)]
+#[command(
+    author,
+    version,
+    about,
+    long_about = "Sort Chinese text by Hanyu Pinyin or stroke count, with deterministic \
+                  tie-breaking and phrase-level overrides for polyphonic characters.",
+    after_help = AFTER_HELP,
+)]
 pub struct CliArgs {
+    #[command(subcommand)]
+    pub command: Option<CliCommand>,
     #[arg(
         short = 'f',
         long = "file",
