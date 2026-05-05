@@ -275,7 +275,7 @@ U+356C,gong1|song4,㕬
 U+356D,ao1|ao4,㕭
 U+356E,fu3,㕮
 U+356F,ne4,㕯
-U+3570,xue4|ma,㕰
+U+3570,xue4|ma5,㕰
 U+3571,you2,㕱
 U+3572,hua2|ying2,㕲
 U+3574,chen2,㕴
@@ -339,14 +339,14 @@ U+35C3,wen3|hun1,㗃
 U+35C4,ku1,㗄
 U+35C5,hu2,㗅
 U+35C6,ge2,㗆
-U+35C7,xia2|ya,㗇
+U+35C7,xia2|ya5,㗇
 U+35C8,man4,㗈
 U+35C9,lve4|e4,㗉
 U+35CA,ji2|lei2,㗊
 U+35CB,hou2,㗋
 U+35CC,zhi4,㗌
 U+35CF,wai1,㗏
-U+35D1,bai,㗑
+U+35D1,bai5,㗑
 U+35D2,ai4,㗒
 U+35D3,zhui1,㗓
 U+35D4,qian1,㗔
@@ -474,7 +474,7 @@ U+3669,liao2,㙩
 U+366A,yi4,㙪
 U+366B,ji2,㙫
 U+366C,yin2,㙬
-U+366E,da1|da,㙮
+U+366E,da1|da5,㙮
 U+366F,yi4,㙯
 U+3670,xie4,㙰
 U+3671,hao4,㙱
@@ -821,7 +821,7 @@ U+37F3,li4,㟳
 U+37F4,kuai4,㟴
 U+37F5,gang3,㟵
 U+37F6,yuan2,㟶
-U+37F7,da,㟷
+U+37F7,da5,㟷
 U+37F9,lao2,㟹
 U+37FA,lou2,㟺
 U+37FB,qian4|zhan3,㟻
@@ -2460,7 +2460,7 @@ U+3F8D,nai2,㾍
 U+3F8E,ya1|xia1,㾎
 U+3F8F,jie4|ya2,㾏
 U+3F90,li4,㾐
-U+3F91,da2|he4|da,㾑
+U+3F91,da2|he4|da5,㾑
 U+3F92,ru2|ru4,㾒
 U+3F93,yuan1,㾓
 U+3F94,lv3,㾔
@@ -5851,7 +5851,7 @@ U+4E44,wu3,乄
 U+4E45,jiu3,久
 U+4E46,jiu3,乆
 U+4E47,tuo1|zhe2,乇
-U+4E48,me|yao1|mo2|ma,么
+U+4E48,me5|yao1|mo2|ma5,么
 U+4E49,yi4,义
 U+4E4A,yi1,乊
 U+4E4B,zhi1|zhu1|zhi4,之
@@ -5870,7 +5870,7 @@ U+4E57,cheng2,乗
 U+4E58,cheng2|sheng4,乘
 U+4E59,yi3|yi4|jue2,乙
 U+4E5A,yin3,乚
-U+4E5B,ya,乛
+U+4E5B,ya5,乛
 U+4E5C,mie1|nie4,乜
 U+4E5D,jiu3|jiu1,九
 U+4E5E,qi3|qi4,乞
@@ -5903,7 +5903,7 @@ U+4E78,na3,乸
 U+4E79,gan1,乹
 U+4E7A,suo3,乺
 U+4E7B,yu2,乻
-U+4E7C,cui,乼
+U+4E7C,cui5,乼
 U+4E7D,zhe3,乽
 U+4E7E,qian2|gan1,乾
 U+4E7F,zhi4|luan4,乿
@@ -5913,8 +5913,8 @@ U+4E82,luan4,亂
 U+4E83,lin3|lin4,亃
 U+4E84,yi4,亄
 U+4E85,jue2,亅
-U+4E86,le|liao3|liao4,了
-U+4E87,ma,亇
+U+4E86,le5|liao3|liao4,了
+U+4E87,ma5,亇
 U+4E88,yu3|yu2|zhu4,予
 U+4E89,zheng1,争
 U+4E8A,shi4,亊
@@ -5949,7 +5949,7 @@ U+4EA6,yi4,亦
 U+4EA7,chan3,产
 U+4EA8,heng1|xiang3|peng1,亨
 U+4EA9,mu3,亩
-U+4EAA,ye,亪
+U+4EAA,ye5,亪
 U+4EAB,xiang3,享
 U+4EAC,jing1,京
 U+4EAD,ting2,亭
@@ -6015,7 +6015,7 @@ U+4EE8,sa1,仨
 U+4EE9,chang2,仩
 U+4EEA,yi2,仪
 U+4EEB,mu4,仫
-U+4EEC,men|men2,们
+U+4EEC,men5|men2,们
 U+4EED,ren4,仭
 U+4EEE,fan3,仮
 U+4EEF,chao4|miao3,仯
@@ -6026,7 +6026,7 @@ U+4EF3,pi3|pi2|bi4,仳
 U+4EF4,wo4,仴
 U+4EF5,wu3,仵
 U+4EF6,jian4|mou2,件
-U+4EF7,jia4|jie|jie4,价
+U+4EF7,jia4|jie5|jie4,价
 U+4EF8,yao3|fo2,仸
 U+4EF9,feng1,仹
 U+4EFA,cang1,仺
@@ -6060,7 +6060,7 @@ U+4F15,fu1,伕
 U+4F16,tang3,伖
 U+4F17,zhong4|yin2,众
 U+4F18,you1|you2,优
-U+4F19,huo3|huo,伙
+U+4F19,huo3|huo5,伙
 U+4F1A,hui4|kuai4,会
 U+4F1B,yu3,伛
 U+4F1C,cui4,伜
@@ -6074,12 +6074,12 @@ U+4F23,qian4,伣
 U+4F24,shang1,伤
 U+4F25,chang1,伥
 U+4F26,lun2,伦
-U+4F27,cang1|chen,伧
+U+4F27,cang1|chen5,伧
 U+4F28,xun4,伨
 U+4F29,xin4,伩
 U+4F2A,wei3,伪
 U+4F2B,zhu4,伫
-U+4F2C,ze,伬
+U+4F2C,ze5,伬
 U+4F2D,xian2,伭
 U+4F2E,nu3,伮
 U+4F2F,bo2|bai3|mo4|ba4,伯
@@ -6137,7 +6137,7 @@ U+4F62,qu2,佢
 U+4F63,yong1|yong4,佣
 U+4F64,wa3,佤
 U+4F65,qian1,佥
-U+4F66,shi,佦
+U+4F66,shi5,佦
 U+4F67,ka3,佧
 U+4F68,bao1,佨
 U+4F69,pei4,佩
@@ -6199,7 +6199,7 @@ U+4FA0,xia2,侠
 U+4FA1,si4,価
 U+4FA2,dai4,侢
 U+4FA3,lv3,侣
-U+4FA4,ta,侤
+U+4FA4,ta5,侤
 U+4FA5,jiao3|yao2,侥
 U+4FA6,zhen1,侦
 U+4FA7,ce4|ze4|zhai1,侧
@@ -6308,7 +6308,7 @@ U+500D,bei4|pei2,倍
 U+500E,tian3,倎
 U+500F,shu1,倏
 U+5010,shu1,倐
-U+5011,men|men4|men2,們
+U+5011,men5|men4|men2,們
 U+5012,dao4|dao3,倒
 U+5013,tan2|dan4|tan4,倓
 U+5014,jue2|jue4,倔
@@ -6362,7 +6362,7 @@ U+5043,yan3,偃
 U+5044,ruan3|ru2,偄
 U+5045,zhong4|chong1|tong2,偅
 U+5046,chun3,偆
-U+5047,jia3|jia4|jie|xia4|xia2|ge2,假
+U+5047,jia3|jia4|jie5|xia4|xia2|ge2,假
 U+5048,ji4|jie2|qi4,偈
 U+5049,wei3,偉
 U+504A,yu3,偊
@@ -6413,7 +6413,7 @@ U+5076,ou3,偶
 U+5077,tou1,偷
 U+5078,tou1,偸
 U+5079,bei4,偹
-U+507A,za2|zan2|zan,偺
+U+507A,za2|zan2|zan5,偺
 U+507B,lou2|lv3,偻
 U+507C,jie2,偼
 U+507D,wei3|wei2|e2|gui4,偽
@@ -6441,7 +6441,7 @@ U+5092,xi1|xi4,傒
 U+5093,shan4,傓
 U+5094,qian4|jian1,傔
 U+5095,jue2|que4,傕
-U+5096,cang1|cheng2|chen,傖
+U+5096,cang1|cheng2|chen5,傖
 U+5097,chu4,傗
 U+5098,san3,傘
 U+5099,bei4,備
@@ -6540,7 +6540,7 @@ U+50F5,jiang1,僵
 U+50F6,min3,僶
 U+50F7,ye4,僷
 U+50F8,jin4,僸
-U+50F9,jia4|qia3|jie,價
+U+50F9,jia4|qia3|jie5,價
 U+50FA,qiao4,僺
 U+50FB,pi4,僻
 U+50FC,feng1,僼
@@ -6610,7 +6610,7 @@ U+513B,tang3|tang4|chang3,儻
 U+513C,yan3,儼
 U+513D,lei2|lei3|luo3,儽
 U+513E,nang4,儾
-U+513F,er2|er|ren2,儿
+U+513F,er2|er5|ren2,儿
 U+5140,wu4|wu1,兀
 U+5141,yun3|yuan2,允
 U+5142,zan1,兂
@@ -6656,7 +6656,7 @@ U+516B,ba1|ba2,八
 U+516C,gong1,公
 U+516D,liu4|lu4,六
 U+516E,xi1,兮
-U+516F,han,兯
+U+516F,han5,兯
 U+5170,lan2,兰
 U+5171,gong4|gong1|gong3|hong2,共
 U+5172,tian1,兲
@@ -6819,7 +6819,7 @@ U+520E,wen3,刎
 U+520F,ji1,刏
 U+5210,dan3,刐
 U+5211,xing2,刑
-U+5212,hua4|hua2|guo4|guo3|huai,划
+U+5212,hua4|hua2|guo4|guo3|huai5,划
 U+5213,wan2,刓
 U+5214,jue2,刔
 U+5215,li2,刕
@@ -6932,7 +6932,7 @@ U+527F,jiao3|chao1,剿
 U+5280,gua1,劀
 U+5281,qiao1|qiao2,劁
 U+5282,jue2,劂
-U+5283,hua4|hua2|huai,劃
+U+5283,hua4|hua2|huai5,劃
 U+5284,zha1|zha2,劄
 U+5285,zhuo2,劅
 U+5286,lian2,劆
@@ -7011,7 +7011,7 @@ U+52CE,lu4,勎
 U+52CF,bu4,勏
 U+52D0,meng3,勐
 U+52D1,chi4|lai4,勑
-U+52D2,lei1|le4|lei,勒
+U+52D2,lei1|le4|lei5,勒
 U+52D3,kai4,勓
 U+52D4,mian3,勔
 U+52D5,dong4,動
@@ -7082,7 +7082,7 @@ U+5315,bi3|pin4,匕
 U+5316,hua4|hua1|huo4,化
 U+5317,bei3|bei4,北
 U+5318,nao3,匘
-U+5319,shi|chi2,匙
+U+5319,shi5|chi2,匙
 U+531A,fang1|fang4,匚
 U+531B,jiu4,匛
 U+531C,yi2,匜
@@ -7149,7 +7149,7 @@ U+5358,dan1,単
 U+5359,ji2|chi4,卙
 U+535A,bo2,博
 U+535B,shuai4,卛
-U+535C,bo|bu3|pu1,卜
+U+535C,bo5|bu3|pu1,卜
 U+535D,kuang4|guan4,卝
 U+535E,bian4|pan2,卞
 U+535F,bu3|ji1,卟
@@ -7206,7 +7206,7 @@ U+5391,ya2,厑
 U+5392,qie4,厒
 U+5393,ya2|ai2,厓
 U+5394,zhi4|shi1,厔
-U+5395,ce4|si,厕
+U+5395,ce4|si5,厕
 U+5396,pang2|mang2,厖
 U+5397,ti2,厗
 U+5398,li2|chan2,厘
@@ -7241,7 +7241,7 @@ U+53B4,yan3,厴
 U+53B5,yuan2,厵
 U+53B6,si1|mou3,厶
 U+53B7,gong1|hong2,厷
-U+53B8,lin2|min,厸
+U+53B8,lin2|min5,厸
 U+53B9,rou2|qiu2,厹
 U+53BA,qu4,厺
 U+53BB,qu4|qu1,去
@@ -7294,7 +7294,7 @@ U+53E9,kou4,叩
 U+53EA,zhi3|zhi1,只
 U+53EB,jiao4,叫
 U+53EC,zhao4|shao4,召
-U+53ED,ba1|pa1|ba,叭
+U+53ED,ba1|pa1|ba5,叭
 U+53EE,ding1,叮
 U+53EF,ke3|ke4|ge1,可
 U+53F0,tai2|tai1|yi2|si4,台
@@ -7336,7 +7336,7 @@ U+5413,xia4|he4|ha4,吓
 U+5414,ye3|ye1,吔
 U+5415,lv3,吕
 U+5416,ya1|a1,吖
-U+5417,ma|ma2|ma3,吗
+U+5417,ma5|ma2|ma3,吗
 U+5418,ou3,吘
 U+5419,huo1,吙
 U+541A,yi1|xi1,吚
@@ -7352,7 +7352,7 @@ U+5423,qin4,吣
 U+5424,jie4|ge4|xie4,吤
 U+5425,bu4|pou1,吥
 U+5426,fou3|pi3,否
-U+5427,ba|ba1|pa1,吧
+U+5427,ba5|ba1|pa1,吧
 U+5428,dun1|tun2|tun3,吨
 U+5429,fen1|pen4,吩
 U+542A,e2|hua1,吪
@@ -7377,10 +7377,10 @@ U+543C,hou3,吼
 U+543D,hong1|ou1|hou3,吽
 U+543E,wu2|yu2|ya2,吾
 U+543F,gao4,吿
-U+5440,ya|ya1|xia1,呀
+U+5440,ya5|ya1|xia1,呀
 U+5441,jun4,呁
 U+5442,lv3,呂
-U+5443,e4|e|ai4,呃
+U+5443,e4|e5|ai4,呃
 U+5444,ge2,呄
 U+5445,mei2|wen3,呅
 U+5446,dai1|bao3|ai2,呆
@@ -7393,17 +7393,17 @@ U+544C,jiao4,呌
 U+544D,hong1,呍
 U+544E,chi3|ying1,呎
 U+544F,sheng1,呏
-U+5450,na4|ne4|na|nuo4|ne,呐
+U+5450,na4|ne4|na5|nuo4|ne5,呐
 U+5451,tun1,呑
 U+5452,wu3|m2,呒
 U+5453,yi4,呓
 U+5454,dai1|tai3,呔
 U+5455,ou3|ou1|ou4,呕
 U+5456,li4,呖
-U+5457,bei|bai4,呗
+U+5457,bei5|bai4,呗
 U+5458,yuan2|yun4|yun2,员
 U+5459,guo1,呙
-U+545A,wen,呚
+U+545A,wen5,呚
 U+545B,qiang1|qiang4,呛
 U+545C,wu1,呜
 U+545D,e4,呝
@@ -7411,7 +7411,7 @@ U+545E,shi1,呞
 U+545F,juan3,呟
 U+5460,pen3,呠
 U+5461,wen3|min3,呡
-U+5462,ne|ni2|ni3|ni1,呢
+U+5462,ne5|ni2|ni3|ni1,呢
 U+5463,m2|m4|mou2,呣
 U+5464,ling4|ling2,呤
 U+5465,ran2,呥
@@ -7430,7 +7430,7 @@ U+5471,gu1|gua1|gua3,呱
 U+5472,ci1|ci2|zi1,呲
 U+5473,wei4|mei4,味
 U+5474,xu3|hou3|hou1|gou4|gou1|gu1,呴
-U+5475,he1|ha1|a1|a|ke1|huo1|a2|a3|a4,呵
+U+5475,he1|ha1|a1|a5|ke1|huo1|a2|a3|a4,呵
 U+5476,nao2|na2|nu3,呶
 U+5477,ga1|xia1|xia2|jia3,呷
 U+5478,pei1,呸
@@ -7453,7 +7453,7 @@ U+5488,fu2,咈
 U+5489,yang1|yang3,咉
 U+548A,he2,咊
 U+548B,za3|ze2|zha1|zha4,咋
-U+548C,he2|he4|hu2|huo2|huo4|huo,和
+U+548C,he2|he4|hu2|huo2|huo4|huo5,和
 U+548D,hai1|tai1,咍
 U+548E,jiu4|gao1,咎
 U+548F,yong3,咏
@@ -7462,14 +7462,14 @@ U+5491,da1,咑
 U+5492,zhou4,咒
 U+5493,wa3,咓
 U+5494,ka1|ka3|nong4,咔
-U+5495,gu1|gu,咕
+U+5495,gu1|gu5,咕
 U+5496,ka1|ga1|jia1,咖
-U+5497,zuo,咗
+U+5497,zuo5,咗
 U+5498,bu4,咘
 U+5499,long2,咙
 U+549A,dong1,咚
 U+549B,ning2,咛
-U+549C,ta,咜
+U+549C,ta5,咜
 U+549D,si1,咝
 U+549E,xian4|xian2,咞
 U+549F,huo4,咟
@@ -7480,17 +7480,17 @@ U+54A3,guang1|gong1,咣
 U+54A4,zha4,咤
 U+54A5,xi4|xi1|die2|zhi4,咥
 U+54A6,yi2|xi1,咦
-U+54A7,lie3|lie1|lie4|lie2|lie,咧
+U+54A7,lie3|lie1|lie4|lie2|lie5,咧
 U+54A8,zi1,咨
-U+54A9,mie1|mie,咩
+U+54A9,mie1|mie5,咩
 U+54AA,mi1|mi3|mie1|mai3,咪
 U+54AB,zhi3,咫
 U+54AC,yao3|jiao1|yao1|jiao3,咬
 U+54AD,ji1|xi1|qia4,咭
 U+54AE,zhou4|zhu4|zhu1|ru2,咮
-U+54AF,ge1|ka3|lo|luo4|ka1,咯
+U+54AF,ge1|ka3|lo5|luo4|ka1,咯
 U+54B0,shu4|xun2,咰
-U+54B1,zan2|za2|za3|zan,咱
+U+54B1,zan2|za2|za3|zan5,咱
 U+54B2,xiao4,咲
 U+54B3,ke2|hai1|hai2|gai1,咳
 U+54B4,hui1|hai2,咴
@@ -7512,7 +7512,7 @@ U+54C3,tong2,哃
 U+54C4,hong3|hong1|hong4,哄
 U+54C5,xiong1|hong1,哅
 U+54C6,duo1|chi3|zha4|chi4|duo4|die3,哆
-U+54C7,wa|wa1|gui1|hua2|wa2,哇
+U+54C7,wa5|wa1|gui1|hua2|wa2,哇
 U+54C8,ha1|ha3|ha4|he1|he2|ta4|sha4,哈
 U+54C9,zai1,哉
 U+54CA,you4,哊
@@ -7529,14 +7529,14 @@ U+54D4,bi4,哔
 U+54D5,hui4|yue3,哕
 U+54D6,nian2,哖
 U+54D7,hua1|hua2,哗
-U+54D8,xing,哘
+U+54D8,xing5,哘
 U+54D9,kuai4,哙
 U+54DA,duo3,哚
 U+54DB,fen1,哛
 U+54DC,ji4,哜
 U+54DD,nong2,哝
 U+54DE,mou1,哞
-U+54DF,yo1|yo,哟
+U+54DF,yo1|yo5,哟
 U+54E0,hao4,哠
 U+54E1,yuan2|yun2|yun4,員
 U+54E2,long4,哢
@@ -7546,8 +7546,8 @@ U+54E5,ge1,哥
 U+54E6,o2|e2|o4,哦
 U+54E7,chi1|xia4|he4,哧
 U+54E8,shao4|sao1|xiao1|xiao4|sao4,哨
-U+54E9,li1|li|li4|li3|mai2|ying1,哩
-U+54EA,na3|na|ne2|nuo2|nai3|na4|nie4|nei3,哪
+U+54E9,li1|li5|li4|li3|mai2|ying1,哩
+U+54EA,na3|na5|ne2|nuo2|nai3|na4|nie4|nei3,哪
 U+54EB,zu2,哫
 U+54EC,he2,哬
 U+54ED,ku1,哭
@@ -7565,7 +7565,7 @@ U+54F8,sui1,哸
 U+54F9,fu2,哹
 U+54FA,bu3|bu1|fu3,哺
 U+54FB,han1,哻
-U+54FC,heng1|hng,哼
+U+54FC,heng1|hng5,哼
 U+54FD,geng3|ying3|ying4|ng2|n2,哽
 U+54FE,shuo1|yue4,哾
 U+54FF,ge3,哿
@@ -7573,7 +7573,7 @@ U+5500,you4,唀
 U+5501,yan4,唁
 U+5502,gu1,唂
 U+5503,gu3,唃
-U+5504,bei|bai4,唄
+U+5504,bei5|bai4,唄
 U+5505,han2,唅
 U+5506,suo1|shua4,唆
 U+5507,chun2|zhen1|zhen4,唇
@@ -7606,7 +7606,7 @@ U+5521,liang3|ying1,唡
 U+5522,suo3,唢
 U+5523,zao4,唣
 U+5524,huan4,唤
-U+5525,lang,唥
+U+5525,lang5,唥
 U+5526,sha1,唦
 U+5527,ji1|jie2,唧
 U+5528,zu3,唨
@@ -7622,7 +7622,7 @@ U+5531,chang4,唱
 U+5532,er2|wa1,唲
 U+5533,li4,唳
 U+5534,qiang4,唴
-U+5535,an3|ng|n,唵
+U+5535,an3|ng5|n5,唵
 U+5536,ze2|jie4,唶
 U+5537,yo1|yu4,唷
 U+5538,nian4|dian4,唸
@@ -7643,7 +7643,7 @@ U+5546,shang1,商
 U+5547,di4|shi4|zhai1,啇
 U+5548,heng1|heng4|e4|za2,啈
 U+5549,lin2|lan2|len4,啉
-U+554A,a|a1|a2|a3|a4|e4,啊
+U+554A,a5|a1|a2|a3|a4|e4,啊
 U+554B,cai3|cai1|xiao1,啋
 U+554C,xiang1|qiang1,啌
 U+554D,tun1|zhun1|xiang1|tui1|dui3,啍
@@ -7671,7 +7671,7 @@ U+5562,liang3|ying1,啢
 U+5563,xian2,啣
 U+5564,pi2,啤
 U+5565,sha2|sha4,啥
-U+5566,la|la1,啦
+U+5566,la5|la1,啦
 U+5567,ze2,啧
 U+5568,ying1|qing2,啨
 U+5569,gua4,啩
@@ -7681,12 +7681,12 @@ U+556C,se4,啬
 U+556D,zhuan4,啭
 U+556E,nie4,啮
 U+556F,guo1,啯
-U+5570,luo1|luo2|luo,啰
+U+5570,luo1|luo2|luo5,啰
 U+5571,yan2,啱
 U+5572,di1,啲
 U+5573,quan2|jue2,啳
 U+5574,chan3|tan1,啴
-U+5575,bo1|bo,啵
+U+5575,bo1|bo5,啵
 U+5576,ding4,啶
 U+5577,lang1,啷
 U+5578,xiao4,啸
@@ -7697,14 +7697,14 @@ U+557C,ti2,啼
 U+557D,an2|an1,啽
 U+557E,jiu1,啾
 U+557F,dan4,啿
-U+5580,ka1|ke4|ke,喀
+U+5580,ka1|ke4|ke5,喀
 U+5581,yong2|yu2,喁
 U+5582,wei4,喂
 U+5583,nan2|nan3,喃
 U+5584,shan4,善
 U+5585,yu4,喅
 U+5586,zhe2,喆
-U+5587,la3|la2|la1|la,喇
+U+5587,la3|la2|la1|la5,喇
 U+5588,jie1|xie4,喈
 U+5589,hou2,喉
 U+558A,han3|kan4|jian1,喊
@@ -7715,9 +7715,9 @@ U+558E,wai1,喎
 U+558F,nuo4|re3,喏
 U+5590,yu4,喐
 U+5591,yin1|yin3|yin4,喑
-U+5592,za2|zan3|zan2|za4|zan,喒
+U+5592,za2|zan3|zan2|za4|zan5,喒
 U+5593,yao1,喓
-U+5594,o1|wo1|wu1|o|o4,喔
+U+5594,o1|wo1|wu1|o5|o4,喔
 U+5595,mian3,喕
 U+5596,hu2,喖
 U+5597,yun3,喗
@@ -7747,8 +7747,8 @@ U+55AE,dan1|dan3|chan2|shan4|chan3|dan4|zhan4|tan2,單
 U+55AF,pen4|ben1,喯
 U+55B0,can1|sun1|qi1,喰
 U+55B1,li2,喱
-U+55B2,yo1|yo,喲
-U+55B3,zha1|cha1|zha,喳
+U+55B2,yo1|yo5,喲
+U+55B3,zha1|cha1|zha5,喳
 U+55B4,wei1,喴
 U+55B5,miao1,喵
 U+55B6,ying2,営
@@ -7758,14 +7758,14 @@ U+55B9,kui2,喹
 U+55BA,xi2,喺
 U+55BB,yu4|yu2,喻
 U+55BC,jie1,喼
-U+55BD,lou2|lou,喽
+U+55BD,lou2|lou5,喽
 U+55BE,ku4,喾
 U+55BF,zao4|qiao1,喿
 U+55C0,hu4,嗀
 U+55C1,ti2,嗁
 U+55C2,yao2,嗂
 U+55C3,he4|xiao1|xiao4|hu4,嗃
-U+55C4,a2|sha4|a|xia4,嗄
+U+55C4,a2|sha4|a5|xia4,嗄
 U+55C5,xiu4,嗅
 U+55C6,qiang1|qiang4|cheng2,嗆
 U+55C7,se4,嗇
@@ -7775,11 +7775,11 @@ U+55CA,hong3|gong3|gong4,嗊
 U+55CB,xie2,嗋
 U+55CC,ai4|yi4|wo4,嗌
 U+55CD,suo1|shuo4,嗍
-U+55CE,ma|ma4|ma2|ma3,嗎
+U+55CE,ma5|ma4|ma2|ma3,嗎
 U+55CF,cha1,嗏
 U+55D0,hai4,嗐
 U+55D1,ke1|ke4|he2|xia2,嗑
-U+55D2,da1|ta4|da,嗒
+U+55D2,da1|ta4|da5,嗒
 U+55D3,sang3,嗓
 U+55D4,chen1|tian2,嗔
 U+55D5,ru4,嗕
@@ -7799,7 +7799,7 @@ U+55E2,wa4,嗢
 U+55E3,si4,嗣
 U+55E4,chi1,嗤
 U+55E5,hao2,嗥
-U+55E6,suo|suo1,嗦
+U+55E6,suo5|suo1,嗦
 U+55E8,hai1|hei1,嗨
 U+55E9,suo3,嗩
 U+55EA,qin2,嗪
@@ -7819,7 +7819,7 @@ U+55F7,ao2,嗷
 U+55F8,ao2,嗸
 U+55F9,lian2,嗹
 U+55FA,zui1|sui1|zui3,嗺
-U+55FB,zhe1|zhe4|zhu4|zhe,嗻
+U+55FB,zhe1|zhe4|zhu4|zhe5,嗻
 U+55FC,mo4,嗼
 U+55FD,sou4|shuo4|shu4,嗽
 U+55FE,sou3,嗾
@@ -7837,24 +7837,24 @@ U+5609,jia1,嘉
 U+560A,ai2,嘊
 U+560B,xiao4,嘋
 U+560C,piao4|piao1,嘌
-U+560D,lou2|lou3|lou,嘍
+U+560D,lou2|lou3|lou5,嘍
 U+560E,ga1|ga2|ga3,嘎
 U+560F,gu3|jia3,嘏
 U+5610,xiao1|jiao1|lao2|bao4|miu4,嘐
 U+5611,hu1|hu4,嘑
 U+5612,hui4,嘒
 U+5613,guo1,嘓
-U+5614,ou3|ou1|ou4|xu1|chu1|ou,嘔
+U+5614,ou3|ou1|ou4|xu1|chu1|ou5,嘔
 U+5615,xian1,嘕
 U+5616,ze2,嘖
 U+5617,chang2,嘗
 U+5618,xu1|shi1,嘘
 U+5619,po2,嘙
 U+561A,de1|dei1|de2|dai1,嘚
-U+561B,ma|ma2,嘛
+U+561B,ma5|ma2,嘛
 U+561C,ma4,嘜
 U+561D,hu2,嘝
-U+561E,lei|le1,嘞
+U+561E,lei5|le1,嘞
 U+561F,du1,嘟
 U+5620,ga1,嘠
 U+5621,tang1,嘡
@@ -7891,7 +7891,7 @@ U+563F,hei1|mo4|mu4,嘿
 U+5640,xun4,噀
 U+5641,e3|wu4|wo4,噁
 U+5642,zun3,噂
-U+5643,fan1|bo,噃
+U+5643,fan1|bo5,噃
 U+5644,chi1,噄
 U+5645,hui1,噅
 U+5646,zan3|can3,噆
@@ -7943,7 +7943,7 @@ U+5673,yu3,噳
 U+5674,pen1|pen4|fen4,噴
 U+5675,dao4,噵
 U+5676,ga2|ge2,噶
-U+5677,hm|xin1|hen1,噷
+U+5677,hm5|xin1|hen1,噷
 U+5678,dun1,噸
 U+5679,dang1,噹
 U+567A,xin1,噺
@@ -7979,13 +7979,13 @@ U+5697,bo2|pao4|bao4,嚗
 U+5698,you1,嚘
 U+5699,nie4|yao3,嚙
 U+569A,yin2,嚚
-U+569B,hu4|yo,嚛
-U+569C,me|mei4|ma,嚜
+U+569B,hu4|yo5,嚛
+U+569C,me5|mei4|ma5,嚜
 U+569D,hong1,嚝
 U+569E,zhe2,嚞
 U+569F,li2,嚟
 U+56A0,liu2,嚠
-U+56A1,hai,嚡
+U+56A1,hai5,嚡
 U+56A2,nang2,嚢
 U+56A3,xiao1|ao2,嚣
 U+56A4,mo2,嚤
@@ -8009,7 +8009,7 @@ U+56B5,chan2|chan1,嚵
 U+56B6,ying1,嚶
 U+56B7,rang3|rang1,嚷
 U+56B8,dian3,嚸
-U+56B9,la2|la,嚹
+U+56B9,la2|la5,嚹
 U+56BA,ta4,嚺
 U+56BB,xiao1,嚻
 U+56BC,jue2|jiao2|jiao4,嚼
@@ -8025,20 +8025,20 @@ U+56C5,chan3,囅
 U+56C6,chai4,囆
 U+56C7,li4,囇
 U+56C8,yi4,囈
-U+56C9,luo1|luo2|luo,囉
+U+56C9,luo1|luo2|luo5,囉
 U+56CA,nang2|nang1,囊
 U+56CB,za2|zan4|can1,囋
 U+56CC,su1,囌
 U+56CD,xi3,囍
-U+56CE,zen,囎
+U+56CE,zen5,囎
 U+56CF,jian1,囏
 U+56D0,za2|nie4|yan4|e4,囐
 U+56D1,zhu3,囑
 U+56D2,lan2,囒
 U+56D3,nie4,囓
-U+56D4,nang1|nang,囔
+U+56D4,nang1|nang5,囔
 U+56D5,lan3,囕
-U+56D6,lo,囖
+U+56D6,lo5,囖
 U+56D7,wei2|guo2,囗
 U+56D8,hui2,囘
 U+56D9,yin1,囙
@@ -8128,7 +8128,7 @@ U+572C,wu1,圬
 U+572D,gui1,圭
 U+572E,pi3,圮
 U+572F,yi2,圯
-U+5730,di4|de,地
+U+5730,di4|de5,地
 U+5731,qian1|su2,圱
 U+5732,qian1,圲
 U+5733,zhen4|quan3|chou2|huai2,圳
@@ -8211,14 +8211,14 @@ U+577F,fu4|fu2,坿
 U+5780,hu1,垀
 U+5781,zhi4,垁
 U+5782,chui2|zhui4,垂
-U+5783,la1|la,垃
+U+5783,la1|la5,垃
 U+5784,long3,垄
 U+5785,long3,垅
 U+5786,lu2,垆
 U+5787,ao4,垇
 U+5788,dai4,垈
 U+5789,pao2,垉
-U+578A,min,垊
+U+578A,min5,垊
 U+578B,xing2,型
 U+578C,dong4|tong2|tong3,垌
 U+578D,ji4|ji1,垍
@@ -8255,7 +8255,7 @@ U+57AB,dian4,垫
 U+57AC,hong2,垬
 U+57AD,ya1,垭
 U+57AE,kua3,垮
-U+57AF,da,垯
+U+57AF,da5,垯
 U+57B0,ka3,垰
 U+57B1,dang4,垱
 U+57B2,kai3,垲
@@ -8351,7 +8351,7 @@ U+580B,peng2|beng4|peng1|ping1,堋
 U+580C,gu4,堌
 U+580D,tu4,堍
 U+580E,leng4,堎
-U+580F,fang,堏
+U+580F,fang5,堏
 U+5810,ya2,堐
 U+5811,qian4,堑
 U+5812,kun1,堒
@@ -8420,7 +8420,7 @@ U+5850,su4,塐
 U+5851,su4,塑
 U+5852,shi2,塒
 U+5853,mi4,塓
-U+5854,ta3|da1|da,塔
+U+5854,ta3|da1|da5,塔
 U+5855,weng3,塕
 U+5856,cheng2,塖
 U+5857,tu2|du4,塗
@@ -8518,7 +8518,7 @@ U+58B2,mu2|wu2,墲
 U+58B3,fen2|fen4,墳
 U+58B4,huang2,墴
 U+58B5,tan2,墵
-U+58B6,da,墶
+U+58B6,da5,墶
 U+58B7,ye4,墷
 U+58B8,zhu4,墸
 U+58B9,jian4,墹
@@ -8573,7 +8573,7 @@ U+58E9,ba4,壩
 U+58EA,wan1,壪
 U+58EB,shi4,士
 U+58EC,ren2,壬
-U+58ED,san,壭
+U+58ED,san5,壭
 U+58EE,zhuang4,壮
 U+58EF,zhuang4|zhuang1,壯
 U+58F0,sheng1|qing4,声
@@ -8644,7 +8644,7 @@ U+5930,gao3,夰
 U+5931,shi1|yi4,失
 U+5932,tao1|ben3,夲
 U+5933,tai4,夳
-U+5934,tou2|tou,头
+U+5934,tou2|tou5,头
 U+5935,yan3|tao1,夵
 U+5936,bi3,夶
 U+5937,yi2,夷
@@ -9090,7 +9090,7 @@ U+5AEE,hu4,嫮
 U+5AEF,ao4,嫯
 U+5AF0,nen4,嫰
 U+5AF1,qiang2,嫱
-U+5AF2,ma,嫲
+U+5AF2,ma5,嫲
 U+5AF3,pie4,嫳
 U+5AF4,gu1,嫴
 U+5AF5,wu3,嫵
@@ -9184,7 +9184,7 @@ U+5B4C,luan2|lian4|luan3,孌
 U+5B4D,yan2|yan3,孍
 U+5B4E,zhu2|shu2|chuo4,孎
 U+5B4F,lan3,孏
-U+5B50,zi|zi3,子
+U+5B50,zi5|zi3,子
 U+5B51,jie2,孑
 U+5B52,jue2,孒
 U+5B53,jue2,孓
@@ -9286,7 +9286,7 @@ U+5BB2,bao3|shi2,宲
 U+5BB3,hai4|he2,害
 U+5BB4,yan4,宴
 U+5BB5,xiao1,宵
-U+5BB6,jia1|jia|jia4|jie|gu1,家
+U+5BB6,jia1|jia5|jia4|jie5|gu1,家
 U+5BB7,shen3,宷
 U+5BB8,chen2,宸
 U+5BB9,rong2|yong3,容
@@ -9393,7 +9393,7 @@ U+5C1D,chang2,尝
 U+5C1E,liao4|liao2,尞
 U+5C1F,xian3,尟
 U+5C20,xian3,尠
-U+5C21,kun,尡
+U+5C21,kun5,尡
 U+5C22,you2|wang1,尢
 U+5C23,wang1,尣
 U+5C24,you2,尤
@@ -9807,7 +9807,7 @@ U+5DBB,jie2,嶻
 U+5DBC,yu3|xu4,嶼
 U+5DBD,yue4,嶽
 U+5DBE,yin3,嶾
-U+5DBF,ru,嶿
+U+5DBF,ru5,嶿
 U+5DC0,jie2,巀
 U+5DC1,li4|lie4,巁
 U+5DC2,gui1|xi1|juan4,巂
@@ -9852,8 +9852,8 @@ U+5DE8,ju4|qu2,巨
 U+5DE9,gong3,巩
 U+5DEA,ju4,巪
 U+5DEB,wu1,巫
-U+5DEC,pu,巬
-U+5DED,pu,巭
+U+5DEC,pu5,巬
+U+5DED,pu5,巭
 U+5DEE,cha4|cha1|chai1|ci1|chai4|cuo1|jie1,差
 U+5DEF,qiu2,巯
 U+5DF0,qiu2,巰
@@ -10021,7 +10021,7 @@ U+5E91,wu3,庑
 U+5E92,zhuang1,庒
 U+5E93,ku4,库
 U+5E94,ying1|ying4,应
-U+5E95,di3|de,底
+U+5E95,di3|de5,底
 U+5E96,pao2,庖
 U+5E97,dian4,店
 U+5E98,ya1,庘
@@ -10065,7 +10065,7 @@ U+5EBD,yu4,庽
 U+5EBE,yu3|yu2,庾
 U+5EBF,miao4,庿
 U+5EC0,sou1,廀
-U+5EC1,ce4|ci4|ze4|si,廁
+U+5EC1,ce4|ci4|ze4|si5,廁
 U+5EC2,xiang1,廂
 U+5EC3,fei4,廃
 U+5EC4,jiu4,廄
@@ -10276,10 +10276,10 @@ U+5F90,xu2,徐
 U+5F91,jing4|jing1,徑
 U+5F92,tu2,徒
 U+5F93,cong2,従
-U+5F94,zhi,徔
+U+5F94,zhi5,徔
 U+5F95,lai2|lai4,徕
 U+5F96,cong2,徖
-U+5F97,de2|de|dei3,得
+U+5F97,de2|de5|dei3,得
 U+5F98,pai2,徘
 U+5F99,xi3|si1,徙
 U+5F9A,dong1,徚
@@ -10324,7 +10324,7 @@ U+5FC0,xiang1|rang3,忀
 U+5FC1,bao4,忁
 U+5FC2,qu2|ju4,忂
 U+5FC3,xin1,心
-U+5FC4,xin,忄
+U+5FC4,xin5,忄
 U+5FC5,bi4,必
 U+5FC6,yi4,忆
 U+5FC7,le4,忇
@@ -10445,7 +10445,7 @@ U+6039,tan1,怹
 U+603A,yong3,怺
 U+603B,zong3,总
 U+603C,dui4,怼
-U+603D,mo,怽
+U+603D,mo5,怽
 U+603E,zhi3,怾
 U+603F,yi4,怿
 U+6040,shi4,恀
@@ -10503,7 +10503,7 @@ U+6073,ken3,恳
 U+6074,de2,恴
 U+6075,hui4,恵
 U+6076,e4|e3|wu4|wu1,恶
-U+6077,xiao,恷
+U+6077,xiao5,恷
 U+6078,tong4,恸
 U+6079,yan1,恹
 U+607A,kai3,恺
@@ -10716,11 +10716,11 @@ U+6148,ci2,慈
 U+6149,xu4|chu4,慉
 U+614A,qian4|qie4|xian2|qian3,慊
 U+614B,tai4,態
-U+614C,huang1|huang3|huang,慌
+U+614C,huang1|huang3|huang5,慌
 U+614D,yun4,慍
 U+614E,shen4|zhen4,慎
 U+614F,ming3,慏
-U+6150,gong,慐
+U+6150,gong5,慐
 U+6151,she4,慑
 U+6152,cong2|cao2,慒
 U+6153,piao1|piao4,慓
@@ -10883,7 +10883,7 @@ U+61EF,fu1,懯
 U+61F0,liu2|liu3,懰
 U+61F1,mie4,懱
 U+61F2,cheng2,懲
-U+61F3,hui,懳
+U+61F3,hui5,懳
 U+61F4,chan4,懴
 U+61F5,meng3|meng4,懵
 U+61F6,lan3|lai4,懶
@@ -10908,7 +10908,7 @@ U+6208,ge1,戈
 U+6209,yue4,戉
 U+620A,wu4,戊
 U+620B,jian1,戋
-U+620C,xu1|qu,戌
+U+620C,xu1|qu5,戌
 U+620D,shu4,戍
 U+620E,rong2|reng1,戎
 U+620F,xi4|hu1,戏
@@ -10972,7 +10972,7 @@ U+6248,hu4,扈
 U+6249,fei1,扉
 U+624A,yan3,扊
 U+624B,shou3,手
-U+624C,shou,扌
+U+624C,shou5,扌
 U+624D,cai2|zai1,才
 U+624E,zha1|za1|zha2|zha3,扎
 U+624F,qiu2,扏
@@ -11059,7 +11059,7 @@ U+629F,tuan2,抟
 U+62A0,kou1,抠
 U+62A1,lun1|lun2,抡
 U+62A2,qiang3|qiang1,抢
-U+62A3,yun,抣
+U+62A3,yun5,抣
 U+62A4,hu4,护
 U+62A5,bao4,报
 U+62A6,bing3,抦
@@ -11097,7 +11097,7 @@ U+62C5,dan1|dan4|dan3|jie1,担
 U+62C6,chai1|che4|chi4|ca1,拆
 U+62C7,mu3,拇
 U+62C8,nian1|nian3|dian1,拈
-U+62C9,la1|la2|la3|la4|la,拉
+U+62C9,la1|la2|la3|la4|la5,拉
 U+62CA,fu3|fu1|bu3,拊
 U+62CB,pao1,拋
 U+62CC,ban4|pan1,拌
@@ -11169,7 +11169,7 @@ U+630D,jiao4|jiao1,挍
 U+630E,kua4|ku1|kou1,挎
 U+630F,dong4,挏
 U+6310,na2|ru2|nu2,挐
-U+6311,tiao1|tiao3|tao2|diao4|tiao2|tiao,挑
+U+6311,tiao1|tiao3|tao2|diao4|tiao2|tiao5,挑
 U+6312,lie4,挒
 U+6313,zha1,挓
 U+6314,lv3,挔
@@ -11333,11 +11333,11 @@ U+63B1,pa2|shou3,掱
 U+63B2,jie1,掲
 U+63B3,lu3,掳
 U+63B4,guai1|guo2,掴
-U+63B5,ming,掵
+U+63B5,ming5,掵
 U+63B6,jie2,掶
 U+63B7,zhi4|zhi1,掷
 U+63B8,dan3|shan4,掸
-U+63B9,meng,掹
+U+63B9,meng5,掹
 U+63BA,can4|chan1|shan3,掺
 U+63BB,sao1,掻
 U+63BC,guan4,掼
@@ -11404,7 +11404,7 @@ U+63F8,zha1,揸
 U+63F9,bei1,揹
 U+63FA,yao2,揺
 U+63FB,wei1,揻
-U+63FC,beng,揼
+U+63FC,beng5,揼
 U+63FD,lan3,揽
 U+63FE,wen4|wu4,揾
 U+63FF,qin4,揿
@@ -12219,7 +12219,7 @@ U+6727,long2|long3,朧
 U+6728,mu4,木
 U+6729,deng3,朩
 U+672A,wei4,未
-U+672B,mo4|me,末
+U+672B,mo4|me5,末
 U+672C,ben3|ben1,本
 U+672D,zha2|ya4,札
 U+672E,shu4|zhu2,朮
@@ -12545,7 +12545,7 @@ U+686E,bei1,桮
 U+686F,ting1|ying2,桯
 U+6870,kuo4,桰
 U+6871,jing4,桱
-U+6872,po|bo2,桲
+U+6872,po5|bo2,桲
 U+6873,ben4,桳
 U+6874,fu2,桴
 U+6875,rui2,桵
@@ -12725,7 +12725,7 @@ U+6922,gui4,椢
 U+6923,dian3,椣
 U+6924,luo2,椤
 U+6925,zhi1,椥
-U+6926,quan,椦
+U+6926,quan5,椦
 U+6927,ming4,椧
 U+6928,fu3,椨
 U+6929,geng1,椩
@@ -12826,7 +12826,7 @@ U+6987,chen4,榇
 U+6988,lv2,榈
 U+6989,ju3,榉
 U+698A,shen2,榊
-U+698B,chu,榋
+U+698B,chu5,榋
 U+698C,bi1,榌
 U+698D,xie4,榍
 U+698E,jia3,榎
@@ -13060,13 +13060,13 @@ U+6A71,chu2,橱
 U+6A72,xi3,橲
 U+6A73,sheng4,橳
 U+6A74,zi3,橴
-U+6A75,san,橵
+U+6A75,san5,橵
 U+6A76,ji2,橶
 U+6A77,dou1,橷
 U+6A78,jing1,橸
 U+6A79,lu3,橹
-U+6A7A,jian,橺
-U+6A7B,chu,橻
+U+6A7A,jian5,橺
+U+6A7B,chu5,橻
 U+6A7C,yuan2,橼
 U+6A7D,ta4,橽
 U+6A7E,shu1|qiao1|sao1,橾
@@ -13188,7 +13188,7 @@ U+6AF1,nie4,櫱
 U+6AF2,yu4,櫲
 U+6AF3,long2,櫳
 U+6AF4,lai4,櫴
-U+6AF5,jiao,櫵
+U+6AF5,jiao5,櫵
 U+6AF6,xian3,櫶
 U+6AF7,gui1,櫷
 U+6AF8,ju3,櫸
@@ -13230,7 +13230,7 @@ U+6B1B,ba4,欛
 U+6B1C,nang2,欜
 U+6B1D,yu4,欝
 U+6B1E,ling2,欞
-U+6B1F,guang,欟
+U+6B1F,guang5,欟
 U+6B20,qian4,欠
 U+6B21,ci4|zi1|ci2,次
 U+6B22,huan1,欢
@@ -13349,7 +13349,7 @@ U+6B92,yun3,殒
 U+6B93,lian4,殓
 U+6B94,yi4,殔
 U+6B95,fou3|ye4|bo2,殕
-U+6B96,zhi2|shi|shi4,殖
+U+6B96,zhi2|shi5|shi4,殖
 U+6B97,ye4|yan4|yan1,殗
 U+6B98,can2,殘
 U+6B99,hun1|men4,殙
@@ -13462,7 +13462,7 @@ U+6C03,tong2,氃
 U+6C04,rong3|rong2,氄
 U+6C05,chang3,氅
 U+6C06,pu3,氆
-U+6C07,lu,氇
+U+6C07,lu5,氇
 U+6C08,zhan1,氈
 U+6C09,sao4,氉
 U+6C0A,zhan1,氊
@@ -13485,7 +13485,7 @@ U+6C1A,chuan1,氚
 U+6C1B,fen1,氛
 U+6C1C,yang2|ri4,氜
 U+6C1D,nei4,氝
-U+6C1E,bin,氞
+U+6C1E,bin5,氞
 U+6C1F,fu2,氟
 U+6C20,shen1,氠
 U+6C21,dong1,氡
@@ -13508,7 +13508,7 @@ U+6C31,yang3,氱
 U+6C32,yun1|yun2,氲
 U+6C33,yun1,氳
 U+6C34,shui3,水
-U+6C35,shui,氵
+U+6C35,shui5,氵
 U+6C36,zheng3|cheng2|zheng4,氶
 U+6C37,bing1,氷
 U+6C38,yong3,永
@@ -13553,7 +13553,7 @@ U+6C5E,gong3,汞
 U+6C5F,jiang1,江
 U+6C60,chi2|tuo2|che4,池
 U+6C61,wu1,污
-U+6C62,tu,汢
+U+6C62,tu5,汢
 U+6C63,jiu3,汣
 U+6C64,tang1|shang1,汤
 U+6C65,zhi1|ji4,汥
@@ -13616,7 +13616,7 @@ U+6C9D,zhui3|zi3,沝
 U+6C9E,za1,沞
 U+6C9F,gou1,沟
 U+6CA0,liu2,沠
-U+6CA1,mei2|mo4|me,没
+U+6CA1,mei2|mo4|me5,没
 U+6CA2,ze2,沢
 U+6CA3,feng1,沣
 U+6CA4,ou1|ou4,沤
@@ -14295,7 +14295,7 @@ U+6F44,shu4,潄
 U+6F45,guan4,潅
 U+6F46,ying2,潆
 U+6F47,xiao1,潇
-U+6F48,zong,潈
+U+6F48,zong5,潈
 U+6F49,kun1,潉
 U+6F4A,xu4,潊
 U+6F4B,lian4,潋
@@ -14377,7 +14377,7 @@ U+6F96,xian2,澖
 U+6F97,jian4,澗
 U+6F98,shan1,澘
 U+6F99,xi4,澙
-U+6F9A,yu,澚
+U+6F9A,yu5,澚
 U+6F9B,lu3,澛
 U+6F9C,lan2,澜
 U+6F9D,ning4,澝
@@ -14472,7 +14472,7 @@ U+6FF5,bin1,濵
 U+6FF6,kuo4,濶
 U+6FF7,fei4,濷
 U+6FF8,cang1,濸
-U+6FF9,me,濹
+U+6FF9,me5,濹
 U+6FFA,jian4|jian1|zan4,濺
 U+6FFB,wei3,濻
 U+6FFC,luo4|po1|li4,濼
@@ -14525,7 +14525,7 @@ U+702A,fan2,瀪
 U+702B,hu2,瀫
 U+702C,lai4,瀬
 U+702D,shu1,瀭
-U+702E,ling,瀮
+U+702E,ling5,瀮
 U+702F,ying2,瀯
 U+7030,mi2|mi3|ni3,瀰
 U+7031,ji4,瀱
@@ -14637,7 +14637,7 @@ U+709A,guang1,炚
 U+709B,guang1,炛
 U+709C,wei3,炜
 U+709D,qiang4,炝
-U+709E,bian,炞
+U+709E,bian5,炞
 U+709F,da2,炟
 U+70A0,xia2,炠
 U+70A1,zheng1,炡
@@ -14798,7 +14798,7 @@ U+713C,shao1,焼
 U+713D,xiong3,焽
 U+713E,nian3,焾
 U+713F,geng1,焿
-U+7140,wei,煀
+U+7140,wei5,煀
 U+7141,chen2,煁
 U+7142,he4,煂
 U+7143,kui3,煃
@@ -14853,7 +14853,7 @@ U+7173,hu2,煳
 U+7174,yun1|yun4|wen3,煴
 U+7175,nan3,煵
 U+7176,shi4,煶
-U+7177,liang,煷
+U+7177,liang5,煷
 U+7178,bian1,煸
 U+7179,gou4,煹
 U+717A,tui4,煺
@@ -14955,7 +14955,7 @@ U+71D9,tang4|dang4,燙
 U+71DA,yi4,燚
 U+71DB,jiong3,燛
 U+71DC,men4,燜
-U+71DD,jing,燝
+U+71DD,jing5,燝
 U+71DE,jiao3,燞
 U+71DF,ying2|cuo1,營
 U+71E0,yu4|ao4,燠
@@ -15022,7 +15022,7 @@ U+721C,cong2,爜
 U+721D,jue2|jiao4,爝
 U+721E,chong2|tong2,爞
 U+721F,guan4,爟
-U+7220,ju,爠
+U+7220,ju5,爠
 U+7221,che4,爡
 U+7222,mi2,爢
 U+7223,tang3,爣
@@ -15041,7 +15041,7 @@ U+722F,cheng1|cheng4,爯
 U+7230,yuan2,爰
 U+7231,ai4,爱
 U+7232,wei4|wei2,爲
-U+7233,han,爳
+U+7233,han5,爳
 U+7234,jue2,爴
 U+7235,jue2,爵
 U+7236,fu4|fu3,父
@@ -15702,7 +15702,7 @@ U+74C4,du2,瓄
 U+74C5,li4,瓅
 U+74C6,zhi4,瓆
 U+74C7,rou2,瓇
-U+74C8,li2|li,瓈
+U+74C8,li2|li5,瓈
 U+74C9,zan4,瓉
 U+74CA,qiong2|xuan2,瓊
 U+74CB,ti4,瓋
@@ -15741,7 +15741,7 @@ U+74EC,fang3,瓬
 U+74ED,dan3|dan1,瓭
 U+74EE,weng4,瓮
 U+74EF,ou1,瓯
-U+74F2,wa,瓲
+U+74F2,wa5,瓲
 U+74F3,hu2,瓳
 U+74F4,ling2,瓴
 U+74F5,yi2,瓵
@@ -15871,7 +15871,7 @@ U+7572,she1,畲
 U+7573,die2,畳
 U+7574,chou2,畴
 U+7575,hua4,畵
-U+7576,dang1|dang4|dang,當
+U+7576,dang1|dang4|dang5,當
 U+7577,zhui4,畷
 U+7578,ji1|qi2,畸
 U+7579,wan3|yuan3,畹
@@ -15937,7 +15937,7 @@ U+75B4,ke1|e1|qia4,疴
 U+75B5,ci1|zi1|zhai4|ji4,疵
 U+75B6,xue1,疶
 U+75B7,zhi1,疷
-U+75B8,dan3|da,疸
+U+75B8,dan3|da5,疸
 U+75B9,zhen3|chen4,疹
 U+75BA,fa2|bian3,疺
 U+75BB,zhi3,疻
@@ -16050,7 +16050,7 @@ U+7625,chai4|cuo2,瘥
 U+7626,shou4,瘦
 U+7627,nve4|yao4,瘧
 U+7628,dian1|chen1,瘨
-U+7629,da1|da|da2,瘩
+U+7629,da1|da5|da2,瘩
 U+762A,bie3|bie1,瘪
 U+762B,tan1,瘫
 U+762C,zhang4,瘬
@@ -16111,7 +16111,7 @@ U+7662,yang3,癢
 U+7663,xuan3,癣
 U+7664,jie1,癤
 U+7665,zheng1,癥
-U+7666,me,癦
+U+7666,me5,癦
 U+7667,li4,癧
 U+7668,huo4,癨
 U+7669,lai4|la4,癩
@@ -16141,7 +16141,7 @@ U+7680,ji2|xiang1|bi1,皀
 U+7681,zao4,皁
 U+7682,zao4,皂
 U+7683,mao4,皃
-U+7684,de|di1|di2|di4,的
+U+7684,de5|di1|di2|di4,的
 U+7685,pa1|ba4,皅
 U+7686,jie1,皆
 U+7687,huang2|wang3,皇
@@ -16329,7 +16329,7 @@ U+773C,yan3|wen3,眼
 U+773D,mo4|mi4,眽
 U+773E,zhong4,眾
 U+773F,mo4,眿
-U+7740,zhe|zhao1|zhao2|zhuo2,着
+U+7740,zhe5|zhao1|zhao2|zhuo2,着
 U+7741,zheng1,睁
 U+7742,mei2,睂
 U+7743,suo1|jun4|juan1,睃
@@ -16609,7 +16609,7 @@ U+7854,hong2|gong3,硔
 U+7855,shuo4,硕
 U+7856,xia2,硖
 U+7857,qiao1,硗
-U+7858,qing,硘
+U+7858,qing5,硘
 U+7859,wei2|wei4,硙
 U+785A,qiao2,硚
 U+785B,yi4,硛
@@ -17100,7 +17100,7 @@ U+7A3F,gao3,稿
 U+7A40,gu3,穀
 U+7A41,rong2,穁
 U+7A42,sui4,穂
-U+7A43,rong,穃
+U+7A43,rong5,穃
 U+7A44,ji4,穄
 U+7A45,kang1,穅
 U+7A46,mu4,穆
@@ -17126,7 +17126,7 @@ U+7A59,pu2,穙
 U+7A5A,jiao1,穚
 U+7A5B,zhuo1|bo2,穛
 U+7A5C,zhong3|tong2|zhong4,穜
-U+7A5D,zui,穝
+U+7A5D,zui5,穝
 U+7A5E,lv3,穞
 U+7A5F,sui4,穟
 U+7A60,nong2,穠
@@ -17200,7 +17200,7 @@ U+7AA3,su1,窣
 U+7AA4,guan1,窤
 U+7AA5,kui1,窥
 U+7AA6,dou4,窦
-U+7AA7,zhuo,窧
+U+7AA7,zhuo5,窧
 U+7AA8,xun1|yin4|yin1,窨
 U+7AA9,wo1,窩
 U+7AAA,wa1,窪
@@ -17499,7 +17499,7 @@ U+7BCE,miao3,篎
 U+7BCF,qian4,篏
 U+7BD0,gu1,篐
 U+7BD1,kui4,篑
-U+7BD2,shi,篒
+U+7BD2,shi5,篒
 U+7BD3,lou3,篓
 U+7BD4,yun2|xun1,篔
 U+7BD5,he2,篕
@@ -17592,7 +17592,7 @@ U+7C2B,xiao1|xiao3,簫
 U+7C2C,lu4,簬
 U+7C2D,shi4,簭
 U+7C2E,zan1,簮
-U+7C2F,qi,簯
+U+7C2F,qi5,簯
 U+7C30,pai2,簰
 U+7C31,qi2,簱
 U+7C32,pai2,簲
@@ -17611,7 +17611,7 @@ U+7C3E,lian2,簾
 U+7C3F,bu4|bo2,簿
 U+7C40,zhou4,籀
 U+7C41,lai4,籁
-U+7C42,shi,籂
+U+7C42,shi5,籂
 U+7C43,lan2,籃
 U+7C44,kui4,籄
 U+7C45,yu2,籅
@@ -17631,7 +17631,7 @@ U+7C52,zhou4,籒
 U+7C53,fan1|ban1|pan1,籓
 U+7C54,sou3|shu3,籔
 U+7C55,zhou4,籕
-U+7C56,qian,籖
+U+7C56,qian5,籖
 U+7C57,zhuo2,籗
 U+7C58,teng2,籘
 U+7C59,lu4,籙
@@ -17685,10 +17685,10 @@ U+7C88,rou2,粈
 U+7C89,fen3,粉
 U+7C8A,bi4,粊
 U+7C8B,cui4,粋
-U+7C8C,yin,粌
+U+7C8C,yin5,粌
 U+7C8D,zhe2,粍
 U+7C8E,mi3,粎
-U+7C8F,tai,粏
+U+7C8F,tai5,粏
 U+7C90,hu4,粐
 U+7C91,ba1,粑
 U+7C92,li4,粒
@@ -17839,7 +17839,7 @@ U+7D22,suo3,索
 U+7D23,cui4,紣
 U+7D24,jiu3,紤
 U+7D25,za1|zha1,紥
-U+7D26,ba,紦
+U+7D26,ba5,紦
 U+7D27,jin3,紧
 U+7D28,fu1|fu4,紨
 U+7D29,zhi4,紩
@@ -18014,7 +18014,7 @@ U+7DD1,lv4|lu4,緑
 U+7DD2,xu4,緒
 U+7DD3,ying1,緓
 U+7DD4,shang4,緔
-U+7DD5,qi,緕
+U+7DD5,qi5,緕
 U+7DD6,xu4,緖
 U+7DD7,xiang1,緗
 U+7DD8,jian1,緘
@@ -18133,7 +18133,7 @@ U+7E48,qiang3,繈
 U+7E49,hun2,繉
 U+7E4A,xian1,繊
 U+7E4B,ji4,繋
-U+7E4C,sha,繌
+U+7E4C,sha5,繌
 U+7E4D,xiu4,繍
 U+7E4E,ran2,繎
 U+7E4F,xuan4,繏
@@ -18160,8 +18160,8 @@ U+7E63,hua4,繣
 U+7E64,zuan3,繤
 U+7E65,xi1,繥
 U+7E66,qiang3,繦
-U+7E67,yun,繧
-U+7E68,da,繨
+U+7E67,yun5,繧
+U+7E68,da5,繨
 U+7E69,sheng2|ying4|min3|sheng4,繩
 U+7E6A,hui4|gui4,繪
 U+7E6B,xi4|ji4,繫
@@ -18373,11 +18373,11 @@ U+7F38,gang1,缸
 U+7F39,fou3,缹
 U+7F3A,que1|kui3,缺
 U+7F3B,fou3,缻
-U+7F3C,qi,缼
+U+7F3C,qi5,缼
 U+7F3D,bo1,缽
 U+7F3E,ping2,缾
 U+7F3F,xiang4,缿
-U+7F40,zhao,罀
+U+7F40,zhao5,罀
 U+7F41,gang1,罁
 U+7F42,ying1,罂
 U+7F43,ying1,罃
@@ -18411,7 +18411,7 @@ U+7F5E,mao2,罞
 U+7F5F,gu3,罟
 U+7F60,min2,罠
 U+7F61,gang1,罡
-U+7F62,ba4|ba,罢
+U+7F62,ba4|ba5,罢
 U+7F63,gua4,罣
 U+7F64,ti2|kun1,罤
 U+7F65,juan4,罥
@@ -18432,7 +18432,7 @@ U+7F73,si1,罳
 U+7F74,pi2,罴
 U+7F75,ma4,罵
 U+7F76,liu3,罶
-U+7F77,ba4|pi2|pi4|bi3|ba|bai3,罷
+U+7F77,ba4|pi2|pi4|bi3|ba5|bai3,罷
 U+7F78,fa2,罸
 U+7F79,li2,罹
 U+7F7A,chao2,罺
@@ -18446,7 +18446,7 @@ U+7F81,ji1,羁
 U+7F82,juan4,羂
 U+7F83,mi4,羃
 U+7F84,zhao4,羄
-U+7F85,luo2|luo1|luo,羅
+U+7F85,luo2|luo1|luo5,羅
 U+7F86,pi2,羆
 U+7F87,ji1,羇
 U+7F88,ji1,羈
@@ -18483,7 +18483,7 @@ U+7FA6,huan2,羦
 U+7FA7,suo1|zui1,羧
 U+7FA8,xian4,羨
 U+7FA9,yi4|yi2|xi1,義
-U+7FAA,yang,羪
+U+7FAA,yang5,羪
 U+7FAB,qiang1|kang4,羫
 U+7FAC,qian2|xian2|yan2,羬
 U+7FAD,yu2,羭
@@ -18837,7 +18837,7 @@ U+8108,mai4|mo4,脈
 U+8109,mai4|mo4,脉
 U+810A,ji2|ji3,脊
 U+810B,xie2,脋
-U+810C,nin,脌
+U+810C,nin5,脌
 U+810D,kuai4,脍
 U+810E,sa4,脎
 U+810F,zang4|zang1,脏
@@ -18863,7 +18863,7 @@ U+8122,mei2,脢
 U+8123,chun2,脣
 U+8124,shen4,脤
 U+8125,qian3|qu1|jie2,脥
-U+8126,de|te4|te,脦
+U+8126,de5|te4|te5,脦
 U+8127,juan1|zui1,脧
 U+8128,cu4|ji2,脨
 U+8129,xiu1|you3|tiao2|xiao1,脩
@@ -19019,7 +19019,7 @@ U+81BE,kuai4,膾
 U+81BF,nong2,膿
 U+81C0,tun2,臀
 U+81C1,lian2,臁
-U+81C2,bi4|bei,臂
+U+81C2,bi4|bei5,臂
 U+81C3,yong1,臃
 U+81C4,jue2|ju1,臄
 U+81C5,chu4,臅
@@ -19626,7 +19626,7 @@ U+841D,luo2,萝
 U+841E,bi4,萞
 U+841F,yi4,萟
 U+8420,pan1,萠
-U+8421,bo,萡
+U+8421,bo5,萡
 U+8422,pao1,萢
 U+8423,ding4,萣
 U+8424,ying2,萤
@@ -19680,7 +19680,7 @@ U+8453,hong2,葓
 U+8454,hou2,葔
 U+8455,yan4,葕
 U+8456,tu1,葖
-U+8457,zhu4|zhuo2|chu2|zhao1|zhao2|zhe,著
+U+8457,zhu4|zhuo2|chu2|zhao1|zhao2|zhe5,著
 U+8458,zi1,葘
 U+8459,xiang1,葙
 U+845A,ren4|shen4,葚
@@ -19736,7 +19736,7 @@ U+848B,jiang3,蒋
 U+848C,lou2,蒌
 U+848D,wei3|hua1|kui1|e2,蒍
 U+848E,pai4,蒎
-U+848F,you,蒏
+U+848F,you5,蒏
 U+8490,sou1|hui4,蒐
 U+8491,yin1,蒑
 U+8492,shi1,蒒
@@ -19814,7 +19814,7 @@ U+84D9,zuo4,蓙
 U+84DA,tiao2,蓚
 U+84DB,ce4,蓛
 U+84DC,pei4,蓜
-U+84DD,lan2|la,蓝
+U+84DD,lan2|la5,蓝
 U+84DE,dan4,蓞
 U+84DF,ji4,蓟
 U+84E0,li2,蓠
@@ -19848,7 +19848,7 @@ U+84FB,zi2|ji2|ju2,蓻
 U+84FC,liao3|lu4|lao3|liu3,蓼
 U+84FD,bi4,蓽
 U+84FE,lu3,蓾
-U+84FF,xu|su4,蓿
+U+84FF,xu5|su4,蓿
 U+8500,bu4,蔀
 U+8501,zhang1,蔁
 U+8502,lei2,蔂
@@ -19869,7 +19869,7 @@ U+8510,di2,蔐
 U+8511,mie4,蔑
 U+8512,xun1,蔒
 U+8513,man4|man2|wan4,蔓
-U+8514,bo2|bo,蔔
+U+8514,bo2|bo5,蔔
 U+8515,di4|dai4|chai4,蔕
 U+8516,cuo2|cu3|zha1,蔖
 U+8517,zhe4,蔗
@@ -20054,7 +20054,7 @@ U+85C9,ji2|jie4,藉
 U+85CA,bian3,藊
 U+85CB,diao4|di2|zhuo2,藋
 U+85CC,mi4,藌
-U+85CD,lan2|la,藍
+U+85CD,lan2|la5,藍
 U+85CE,jin4,藎
 U+85CF,cang2|zang4|zang1,藏
 U+85D0,miao3|mo4,藐
@@ -20490,7 +20490,7 @@ U+877D,chun1,蝽
 U+877E,rong2,蝾
 U+877F,ying2,蝿
 U+8780,jiang1,螀
-U+8781,ban,螁
+U+8781,ban5,螁
 U+8782,lang2,螂
 U+8783,pang2|bang3,螃
 U+8784,si1,螄
@@ -20530,7 +20530,7 @@ U+87A5,cang1,螥
 U+87A6,sao1,螦
 U+87A7,qi2,螧
 U+87A8,man3,螨
-U+87A9,tiao,螩
+U+87A9,tiao5,螩
 U+87AA,shang1,螪
 U+87AB,shi4|zhe1,螫
 U+87AC,cao2,螬
@@ -20569,7 +20569,7 @@ U+87CC,cong1,蟌
 U+87CD,li2,蟍
 U+87CE,man3,蟎
 U+87CF,xiao1,蟏
-U+87D0,chang,蟐
+U+87D0,chang5,蟐
 U+87D1,zhang1,蟑
 U+87D2,mang3|meng3,蟒
 U+87D3,xiang4,蟓
@@ -20813,7 +20813,7 @@ U+88C0,yin1,裀
 U+88C1,cai2,裁
 U+88C2,lie4|lie3,裂
 U+88C3,ka3,裃
-U+88C4,xing,裄
+U+88C4,xing5,裄
 U+88C5,zhuang1,装
 U+88C6,dang1,裆
 U+88C7,xu1,裇
@@ -20860,7 +20860,7 @@ U+88EF,chou2|dao1,裯
 U+88F0,duo1,裰
 U+88F1,biao3,裱
 U+88F2,liang3,裲
-U+88F3,shang|chang2,裳
+U+88F3,shang5|chang2,裳
 U+88F4,pei2|fei2,裴
 U+88F5,pei2,裵
 U+88F6,fei1,裶
@@ -22143,7 +22143,7 @@ U+8DF2,jia2|jie2,跲
 U+8DF3,tiao4|diao4|tao2,跳
 U+8DF4,cai3,跴
 U+8DF5,jian4,践
-U+8DF6,da2|da,跶
+U+8DF6,da2|da5,跶
 U+8DF7,qiao1,跷
 U+8DF8,bi4,跸
 U+8DF9,xian1,跹
@@ -22269,7 +22269,7 @@ U+8E70,chu2,蹰
 U+8E71,zhong1|chong4,蹱
 U+8E72,dun1|zun2|cun2|zun1|cun3|cuan2|qun3,蹲
 U+8E73,bo1,蹳
-U+8E74,cu4|zu2|jiu,蹴
+U+8E74,cu4|zu2|jiu5,蹴
 U+8E75,cu4,蹵
 U+8E76,jue2|jue3|gui4,蹶
 U+8E77,jue2,蹷
@@ -22594,7 +22594,7 @@ U+8FB5,chuo4,辵
 U+8FB6,chuo4,辶
 U+8FB7,yi1,辷
 U+8FB8,reng2,辸
-U+8FB9,bian1|bian,边
+U+8FB9,bian1|bian5,边
 U+8FBA,bian1,辺
 U+8FBB,shi2,辻
 U+8FBC,yu1,込
@@ -22651,7 +22651,7 @@ U+8FEE,ze2|zuo4,迮
 U+8FEF,tao2,迯
 U+8FF0,shu4,述
 U+8FF1,tuo2|yi2,迱
-U+8FF2,qu,迲
+U+8FF2,qu5,迲
 U+8FF3,jing4,迳
 U+8FF4,hui2,迴
 U+8FF5,dong4,迵
@@ -22743,7 +22743,7 @@ U+904A,you2,遊
 U+904B,yun4,運
 U+904C,e4,遌
 U+904D,bian4,遍
-U+904E,guo4|guo1|guo|huo4,過
+U+904E,guo4|guo1|guo5|huo4,過
 U+904F,e4,遏
 U+9050,xia2,遐
 U+9051,huang2,遑
@@ -22763,7 +22763,7 @@ U+905E,di4|shi4|dai4,遞
 U+905F,chi2|zhi4|xi1,遟
 U+9060,yuan3|yuan4,遠
 U+9061,su4,遡
-U+9062,ta4|ta|ta1,遢
+U+9062,ta4|ta5|ta1,遢
 U+9063,qian3|qian4,遣
 U+9064,ma3,遤
 U+9065,yao2,遥
@@ -22803,7 +22803,7 @@ U+9086,teng2,邆
 U+9087,er3,邇
 U+9088,miao3|miao2,邈
 U+9089,bian1,邉
-U+908A,bian1|bian,邊
+U+908A,bian1|bian5,邊
 U+908B,la1|lie4,邋
 U+908C,li2|chi2,邌
 U+908D,yuan2,邍
@@ -23013,7 +23013,7 @@ U+9158,dou4,酘
 U+9159,zhen1,酙
 U+915A,fen1,酚
 U+915B,yuan2,酛
-U+915C,fu,酜
+U+915C,fu5,酜
 U+915D,yun4,酝
 U+915E,tai4,酞
 U+915F,tian1,酟
@@ -23125,7 +23125,7 @@ U+91C8,shi4,釈
 U+91C9,you4,釉
 U+91CA,shi4,释
 U+91CB,shi4|yi4,釋
-U+91CC,li3|li,里
+U+91CC,li3|li5,里
 U+91CD,zhong4|chong2|tong2,重
 U+91CE,ye3|shu4,野
 U+91CF,liang4|liang2,量
@@ -23492,7 +23492,7 @@ U+9337,ga2,錷
 U+9338,lai2,錸
 U+9339,ken3,錹
 U+933A,fang1,錺
-U+933B,wu,錻
+U+933B,wu5,錻
 U+933C,nai4,錼
 U+933D,wan4|jian3,錽
 U+933E,zan4,錾
@@ -23567,7 +23567,7 @@ U+9382,mei3,鎂
 U+9383,pai4,鎃
 U+9384,ai1,鎄
 U+9385,jie4,鎅
-U+9386,qian,鎆
+U+9386,qian5,鎆
 U+9387,mei2,鎇
 U+9388,suo3|cha1,鎈
 U+9389,da2|ta4,鎉
@@ -23674,8 +23674,8 @@ U+93ED,xi1,鏭
 U+93EE,kang1,鏮
 U+93EF,shuang3,鏯
 U+93F0,beng4,鏰
-U+93F1,zhang,鏱
-U+93F2,qian,鏲
+U+93F1,zhang5,鏱
+U+93F2,qian5,鏲
 U+93F3,cheng1,鏳
 U+93F4,lu4,鏴
 U+93F5,hua2,鏵
@@ -23791,7 +23791,7 @@ U+9462,lv4,鑢
 U+9463,biao1,鑣
 U+9464,bao4,鑤
 U+9465,lu3,鑥
-U+9466,xian,鑦
+U+9466,xian5,鑦
 U+9467,kuan1,鑧
 U+9468,long2,鑨
 U+9469,e4,鑩
@@ -24095,7 +24095,7 @@ U+9592,xian2|jian4|jian1|jian3,閒
 U+9593,jian1|jian4|jian3,間
 U+9594,min3|min2,閔
 U+9595,xia1|xia3,閕
-U+9596,shui,閖
+U+9596,shui5,閖
 U+9597,dou4,閗
 U+9598,zha2|ya1|ge1,閘
 U+9599,nao4,閙
@@ -24264,7 +24264,7 @@ U+963B,zu3|zhu4,阻
 U+963C,zuo4,阼
 U+963D,dian4|yan2,阽
 U+963E,ling3|ling2,阾
-U+963F,a1|e1|e3|a3|a4|a,阿
+U+963F,a1|e1|e3|a3|a4|a5,阿
 U+9640,tuo2|duo4,陀
 U+9641,tuo2|zhi4|yi3,陁
 U+9642,bei1|pi2|bi4|po1,陂
@@ -24618,7 +24618,7 @@ U+979D,shang4|zhang3,鞝
 U+979E,bing3|bi4|pi2|bei1,鞞
 U+979F,kuo4,鞟
 U+97A0,ju1|qu1|qiong1,鞠
-U+97A1,la,鞡
+U+97A1,la5,鞡
 U+97A2,xie4|zha2|die2,鞢
 U+97A3,rou2,鞣
 U+97A4,bang1,鞤
@@ -24758,7 +24758,7 @@ U+9829,ping1|ping3,頩
 U+982A,lei4,頪
 U+982B,fu3|tao1|tiao4,頫
 U+982C,jia2,頬
-U+982D,tou2|tou,頭
+U+982D,tou2|tou5,頭
 U+982E,hui4,頮
 U+982F,kui2,頯
 U+9830,jia2,頰
@@ -24983,7 +24983,7 @@ U+990A,yang3|yang4,養
 U+990B,juan4,餋
 U+990C,er3,餌
 U+990D,yan4,餍
-U+990E,le,餎
+U+990E,le5,餎
 U+990F,xi1,餏
 U+9910,can1|sun1,餐
 U+9911,bo1,餑
@@ -25090,7 +25090,7 @@ U+9975,er3,饵
 U+9976,rao2,饶
 U+9977,xiang3,饷
 U+9978,he2,饸
-U+9979,le|ge1,饹
+U+9979,le5|ge1,饹
 U+997A,jiao3,饺
 U+997B,xi1,饻
 U+997C,bing3,饼
@@ -25104,7 +25104,7 @@ U+9983,guo3,馃
 U+9984,hun2,馄
 U+9985,xian4,馅
 U+9986,guan3,馆
-U+9987,cha1|zha,馇
+U+9987,cha1|zha5,馇
 U+9988,kui4,馈
 U+9989,gu3,馉
 U+998A,sou1,馊
@@ -25633,7 +25633,7 @@ U+9B94,ju4,鮔
 U+9B95,gu1,鮕
 U+9B96,shi2,鮖
 U+9B97,dong1,鮗
-U+9B98,dai,鮘
+U+9B98,dai5,鮘
 U+9B99,ta4,鮙
 U+9B9A,jie2|qia4,鮚
 U+9B9B,shu1,鮛
@@ -26093,7 +26093,7 @@ U+9D60,hu2|gu3|he4,鵠
 U+9D61,wu3,鵡
 U+9D62,shen1,鵢
 U+9D63,lai4|chi4,鵣
-U+9D64,jiao,鵤
+U+9D64,jiao5,鵤
 U+9D65,pan4,鵥
 U+9D66,lu4,鵦
 U+9D67,pi2,鵧
@@ -26431,14 +26431,14 @@ U+9EB2,xian4|yan4,麲
 U+9EB3,lai2,麳
 U+9EB4,qu1,麴
 U+9EB5,mian4,麵
-U+9EB6,chi,麶
+U+9EB6,chi5,麶
 U+9EB7,feng1,麷
 U+9EB8,fu1,麸
 U+9EB9,qu1,麹
 U+9EBA,mian4,麺
 U+9EBB,ma2|ma1,麻
-U+9EBC,me,麼
-U+9EBD,mo2|ma2|ma|me,麽
+U+9EBC,me5,麼
+U+9EBD,mo2|ma2|ma5|me5,麽
 U+9EBE,hui1,麾
 U+9EBF,mi2,麿
 U+9EC0,zou1,黀
@@ -27581,7 +27581,7 @@ U+20BB4,yang1,𠮴
 U+20BB5,mang4,𠮵
 U+20BBD,long4,𠮽
 U+20BBE,n4|ng4,𠮾
-U+20BBF,sa|san,𠮿
+U+20BBF,sa5|san5,𠮿
 U+20BC0,chuan1,𠯀
 U+20BC2,ci2,𠯂
 U+20BC3,wu3,𠯃
@@ -27631,7 +27631,7 @@ U+20C1C,e4,𠰜
 U+20C34,shi2,𠰴
 U+20C39,tuo1,𠰹
 U+20C3A,dai4,𠰺
-U+20C3B,wai4|wai,𠰻
+U+20C3B,wai4|wai5,𠰻
 U+20C3C,po1,𠰼
 U+20C3D,rong3,𠰽
 U+20C3E,ju1,𠰾
@@ -27662,7 +27662,7 @@ U+20C8A,xie4,𠲊
 U+20C8B,zui3,𠲋
 U+20C8C,shu4,𠲌
 U+20C8D,diu1,𠲍
-U+20C8E,fa|fei4|fa2|wa,𠲎
+U+20C8E,fa5|fei4|fa2|wa5,𠲎
 U+20C8F,ren3,𠲏
 U+20C91,bang1,𠲑
 U+20C92,han2,𠲒
@@ -27730,7 +27730,7 @@ U+20D60,zhai1,𠵠
 U+20D63,ya4,𠵣
 U+20D66,wu3,𠵦
 U+20D67,zhen2|chun2,𠵧
-U+20D68,de,𠵨
+U+20D68,de5,𠵨
 U+20D69,he1,𠵩
 U+20D6B,ang1,𠵫
 U+20D6C,pi2,𠵬
@@ -27934,7 +27934,7 @@ U+20FE3,yi1,𠿣
 U+20FE4,guo2,𠿤
 U+20FE5,kui4|gui4,𠿥
 U+21011,zhou1,𡀑
-U+21014,lu4|lou,𡀔
+U+21014,lu4|lou5,𡀔
 U+21016,bo1,𡀖
 U+21017,shi2,𡀗
 U+21018,ying4,𡀘
@@ -27986,7 +27986,7 @@ U+210A3,zhi2,𡂣
 U+210A9,lie4,𡂩
 U+210AB,peng2,𡂫
 U+210AD,zhe1,𡂭
-U+210BF,ou1|ou,𡂿
+U+210BF,ou1|ou5,𡂿
 U+210C2,xie4,𡃂
 U+210C3,ji2,𡃃
 U+210C4,lai4,𡃄
@@ -28009,7 +28009,7 @@ U+21114,qing4,𡄔
 U+21115,xie4,𡄕
 U+21116,ying4,𡄖
 U+2111F,ha2,𡄟
-U+21121,zhe,𡄡
+U+21121,zhe5,𡄡
 U+21122,she1,𡄢
 U+21123,mi2,𡄣
 U+21124,huan2,𡄤
@@ -28235,7 +28235,7 @@ U+2141E,bie1,𡐞
 U+21420,kui1,𡐠
 U+21424,qie4,𡐤
 U+21425,sa4,𡐥
-U+2143F,da1|da,𡐿
+U+2143F,da1|da5,𡐿
 U+21440,ye3|shu4,𡑀
 U+21444,zhang3,𡑄
 U+21446,liang2,𡑆
@@ -30552,7 +30552,7 @@ U+23320,chun2,𣌠
 U+23327,ce4,𣌧
 U+23328,xun2,𣌨
 U+2332C,ju3,𣌬
-U+2332D,hui|da2,𣌭
+U+2332D,hui5|da2,𣌭
 U+2333E,tong1,𣌾
 U+23346,ning2,𣍆
 U+23347,ju4,𣍇
@@ -30605,7 +30605,7 @@ U+2340E,wa3,𣐎
 U+2340F,nian3,𣐏
 U+23411,ci2,𣐑
 U+23413,yi2,𣐓
-U+23424,jiu,𣐤
+U+23424,jiu5,𣐤
 U+2342B,yang1,𣐫
 U+2342C,li2,𣐬
 U+2342E,dai1,𣐮
@@ -31203,8 +31203,8 @@ U+23B2C,sa1,𣬬
 U+23B2E,pi1,𣬮
 U+23B34,di4,𣬴
 U+23B35,mao2|mao4,𣬵
-U+23B36,ba,𣬶
-U+23B37,ba,𣬷
+U+23B36,ba5,𣬶
+U+23B37,ba5,𣬷
 U+23B38,tiao2,𣬸
 U+23B39,ling2,𣬹
 U+23B3A,sheng1,𣬺
@@ -32543,7 +32543,7 @@ U+24DD6,ling4,𤷖
 U+24DD7,bie1,𤷗
 U+24DD8,dao4,𤷘
 U+24DD9,de2,𤷙
-U+24DDF,la,𤷟
+U+24DDF,la5,𤷟
 U+24DE1,xi1|nve4,𤷡
 U+24DE2,ju4,𤷢
 U+24DE4,xiao2,𤷤
@@ -33742,7 +33742,7 @@ U+25AF7,qiu1,𥫷
 U+25AF8,shui3,𥫸
 U+25AF9,chen2,𥫹
 U+25AFC,huang4,𥫼
-U+25AFD,shi,𥫽
+U+25AFD,shi5,𥫽
 U+25B00,yun2,𥬀
 U+25B06,long2,𥬆
 U+25B08,man3,𥬈
@@ -34696,7 +34696,7 @@ U+26559,qu2,𦕙
 U+26560,hong1,𦕠
 U+26561,sheng4,𦕡
 U+26562,ting4,𦕢
-U+26570,duo,𦕰
+U+26570,duo5,𦕰
 U+26575,liao2,𦕵
 U+26577,hong4,𦕷
 U+26578,li3,𦕸
@@ -34885,7 +34885,7 @@ U+26774,yin4,𦝴
 U+26777,beng4,𦝷
 U+2677C,lv2|lou2,𦝼
 U+26781,zai1,𦞁
-U+26782,da1|da,𦞂
+U+26782,da1|da5,𦞂
 U+26786,nie4,𦞆
 U+26787,ju3,𦞇
 U+26788,hou2,𦞈
@@ -39007,7 +39007,7 @@ U+292EF,zong4,𩋯
 U+292F0,zhou4,𩋰
 U+292F1,xuan1,𩋱
 U+292F5,zhu1,𩋵
-U+292F7,la,𩋷
+U+292F7,la5,𩋷
 U+292F9,ying4,𩋹
 U+292FA,gao4,𩋺
 U+292FB,kuo4,𩋻
@@ -40465,7 +40465,7 @@ U+29F83,mian3,𩾃
 U+29F84,xun4,𩾄
 U+29F85,tu4,𩾅
 U+29F86,ni2,𩾆
-U+29F87,hu,𩾇
+U+29F87,hu5,𩾇
 U+29F88,shu1,𩾈
 U+29F8A,xu1,𩾊
 U+29F8B,zhong4,𩾋
@@ -41335,7 +41335,7 @@ U+2B099,su4,𫂙
 U+2B0DC,kou4,𫃜
 U+2B11B,jin1,𫄛
 U+2B11F,shi1,𫄟
-U+2B124,da,𫄤
+U+2B124,da5,𫄤
 U+2B125,li2|xi3,𫄥
 U+2B127,yan2,𫄧
 U+2B128,chi1,𫄨
@@ -41754,7 +41754,7 @@ U+3169D,zha3,𱚝
 U+316A6,mao1,𱚦
 U+316AF,mo4,𱚯
 U+316B1,a1,𱚱
-U+316C6,niao,𱛆
+U+316C6,niao5,𱛆
 U+316CD,lun2,𱛍
 U+316D2,hong2,𱛒
 U+316D3,long2,𱛓

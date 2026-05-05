@@ -12,7 +12,28 @@ DST_PINYIN_CSV = PROJECT_ROOT / "data" / "pinyin.csv"
 
 
 def normalize_pinyin(pinyin: str) -> str:
-	return to_tone3(pinyin.strip())
+	"""Normalize a pinyin syllable to strict tone3 form.
+
+	pypinyin's `to_tone3` returns numeric-tone syllables for the four marked
+	tones but leaves neutral-tone syllables without a digit (e.g. `le` for
+	了). hanzi-sort's encoding requires every syllable to end in a tone digit
+	1-5 so that:
+
+	  1. byte-order comparison gives `(base, tone)` ordering deterministically
+	  2. neutral tone (`5`) sorts after the four marked tones (matching
+	     conventional Chinese dictionary ordering, e.g. 了 sorts after lè)
+	  3. the `encode_primary_pinyin_unchecked` hot path can rely on a stable
+	     "letters then digit" structure
+
+	This function appends `5` to any tone3 output that does not already end
+	in a tone digit.
+	"""
+	result = to_tone3(pinyin.strip())
+	if not result:
+		return result
+	if not result[-1].isdigit():
+		result = result + "5"
+	return result
 
 
 def convert_pinyin_to_csv(src: Path, dst: Path) -> None:
@@ -37,8 +58,8 @@ def convert_pinyin_to_csv(src: Path, dst: Path) -> None:
 					pinyins, char = map(str.strip, rest.strip().split("#"))
 					pinyins = "|".join(map(normalize_pinyin, pinyins.split(",")))
 					fout.write(f"{codepoint},{pinyins},{char}\n")
-				except:
-					print(f"Error parsing line: {line}")
+				except Exception as exc:
+					print(f"Error parsing line: {line!r}: {exc}", file=sys.stderr)
 					raise
 
 

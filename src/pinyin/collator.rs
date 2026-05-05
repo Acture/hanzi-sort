@@ -239,4 +239,24 @@ mod tests {
         );
         assert_eq!(sorted, vec!["汉字", "张三", "照相", "赵四", "赵云"]);
     }
+
+    #[test]
+    fn neutral_tone_sorts_after_marked_tones() {
+        // After the toneless-to-5 normalization, 吗 (ma, neutral) has
+        // primary "ma5" and must sort after 麻 (ma2) and 马 (ma3) but
+        // before 骂 (ma4)... wait, no — under tone3 lexicographic order,
+        // ma5 sorts after ma4. So expected ascending order is:
+        //   麻 (ma2) < 马 (ma3) < 骂 (ma4) < 吗 (ma5)
+        let collator = PinyinCollator::default();
+        let sorted = sort_strings_with(
+            vec![
+                "吗".to_string(),
+                "马".to_string(),
+                "麻".to_string(),
+                "骂".to_string(),
+            ],
+            &collator,
+        );
+        assert_eq!(sorted, vec!["麻", "马", "骂", "吗"]);
+    }
 }

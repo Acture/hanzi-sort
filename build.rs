@@ -151,6 +151,15 @@ fn generate_pinyin_map(data_csv: &Path, out_path: &Path) {
                 source.display()
             ));
         }
+        match primary.as_bytes().last() {
+            Some(b'1'..=b'5') => {}
+            _ => fail(&format!(
+                "{}:{line}: primary pinyin {primary:?} for {code_str} must end with a tone \
+                 digit 1-5; the convert_pinyin_to_csv.py pipeline appends 5 for neutral/light \
+                 tone — regenerate data/pinyin.csv",
+                source.display()
+            )),
+        }
 
         seen_codepoints.insert(code_u32);
         let value_str = format!(

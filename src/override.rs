@@ -68,9 +68,15 @@ impl PinyinOverride {
 
 /// Validate a single tone3 pinyin syllable.
 ///
-/// Accepts lowercase ASCII letters optionally followed by a single tone digit
-/// in `1..=5`. The data pipeline normalizes `ü` to `v`, so non-ASCII input is
-/// rejected here as well to keep the byte-wise sort key encoding monotonic.
+/// Requires lowercase ASCII letters followed by a tone digit in `1..=5`.
+/// Tone 5 represents the neutral tone; toneless syllables like `le` (light
+/// tone of 了) must be written as `le5` here. This is enforced because the
+/// `u128` sort-key encoding pads on the right with zero bytes, which would
+/// place toneless syllables before all toned variants — opposite of the
+/// conventional Chinese dictionary ordering where neutral tone sorts last.
+///
+/// The data pipeline normalizes `ü` to `v`, so non-ASCII input is rejected
+/// here as well to keep the byte-wise encoding monotonic.
 fn validate_syllable(syllable: &str) -> std::result::Result<(), &'static str> {
     if syllable.is_empty() {
         return Err("syllable is empty");
@@ -82,11 +88,16 @@ fn validate_syllable(syllable: &str) -> std::result::Result<(), &'static str> {
     let bytes = syllable.as_bytes();
     let letters = match bytes.last() {
         Some(b'1'..=b'5') => &bytes[..bytes.len() - 1],
-        _ => bytes,
+        Some(_) => {
+            return Err(
+                "syllable must end with a tone digit 1-5 (use 5 for neutral / light tone)",
+            );
+        }
+        None => unreachable!("non-empty syllable always has a last byte"),
     };
 
     if letters.is_empty() {
-        return Err("syllable must contain at least one letter");
+        return Err("syllable must contain at least one letter before the tone digit");
     }
     if !letters.iter().all(|b| b.is_ascii_lowercase()) {
         return Err("syllable letters must be lowercase ASCII");
@@ -153,8 +164,11 @@ mod tests {
             .expect("override TOML should parse");
         let error = overrides
             .validate()
-            .expect_err("tone 9 should fail because '9' is not stripped and 'chong9' has digit in letters position");
-        assert!(error.to_string().contains("lowercase ASCII"));
+            .expect_err("tone 9 should fail because 9 is not in the valid 1-5 range");
+        assert!(
+            error.to_string().contains("tone digit"),
+            "unexpected: {error}"
+        );
     }
 
     #[test]
@@ -181,12 +195,27 @@ mod tests {
     }
 
     #[test]
+    fn test_override_rejects_toneless_syllable() {
+        // Toneless syllables like "le" must be written with explicit tone 5
+        // (e.g. "le5") so they sort after toned variants like "le4".
+        let overrides: PinyinOverride = toml::from_str("[char_override]\n'了' = 'le'\n")
+            .expect("override TOML should parse");
+        let error = overrides
+            .validate()
+            .expect_err("toneless syllable should fail");
+        assert!(
+            error.to_string().contains("tone digit"),
+            "unexpected: {error}"
+        );
+    }
+
+    #[test]
     fn test_override_accepts_valid_syllables() {
         let toml_input = "[char_override]\n\
             '重' = 'chong2'\n\
             '行' = 'xing2'\n\
             '〇' = 'ling2'\n\
-            'a' = 'a'\n\
+            '了' = 'le5'\n\
             \n\
             [phrase_override]\n\
             \"重庆\" = [\"chong2\", \"qing4\"]\n";

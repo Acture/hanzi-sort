@@ -40,6 +40,7 @@
 - `PinyinContext::new()` is now infallible and creates an empty context; pass overrides via `PinyinContext::with_override`
 - `encode_primary_pinyin` returns a `Result` instead of panicking on invalid input
 - `build.rs` reports row/codepoint context on failure and re-runs when the build script itself changes
+- toneless primary syllables in `data/pinyin.csv` are now normalized to neutral tone `5` (e.g. `了 → le5` instead of `了 → le`); `validate_syllable` and `build.rs` enforce that every syllable ends in a tone digit `1-5`, so neutral-tone characters now sort *after* tone-4 variants instead of *before* tone-1 variants. Override files using toneless syllables (e.g. `'了' = 'le'`) must update to `'le5'`
 
 ### Removed
 
