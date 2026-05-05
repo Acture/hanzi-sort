@@ -1,5 +1,58 @@
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-05
+
+A small follow-up to 0.2.0 that finishes the deferred Jyutping API
+parity work, hardens CI, and exposes a sort entry point that lets
+library users verify the crate's stable-sort guarantee directly.
+
+### Added
+
+- `JyutpingOverride` struct (gated by `collator-jyutping`) with the same
+  TOML schema as `PinyinOverride` but tone digits in `1..=6`. Loadable
+  via `JyutpingOverride::load_from_file`.
+- `JyutpingCollator::with_override(JyutpingOverride) -> Result<Self>`
+  for building an override-aware collator.
+- `JyutpingCollator::jyutping_of(&str)` returns readings honoring any
+  configured phrase or per-character overrides.
+- `AnyCollator::jyutping_with_override` constructor.
+- CLI accepts `--config <path>` together with `--sort-by jyutping`; the
+  file is parsed as a `JyutpingOverride` (tone 1-6) when sort_by is
+  Jyutping and as a `PinyinOverride` (tone 1-5) for the default mode.
+- `sort_indices_with<C>(&[String], &C) -> Vec<usize>` exposes the sort
+  permutation, which makes the index-tiebreak stability guarantee
+  directly verifiable from outside the crate.
+- Cargo.toml `rust-version = "1.85"` (MSRV declared, matching edition
+  2024 requirement).
+- `.gitattributes` enforcing LF line endings on text files (CSVs,
+  Python scripts, generated PHF files), so Windows clones with default
+  autocrlf don't corrupt build-time inputs.
+
+### Changed
+
+- CI now runs on a `ubuntu-latest`/`macos-latest`/`windows-latest`
+  matrix with `fail-fast: false`. Previously only Linux was tested,
+  so Windows path / line-ending / `IsTerminal` behavior had no
+  coverage.
+- The error message for `--config` paired with an unsupported
+  `--sort-by` is now `"--config is not supported with --sort-by
+  <scheme>"` (was previously phrased as "only supported with
+  --sort-by pinyin", which is now incorrect since jyutping also
+  accepts overrides).
+- Internal `validate_syllable` in `src/override.rs` is parameterized
+  over the valid tone range so `PinyinOverride` and `JyutpingOverride`
+  share the syllable-shape check.
+
+### Fixed
+
+- Stability of equal-key inputs is now provable. Previous tests on
+  duplicate strings could not actually verify that the unstable
+  backend was promoted to stable behavior — the rubber-duck Phase 1
+  review flagged this as a smoke-level test. With `sort_indices_with`
+  exposed, proptest verifies the stronger property:
+  *for any input, equal-sort-key items preserve their input-order
+  relative position*.
+
 ## [0.2.0] - 2026-05-05
 
 A major release. Project rebrand from `pinyin-sort` → `hanzi-sort`, the public
