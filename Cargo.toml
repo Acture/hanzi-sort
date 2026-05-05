@@ -2,6 +2,7 @@
 name = "hanzi-sort"
 version = "0.2.0"
 edition = "2024"
+rust-version = "1.85"
 license = "AGPL-3.0-only"
 authors = ["Acture <acturea@gmail.com>"]
 readme = "README.crates.md"

@@ -1,0 +1,21 @@
+# Default to LF line endings on checkout, regardless of git autocrlf setting.
+# This keeps build-time CSV parsing and Python script execution consistent
+# across Linux, macOS, and Windows clones.
+* text=auto eol=lf
+
+# Files that genuinely need CRLF (none currently, but listed for clarity).
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Bundled data and scripts must stay LF for build.rs CSV parsing and
+# Python execution.
+data/*.csv text eol=lf
+scripts/*.py text eol=lf
+
+# Generated PHF files are written by build.rs; keep them LF.
+src/generated/*.rs text eol=lf
+
+# Binary files (no transformation needed; explicit for safety).
+*.png binary
+*.jpg binary
+*.zip binary
