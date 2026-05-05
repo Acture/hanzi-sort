@@ -5,7 +5,13 @@ use crate::input::read_input_lines;
 
 pub fn render(config: RuntimeConfig) -> Result<String> {
     let input = read_input_lines(&config.input)?;
-    let sorted = config.collator.sort(input);
+    let mut sorted = config.collator.sort(input);
+    if config.unique {
+        sorted.dedup();
+    }
+    if config.reverse {
+        sorted.reverse();
+    }
     Ok(format_items(&sorted, &config.format))
 }
 

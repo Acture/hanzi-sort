@@ -19,6 +19,9 @@
 - accept `-f -` as an alias for reading stdin in addition to or interleaved with file inputs
 - `InputSource::Stdin` variant on the public `InputSource` enum
 - `criterion` benchmark suite (`cargo bench`) covering `sort_strings_with`, stroke sort, `pinyin_of`, and `format_items` at multiple input sizes
+- `-r/--reverse` flag to reverse the sorted output
+- `-u/--unique` flag to remove adjacent duplicates from the sorted output (like `sort -u`); ordering is `unique` then `reverse`
+- `RuntimeConfig::with_unique` and `RuntimeConfig::with_reverse` builder-style setters
 
 ### Changed
 

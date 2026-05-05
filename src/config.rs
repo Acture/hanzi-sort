@@ -32,6 +32,12 @@ pub struct RuntimeConfig {
     pub input: InputSource,
     pub format: FormatConfig,
     pub collator: AnyCollator,
+    /// When `true`, remove adjacent duplicates after sorting (like `sort -u`).
+    /// Because the sort is stable and total, adjacent dedup is equivalent to
+    /// full dedup.
+    pub unique: bool,
+    /// When `true`, reverse the sorted (and possibly de-duplicated) output.
+    pub reverse: bool,
 }
 
 impl RuntimeConfig {
@@ -46,6 +52,20 @@ impl RuntimeConfig {
             input,
             format: format.validate()?,
             collator,
+            unique: false,
+            reverse: false,
         })
+    }
+
+    /// Builder-style setter for the `unique` flag.
+    pub fn with_unique(mut self, unique: bool) -> Self {
+        self.unique = unique;
+        self
+    }
+
+    /// Builder-style setter for the `reverse` flag.
+    pub fn with_reverse(mut self, reverse: bool) -> Self {
+        self.reverse = reverse;
+        self
     }
 }

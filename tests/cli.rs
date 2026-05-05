@@ -106,6 +106,49 @@ fn dash_file_arg_reads_stdin() {
 }
 
 #[test]
+fn reverse_flag_inverts_sort_order() {
+    let mut command = binary_command();
+    command.args([
+        "-t", "汉字", "张三", "赵四",
+        "--reverse",
+        "--columns", "1", "--entry-width", "2", "--blank-every", "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "赵四\n张三\n汉字");
+}
+
+#[test]
+fn unique_flag_removes_duplicates() {
+    let mut command = binary_command();
+    command.args([
+        "-t", "张三", "汉字", "张三", "赵四", "张三",
+        "--unique",
+        "--columns", "1", "--entry-width", "2", "--blank-every", "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉字\n张三\n赵四");
+}
+
+#[test]
+fn unique_and_reverse_compose_correctly() {
+    // -u removes duplicates first, then -r reverses the deduped output.
+    let mut command = binary_command();
+    command.args([
+        "-t", "张三", "汉字", "张三", "赵四",
+        "--unique", "--reverse",
+        "--columns", "1", "--entry-width", "2", "--blank-every", "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "赵四\n张三\n汉字");
+}
+
+#[test]
 fn reads_file_inputs_line_by_line_and_ignores_blank_lines() {
     let temp = TempWorkspace::new();
     let input_path = temp.path().join("names.txt");

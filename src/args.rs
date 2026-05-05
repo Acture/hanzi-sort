@@ -101,6 +101,20 @@ pub struct CliArgs {
         help = "Sort strategy: pinyin or strokes"
     )]
     pub sort_by: Option<CliSortMode>,
+
+    #[arg(
+        short = 'r',
+        long = "reverse",
+        help = "Reverse the sorted output"
+    )]
+    pub reverse: bool,
+
+    #[arg(
+        short = 'u',
+        long = "unique",
+        help = "Remove adjacent duplicates from the sorted output (like sort -u)"
+    )]
+    pub unique: bool,
 }
 
 impl CliArgs {
@@ -147,7 +161,9 @@ impl CliArgs {
             .transpose()?;
 
         let collator = build_collator(self.sort_by.unwrap_or_default(), override_data)?;
-        let config = RuntimeConfig::new(input, format, collator)?;
+        let config = RuntimeConfig::new(input, format, collator)?
+            .with_unique(self.unique)
+            .with_reverse(self.reverse);
         Ok((config, self.output_path))
     }
 }
