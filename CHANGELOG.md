@@ -24,6 +24,7 @@
 - `RuntimeConfig::with_unique` and `RuntimeConfig::with_reverse` builder-style setters
 - `hanzi-sort completions <shell>` subcommand that prints a shell completion script (bash/zsh/fish/powershell/elvish), via `clap_complete`
 - usage examples in `--help` output (after the options list)
+- `--help` now displays default values for `--columns`, `--entry-width`, `--align`, `--padding-char`, and `--sort-by` (those whose defaults are printable); `--blank-every`, `--separator`, `--line-ending` keep their `Option` types because their defaults are non-printable or have semantic conversion (`0 → disabled`)
 
 ### Changed
 

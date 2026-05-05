@@ -106,8 +106,12 @@ pub struct CliArgs {
     )]
     pub config_path: Option<PathBuf>,
 
-    #[arg(long = "columns", help = "Number of entries per row")]
-    pub columns_per_row: Option<usize>,
+    #[arg(
+        long = "columns",
+        help = "Number of entries per row",
+        default_value_t = FormatConfig::default().columns_per_row
+    )]
+    pub columns_per_row: usize,
 
     #[arg(
         long = "blank-every",
@@ -115,31 +119,47 @@ pub struct CliArgs {
     )]
     pub blank_per: Option<usize>,
 
-    #[arg(long = "entry-width", help = "Pad each entry to this display width")]
-    pub entry_width: Option<usize>,
+    #[arg(
+        long = "entry-width",
+        help = "Pad each entry to this display width",
+        default_value_t = FormatConfig::default().entry_width
+    )]
+    pub entry_width: usize,
 
     #[arg(
         long = "align",
         value_enum,
-        help = "Alignment strategy: left, center, right, even"
+        help = "Alignment strategy",
+        default_value_t = CliAlign::Center
     )]
-    pub align: Option<CliAlign>,
+    pub align: CliAlign,
 
-    #[arg(long = "padding-char", help = "Character used for padding")]
-    pub padding_char: Option<char>,
+    #[arg(
+        long = "padding-char",
+        help = "Character used for padding",
+        default_value_t = FormatConfig::default().padding_char
+    )]
+    pub padding_char: char,
 
-    #[arg(long = "separator", help = "Character used to separate entries")]
+    #[arg(
+        long = "separator",
+        help = "Character used to separate entries (default: tab)"
+    )]
     pub separator: Option<char>,
 
-    #[arg(long = "line-ending", help = "Line ending character")]
+    #[arg(
+        long = "line-ending",
+        help = "Line ending character (default: newline)"
+    )]
     pub line_ending: Option<char>,
 
     #[arg(
         long = "sort-by",
         value_enum,
-        help = "Sort strategy: pinyin or strokes"
+        help = "Sort strategy",
+        default_value_t = CliSortMode::Pinyin
     )]
-    pub sort_by: Option<CliSortMode>,
+    pub sort_by: CliSortMode,
 
     #[arg(
         short = 'r',
@@ -170,28 +190,16 @@ impl CliArgs {
             InputSource::Stdin
         };
 
-        let mut format = FormatConfig::default();
-        if let Some(value) = self.columns_per_row {
-            format.columns_per_row = value;
-        }
-        if let Some(value) = self.blank_per {
-            format.blank_per = (value > 0).then_some(value);
-        }
-        if let Some(value) = self.entry_width {
-            format.entry_width = value;
-        }
-        if let Some(value) = self.align {
-            format.align = value.into();
-        }
-        if let Some(value) = self.padding_char {
-            format.padding_char = value;
-        }
-        if let Some(value) = self.separator {
-            format.separator = value;
-        }
-        if let Some(value) = self.line_ending {
-            format.line_ending = value;
-        }
+        let defaults = FormatConfig::default();
+        let format = FormatConfig {
+            columns_per_row: self.columns_per_row,
+            blank_per: self.blank_per.map_or(defaults.blank_per, |n| (n > 0).then_some(n)),
+            entry_width: self.entry_width,
+            align: self.align.into(),
+            padding_char: self.padding_char,
+            separator: self.separator.unwrap_or(defaults.separator),
+            line_ending: self.line_ending.unwrap_or(defaults.line_ending),
+        };
 
         let override_data = self
             .config_path
@@ -199,7 +207,7 @@ impl CliArgs {
             .map(PinyinOverride::load_from_file)
             .transpose()?;
 
-        let collator = build_collator(self.sort_by.unwrap_or_default(), override_data)?;
+        let collator = build_collator(self.sort_by, override_data)?;
         let config = RuntimeConfig::new(input, format, collator)?
             .with_unique(self.unique)
             .with_reverse(self.reverse);
