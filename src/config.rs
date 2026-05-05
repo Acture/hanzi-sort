@@ -8,13 +8,19 @@ use crate::format::FormatConfig;
 pub enum InputSource {
     Files(Vec<PathBuf>),
     Text(Vec<String>),
+    Stdin,
 }
 
 impl InputSource {
+    /// Returns `true` if the source is statically known to carry no input
+    /// (empty `--file` or `--text` list). [`InputSource::Stdin`] is always
+    /// considered non-empty at construction time; emptiness is determined
+    /// by [`crate::input::read_input_lines`] when reading.
     pub fn is_empty(&self) -> bool {
         match self {
             Self::Files(paths) => paths.is_empty(),
             Self::Text(items) => items.is_empty(),
+            Self::Stdin => false,
         }
     }
 }

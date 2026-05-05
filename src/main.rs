@@ -1,6 +1,6 @@
 mod args;
 
-use std::io::Write;
+use std::io::{IsTerminal, Write};
 use std::path::Path;
 
 use clap::{CommandFactory, Parser};
@@ -17,7 +17,9 @@ fn main() {
 
 fn run() -> Result<()> {
     let args = CliArgs::parse();
-    if !args.has_input() {
+
+    // No explicit input: read stdin if it's piped, otherwise show help.
+    if !args.has_input() && std::io::stdin().is_terminal() {
         let mut command = CliArgs::command();
         command
             .print_help()

@@ -1,6 +1,7 @@
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
-use std::process::{Command, Output};
+use std::process::{Command, Output, Stdio};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 struct TempWorkspace {
@@ -43,11 +44,65 @@ fn stderr(output: &Output) -> String {
 }
 
 #[test]
-fn shows_help_and_exits_successfully_when_no_input_is_given() {
-    let output = binary_command().output().expect("CLI command should run");
+fn empty_stdin_produces_empty_output_and_exits_successfully() {
+    // Mimics `hanzi-sort < /dev/null`: stdin is non-TTY, empty.
+    // Like `sort`, hanzi-sort should treat this as "no input, no output"
+    // and exit 0 — matching Unix filter conventions.
+    let mut command = binary_command();
+    command.stdin(Stdio::null());
+    command.stdout(Stdio::piped());
+    command.stderr(Stdio::piped());
+    let output = command.output().expect("CLI command should run");
 
-    assert!(output.status.success());
-    assert!(stdout(&output).contains("Usage: hanzi-sort [OPTIONS]"));
+    assert!(
+        output.status.success(),
+        "stderr: {}",
+        stderr(&output)
+    );
+    assert_eq!(stdout(&output), "");
+}
+
+#[test]
+fn reads_stdin_when_no_explicit_input_provided() {
+    let mut command = binary_command();
+    command.args(["--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    command.stdin(Stdio::piped());
+    command.stdout(Stdio::piped());
+    command.stderr(Stdio::piped());
+
+    let mut child = command.spawn().expect("CLI command should spawn");
+    {
+        let stdin = child.stdin.as_mut().expect("stdin should be piped");
+        stdin
+            .write_all(b"\xe8\xb5\xb5\xe5\x9b\x9b\n\xe5\xbc\xa0\xe4\xb8\x89\n\xe6\xb1\x89\xe5\xad\x97\n")
+            .expect("write stdin");
+        // 赵四 / 张三 / 汉字 in UTF-8
+    }
+    let output = child.wait_with_output().expect("CLI command should finish");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉字\n张三\n赵四");
+}
+
+#[test]
+fn dash_file_arg_reads_stdin() {
+    let mut command = binary_command();
+    command.args(["-f", "-", "--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    command.stdin(Stdio::piped());
+    command.stdout(Stdio::piped());
+    command.stderr(Stdio::piped());
+
+    let mut child = command.spawn().expect("CLI command should spawn");
+    {
+        let stdin = child.stdin.as_mut().expect("stdin should be piped");
+        stdin
+            .write_all("乙\n甲\n".as_bytes())
+            .expect("write stdin");
+    }
+    let output = child.wait_with_output().expect("CLI command should finish");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "甲\n乙");
 }
 
 #[test]

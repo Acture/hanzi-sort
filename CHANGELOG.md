@@ -15,6 +15,10 @@
 - `build.rs` validates that the primary pinyin syllable for every codepoint is ASCII and ≤16 bytes, so the encoded sort key path is safe by construction
 - `build.rs` enforces exact column counts and verifies that the `char` column matches its codepoint
 - preserve original input order for duplicate or equal-key entries via an index tiebreak in both pinyin and stroke sort
+- read input from stdin when neither `--file` nor `--text` is provided and stdin is not a TTY (`cat names.txt | hanzi-sort` now works)
+- accept `-f -` as an alias for reading stdin in addition to or interleaved with file inputs
+- `InputSource::Stdin` variant on the public `InputSource` enum
+- `criterion` benchmark suite (`cargo bench`) covering `sort_strings_with`, stroke sort, `pinyin_of`, and `format_items` at multiple input sizes
 
 ### Changed
 

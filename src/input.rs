@@ -9,6 +9,10 @@ pub(crate) fn read_input_lines(source: &InputSource) -> Result<Vec<String>> {
         InputSource::Files(paths) => {
             let mut items = Vec::new();
             for path in paths {
+                if path.as_os_str() == "-" {
+                    read_stdin_into(&mut items)?;
+                    continue;
+                }
                 let metadata = std::fs::metadata(path).map_err(|source| {
                     HanziSortError::io(
                         format!("failed to inspect input path {}", path.display()),
@@ -47,5 +51,22 @@ pub(crate) fn read_input_lines(source: &InputSource) -> Result<Vec<String>> {
             .filter(|item| !item.trim().is_empty())
             .cloned()
             .collect()),
+        InputSource::Stdin => {
+            let mut items = Vec::new();
+            read_stdin_into(&mut items)?;
+            Ok(items)
+        }
     }
+}
+
+fn read_stdin_into(items: &mut Vec<String>) -> Result<()> {
+    let stdin = std::io::stdin();
+    let handle = stdin.lock();
+    for line in handle.lines() {
+        let line = line.map_err(|source| HanziSortError::io("failed to read stdin", source))?;
+        if !line.trim().is_empty() {
+            items.push(line);
+        }
+    }
+    Ok(())
 }

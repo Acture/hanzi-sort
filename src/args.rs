@@ -39,7 +39,7 @@ pub struct CliArgs {
         short = 'f',
         long = "file",
         value_name = "FILE",
-        help = "Input file path (can be multiple)",
+        help = "Input file path (can be multiple, '-' reads stdin)",
         conflicts_with = "input_texts"
     )]
     pub input_files: Vec<PathBuf>,
@@ -111,8 +111,10 @@ impl CliArgs {
     pub fn into_runtime_parts(self) -> Result<(RuntimeConfig, Option<PathBuf>)> {
         let input = if !self.input_files.is_empty() {
             InputSource::Files(self.input_files)
-        } else {
+        } else if !self.input_texts.is_empty() {
             InputSource::Text(self.input_texts)
+        } else {
+            InputSource::Stdin
         };
 
         let mut format = FormatConfig::default();
