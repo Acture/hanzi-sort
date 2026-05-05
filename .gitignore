@@ -23,5 +23,6 @@ target
 data/*
 !data/pinyin.csv
 !data/strokes.csv
+!data/radical.csv
 
 /result

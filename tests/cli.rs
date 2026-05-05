@@ -312,6 +312,30 @@ fn supports_stroke_sorting_from_cli() {
     assert_eq!(stdout(&output), "一\n十\n天");
 }
 
+#[cfg(feature = "collator-radical")]
+#[test]
+fn radical_sort_works_via_cli() {
+    let mut command = binary_command();
+    command.args([
+        "-t",
+        "一",
+        "中",
+        "汉",
+        "--sort-by",
+        "radical",
+        "--columns",
+        "1",
+        "--entry-width",
+        "2",
+        "--blank-every",
+        "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "一\n中\n汉");
+}
+
 #[test]
 fn rejects_output_path_that_is_a_directory() {
     let temp = TempWorkspace::new();

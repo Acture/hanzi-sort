@@ -27,6 +27,7 @@
 - `--help` now displays default values for `--columns`, `--entry-width`, `--align`, `--padding-char`, and `--sort-by` (those whose defaults are printable); `--blank-every`, `--separator`, `--line-ending` keep their `Option` types because their defaults are non-printable or have semantic conversion (`0 → disabled`)
 - `proptest`-based property tests covering: encoded sort key preserves byte-wise lex order (for arbitrary ASCII and for tone3-shaped inputs), unchecked vs checked encoding agree on valid input, sort is idempotent, sort produces a permutation, sort key induces a total order (reflexive / antisymmetric / transitive)
 - cargo features `collator-pinyin`, `collator-strokes` (default) and placeholders `collator-jyutping`, `collator-zhuyin`, `collator-radical` (off by default) for upcoming Phase 3.1 streams; `AnyCollator` variants and `CliSortMode` variants are gated accordingly
+- `RadicalCollator` and `--sort-by radical` (Phase 3.1 Stream C); sorts Hanzi by their Kangxi radical and residual stroke count from Unihan kRSUnicode. Off by default; enable with `--features collator-radical`.
 - `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator and a worktree-parallel workflow note
 
 ### Changed
