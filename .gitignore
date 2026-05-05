@@ -24,5 +24,6 @@ data/*
 !data/pinyin.csv
 !data/strokes.csv
 !data/radical.csv
+!data/zhuyin.csv
 
 /result

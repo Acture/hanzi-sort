@@ -29,6 +29,7 @@
 - cargo features `collator-pinyin`, `collator-strokes` (default) and placeholders `collator-jyutping`, `collator-zhuyin`, `collator-radical` (off by default) for upcoming Phase 3.1 streams; `AnyCollator` variants and `CliSortMode` variants are gated accordingly
 - `RadicalCollator` and `--sort-by radical` (Phase 3.1 Stream C); sorts Hanzi by their Kangxi radical and residual stroke count from Unihan kRSUnicode. Off by default; enable with `--features collator-radical`.
 - `CONTRIBUTING.md` with a step-by-step recipe for adding a new collator and a worktree-parallel workflow note
+- `ZhuyinCollator` and `--sort-by zhuyin` (Phase 3.1 Stream B); sorts Hanzi by their Mandarin Zhuyin / Bopomofo reading derived from the bundled pinyin data. Off by default; enable with `--features collator-zhuyin`.
 
 ### Changed
 

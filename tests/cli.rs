@@ -336,6 +336,30 @@ fn radical_sort_works_via_cli() {
     assert_eq!(stdout(&output), "一\n中\n汉");
 }
 
+#[cfg(feature = "collator-zhuyin")]
+#[test]
+fn supports_zhuyin_sorting_from_cli() {
+    let mut command = binary_command();
+    command.args([
+        "-t",
+        "一",
+        "中",
+        "汉",
+        "--sort-by",
+        "zhuyin",
+        "--columns",
+        "1",
+        "--entry-width",
+        "2",
+        "--blank-every",
+        "0",
+    ]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉\n中\n一");
+}
+
 #[test]
 fn rejects_output_path_that_is_a_directory() {
     let temp = TempWorkspace::new();
