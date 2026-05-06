@@ -37,6 +37,7 @@ csv = "1.3.1"
 [dev-dependencies]
 criterion = { version = "0.5", default-features = false, features = ["plotters", "cargo_bench_support"] }
 proptest = "1.5"
+icu = { version = "2.0", features = ["compiled_data"] }
 
 [[bench]]
 name = "sort"
@@ -44,4 +45,8 @@ harness = false
 
 [[bench]]
 name = "format"
+harness = false
+
+[[bench]]
+name = "icu_compare"
 harness = false

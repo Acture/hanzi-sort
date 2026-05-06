@@ -55,6 +55,24 @@ hanzi-sort -t 重庆 银行 -o ./sorted.txt
 - Use the same core sorter from Rust via `PinyinCollator`, `StrokesCollator`, and the generic `Collator` trait
 - Opt in to additional collators (Cantonese Jyutping, Mandarin Zhuyin, Kangxi Radical) via cargo features
 
+## Performance
+
+`hanzi-sort` is **3.8×–4.8× faster than `icu_collator` 2.x with `zh-u-co-pinyin`**
+on Chinese pinyin sort workloads (Apple Silicon, deterministic input):
+
+| N | hanzi-sort | ICU `zh-u-co-pinyin` | speedup |
+|--:|--:|--:|--:|
+| 1,000 | 188 µs | 759 µs | 4.0× |
+| 10,000 | 2.51 ms | 11.99 ms | 4.8× |
+| 100,000 | 34.9 ms | 131.5 ms | 3.8× |
+
+The win comes from `hanzi-sort` trading ICU's full-locale generality for a
+domain-specific compact representation: every primary pinyin syllable fits
+in a `u128` after byte-packed encoding, so per-character comparison is two
+integer compares instead of multi-level CE table lookup. See
+[`BENCHMARKS.md`](BENCHMARKS.md) for methodology, caveats (output identity
+is not preserved across the two collators), and reproduction steps.
+
 ## Install and build
 
 ### From crates.io
