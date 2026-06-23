@@ -1,9 +1,12 @@
 name: Sync Homebrew Tap
 
 on:
-  release:
-    types:
-      - published
+  # Trigger on the tag push itself rather than `release: published`: releases
+  # are created by github-actions[bot] with GITHUB_TOKEN, and GitHub does not
+  # fire workflow events from that token, so the `release` trigger never ran.
+  push:
+    tags:
+      - "v[0-9]+.*"
   workflow_dispatch:
     inputs:
       tag:
@@ -26,13 +29,17 @@ jobs:
 
       - name: Resolve release tag
         id: release
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_REF: ${{ github.ref_name }}
+          DISPATCH_TAG: ${{ inputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            tag="${{ github.event.release.tag_name }}"
+          if [[ "${EVENT_NAME}" == "push" ]]; then
+            tag="${PUSH_REF}"
           else
-            tag="${{ inputs.tag }}"
+            tag="${DISPATCH_TAG}"
           fi
           version="${tag#v}"
           tarball_url="https://github.com/Acture/hanzi-sort/archive/refs/tags/${tag}.tar.gz"

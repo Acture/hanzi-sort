@@ -28,16 +28,18 @@ impl From<CliAlign> for Align {
 
 #[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq, Default)]
 pub enum CliSortMode {
+    /// Hanyu Pinyin: primary tone3 reading per character (default).
     #[default]
     Pinyin,
+    /// Total stroke count per character.
     Strokes,
-    /// Cantonese Jyutping (Phase 3.1 Stream A; placeholder until implemented).
+    /// Cantonese Jyutping from Unihan kCantonese.
     #[cfg(feature = "collator-jyutping")]
     Jyutping,
-    /// Mandarin Zhuyin / Bopomofo (Phase 3.1 Stream B; placeholder until implemented).
+    /// Mandarin Zhuyin / Bopomofo, derived from the bundled pinyin data.
     #[cfg(feature = "collator-zhuyin")]
     Zhuyin,
-    /// Radical / Kangxi index (Phase 3.1 Stream C; placeholder until implemented).
+    /// Kangxi radical index plus residual stroke count (Unihan kRSUnicode).
     #[cfg(feature = "collator-radical")]
     Radical,
 }
@@ -67,6 +69,12 @@ const AFTER_HELP: &str = "EXAMPLES:
 
   Reverse + dedup:
     hanzi-sort -f names.txt -u -r
+
+  Merge two files, dedup, then sort by strokes:
+    hanzi-sort -f names.txt -f extra.txt -u --sort-by strokes
+
+  Full pipeline (read a file, sort by strokes, lay out a 3-column grid, write a file):
+    hanzi-sort -f names.txt -o sorted.txt --sort-by strokes --columns 3 --entry-width 6 --align left --blank-every 5
 
   Generate shell completions:
     hanzi-sort completions bash > /usr/local/etc/bash_completion.d/hanzi-sort";
@@ -124,7 +132,7 @@ pub struct CliArgs {
 
     #[arg(
         long = "blank-every",
-        help = "Insert a blank line every N lines; use 0 to disable"
+        help = "Insert a blank line every N rows; use 0 to disable"
     )]
     pub blank_per: Option<usize>,
 

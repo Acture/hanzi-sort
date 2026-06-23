@@ -46,6 +46,11 @@ jobs:
                 with: # (required) Comma-separated list of binary names (non-extension portion of filename) to build and upload.
                     # Note that glob pattern is not supported yet.
                     bin: hanzi-sort
+                    # Ship every collator (pinyin, strokes, jyutping, zhuyin,
+                    # radical) in the prebuilt binaries so a downloaded release
+                    # works without recompiling. Source installs still default
+                    # to pinyin + strokes via Cargo's default features.
+                    all-features: true
                     # (optional) Target triple, default is host triple.
                     # This is optional but it is recommended that this always be set to
                     # clarify which target you are building for if macOS is included in

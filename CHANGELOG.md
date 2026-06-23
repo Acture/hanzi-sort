@@ -1,5 +1,39 @@
 ## [Unreleased]
 
+## [0.2.2] - 2026-06-23
+
+A docs-and-packaging release. The prebuilt release binaries now ship every
+collator, the `--help`/rustdoc text no longer claims the opt-in collators are
+unimplemented, and the README leads with direct binary usage.
+
+### Changed
+
+- Prebuilt release binaries (GitHub Releases) are now built with
+  `--all-features`, so a downloaded binary includes all five sort schemes
+  (pinyin, strokes, jyutping, zhuyin, radical) with no recompile. Source
+  installs via `cargo install` still default to pinyin + strokes; add the
+  `collator-*` features (or `--all-features`) to opt in.
+- README restructured to separate **Usage** from **Development**, leading
+  with the prebuilt-binary install path, a per-platform asset table, and a
+  full read→sort→format→write pipeline example. `README.crates.md` points at
+  the prebuilt binaries for an all-collators install.
+
+### Fixed
+
+- `--sort-by` help text for `jyutping`, `zhuyin`, and `radical` described them
+  as "Phase 3.1 … placeholder until implemented" even though they have shipped
+  since 0.2.0. The possible-values now carry accurate one-line descriptions,
+  and `pinyin`/`strokes` gained descriptions too. The same stale wording was
+  removed from the rustdoc on `AnyCollator::zhuyin` / `AnyCollator::radical`
+  and the `jyutping` / `zhuyin` / `radical` module docs.
+- `--blank-every` help wording now says "every N rows" (was "every N lines"),
+  matching `--columns` and the README.
+- Homebrew tap auto-sync never ran: the `Sync Homebrew Tap` workflow triggered
+  on `release: published`, but releases are created by github-actions[bot] with
+  `GITHUB_TOKEN`, which GitHub does not allow to trigger further workflows. It
+  now triggers on the tag push, and the generated formula builds with
+  `--all-features`. (The tap formula had been stuck at 0.1.1.)
+
 ## [0.2.1] - 2026-05-05
 
 A small follow-up to 0.2.0 that finishes the deferred Jyutping API

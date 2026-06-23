@@ -1,4 +1,4 @@
-//! Mandarin Zhuyin (注音 / Bopomofo) collator. Phase 3.1 Stream B.
+//! Mandarin Zhuyin (注音 / Bopomofo) collator, derived from the bundled pinyin data.
 //!
 //! Sorts Hanzi by the primary Mandarin Zhuyin reading generated from the
 //! bundled pinyin data. The generated key uses canonical Bopomofo order, not

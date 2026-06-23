@@ -74,6 +74,10 @@ for methodology, caveats, and reproduction.
 
 ## Opt-in collators
 
+A source install defaults to pinyin + strokes. Add the others explicitly, or
+grab a [prebuilt release binary](https://github.com/Acture/hanzi-sort/releases)
+— those bundle all five collators with no extra flags.
+
 ```bash
 # pinyin + strokes only (default)
 cargo install hanzi-sort

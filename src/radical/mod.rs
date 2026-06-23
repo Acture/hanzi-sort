@@ -1,4 +1,4 @@
-//! Radical (部首) collator. Phase 3.1 Stream C.
+//! Kangxi radical (部首) collator, backed by Unihan `kRSUnicode`.
 //!
 //! Sorts Hanzi by the Unicode Unihan `kRSUnicode` Kangxi radical/stroke
 //! index generated at build time. The sort key packs `radical * 1000 +

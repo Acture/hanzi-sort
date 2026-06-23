@@ -1,4 +1,4 @@
-//! Cantonese Jyutping (粤拼) collator. Phase 3.1 Stream A.
+//! Cantonese Jyutping (粤拼) collator, backed by Unihan `kCantonese`.
 //!
 //! Sorts Hanzi by their Cantonese Jyutping reading using Unicode Unihan
 //! `kCantonese` data bundled in `data/jyutping.csv`. Optional

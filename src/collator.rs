@@ -200,13 +200,13 @@ impl AnyCollator {
         ))
     }
 
-    /// Mandarin Zhuyin collator (Phase 3.1 Stream B; placeholder until implemented).
+    /// Mandarin Zhuyin / Bopomofo collator.
     #[cfg(feature = "collator-zhuyin")]
     pub fn zhuyin() -> Self {
         Self::Zhuyin(crate::zhuyin::ZhuyinCollator::new())
     }
 
-    /// Radical (部首) collator (Phase 3.1 Stream C; placeholder until implemented).
+    /// Kangxi radical (部首) collator.
     #[cfg(feature = "collator-radical")]
     pub fn radical() -> Self {
         Self::Radical(crate::radical::RadicalCollator::new())
