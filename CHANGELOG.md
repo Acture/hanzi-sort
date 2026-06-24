@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [0.2.3] - 2026-06-24
+
 ### Added
 
 - `--skip-header [N]` and `--keep-header [N]` CLI options for header rows in
