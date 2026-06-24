@@ -98,6 +98,12 @@ Sort piped input (works the way Unix users expect):
 cat names.txt | hanzi-sort
 ```
 
+Drop a header row before sorting (or `--keep-header` to pin it on top):
+
+```bash
+hanzi-sort -f names.csv --skip-header
+```
+
 Run `hanzi-sort --help` for the full option list and a built-in examples block.
 
 ## Features
@@ -153,6 +159,8 @@ Bundled in the prebuilt binaries, opt-in for source installs via cargo features 
 - `-c, --config <PATH>`: TOML override file (pinyin or jyutping)
 - `-r, --reverse`: reverse the sorted output
 - `-u, --unique`: remove adjacent duplicates after sorting (like `sort -u`)
+- `--skip-header [N]`: drop the first `N` lines (default `1`) of each file/stdin before sorting; applies per file when merging; not allowed with `--text`
+- `--keep-header [N]`: keep the first `N` lines (default `1`) of each file/stdin verbatim on top, unsorted, with the sorted data below; mutually exclusive with `--skip-header`
 - `--sort-by <MODE>`: see "Sort modes" above
 - `--columns <N>`: entries per row, must be greater than `0`
 - `--blank-every <N>`: insert a blank line every `N` rows; use `0` to disable

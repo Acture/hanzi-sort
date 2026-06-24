@@ -3,8 +3,8 @@ use clap_complete::Shell;
 use std::path::PathBuf;
 
 use hanzi_sort::{
-    Align, AnyCollator, FormatConfig, HanziSortError, InputSource, PinyinOverride, Result,
-    RuntimeConfig,
+    Align, AnyCollator, FormatConfig, HanziSortError, HeaderSpec, InputSource, PinyinOverride,
+    Result, RuntimeConfig,
 };
 
 #[derive(Copy, Clone, Debug, ValueEnum, PartialEq, Eq)]
@@ -75,6 +75,9 @@ const AFTER_HELP: &str = "EXAMPLES:
 
   Full pipeline (read a file, sort by strokes, lay out a 3-column grid, write a file):
     hanzi-sort -f names.txt -o sorted.txt --sort-by strokes --columns 3 --entry-width 6 --align left --blank-every 5
+
+  Drop a CSV-style header row before sorting (or --keep-header to pin it on top):
+    hanzi-sort -f names.csv --skip-header
 
   Generate shell completions:
     hanzi-sort completions bash > /usr/local/etc/bash_completion.d/hanzi-sort";
@@ -191,6 +194,26 @@ pub struct CliArgs {
         help = "Remove adjacent duplicates from the sorted output (like sort -u)"
     )]
     pub unique: bool,
+
+    #[arg(
+        long = "skip-header",
+        value_name = "N",
+        num_args = 0..=1,
+        default_missing_value = "1",
+        conflicts_with = "keep_header",
+        help = "Drop the first N lines (default 1) of each file/stdin before sorting"
+    )]
+    pub skip_header: Option<usize>,
+
+    #[arg(
+        long = "keep-header",
+        value_name = "N",
+        num_args = 0..=1,
+        default_missing_value = "1",
+        conflicts_with = "skip_header",
+        help = "Keep the first N lines (default 1) of each file/stdin on top, unsorted"
+    )]
+    pub keep_header: Option<usize>,
 }
 
 impl CliArgs {
@@ -207,6 +230,19 @@ impl CliArgs {
             InputSource::Stdin
         };
 
+        let header = match (self.skip_header, self.keep_header) {
+            (Some(lines), None) => HeaderSpec { lines, keep: false },
+            (None, Some(lines)) => HeaderSpec { lines, keep: true },
+            (None, None) => HeaderSpec::default(),
+            // clap `conflicts_with` rejects both flags at parse time.
+            (Some(_), Some(_)) => unreachable!("--skip-header conflicts with --keep-header"),
+        };
+        if header.lines > 0 && matches!(input, InputSource::Text(_)) {
+            return Err(HanziSortError::InvalidArgument(
+                "header options are not supported with --text".to_string(),
+            ));
+        }
+
         let defaults = FormatConfig::default();
         let format = FormatConfig {
             columns_per_row: self.columns_per_row,
@@ -221,7 +257,8 @@ impl CliArgs {
         let collator = build_collator(self.sort_by, self.config_path.as_deref())?;
         let config = RuntimeConfig::new(input, format, collator)?
             .with_unique(self.unique)
-            .with_reverse(self.reverse);
+            .with_reverse(self.reverse)
+            .with_header(header);
         Ok((config, self.output_path))
     }
 }

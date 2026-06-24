@@ -497,3 +497,97 @@ fn char_override_changes_single_character_sort_order() {
     assert!(output.status.success());
     assert_eq!(stdout(&output), "重要\n银行");
 }
+
+#[test]
+fn skip_header_drops_leading_file_line() {
+    let temp = TempWorkspace::new();
+    let input_path = temp.path().join("names.csv");
+    fs::write(&input_path, "name\n赵四\n汉字\n").expect("input file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&input_path);
+    command.args(["--skip-header", "--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉字\n赵四");
+}
+
+#[test]
+fn skip_header_applies_to_each_merged_file() {
+    let temp = TempWorkspace::new();
+    let first = temp.path().join("a.csv");
+    let second = temp.path().join("b.csv");
+    fs::write(&first, "hdr1\n赵四\n汉字\n").expect("first file should be written");
+    fs::write(&second, "hdr2\n张三\n").expect("second file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&first);
+    command.args(["-f"]);
+    command.arg(&second);
+    command.args(["--skip-header", "--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉字\n张三\n赵四");
+}
+
+#[test]
+fn keep_header_pins_leading_line_on_top() {
+    let temp = TempWorkspace::new();
+    let input_path = temp.path().join("names.csv");
+    fs::write(&input_path, "name\n赵四\n汉字\n").expect("input file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&input_path);
+    command.args(["--keep-header", "--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "name\n汉字\n赵四");
+}
+
+#[test]
+fn skip_header_accepts_an_explicit_count() {
+    let temp = TempWorkspace::new();
+    let input_path = temp.path().join("names.csv");
+    fs::write(&input_path, "title\ncol\n赵四\n汉字\n").expect("input file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&input_path);
+    command.args(["--skip-header", "2", "--columns", "1", "--entry-width", "2", "--blank-every", "0"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "汉字\n赵四");
+}
+
+#[test]
+fn rejects_skip_and_keep_header_together() {
+    let temp = TempWorkspace::new();
+    let input_path = temp.path().join("names.csv");
+    fs::write(&input_path, "name\n赵四\n").expect("input file should be written");
+
+    let mut command = binary_command();
+    command.args(["-f"]);
+    command.arg(&input_path);
+    command.args(["--skip-header", "--keep-header"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(!output.status.success());
+    assert!(stderr(&output).contains("cannot be used with"));
+}
+
+#[test]
+fn rejects_header_option_with_text_input() {
+    let mut command = binary_command();
+    command.args(["-t", "赵四", "汉字", "--skip-header"]);
+    let output = command.output().expect("CLI command should run");
+
+    assert!(!output.status.success());
+    assert!(stderr(&output).contains("header options are not supported with --text"));
+}

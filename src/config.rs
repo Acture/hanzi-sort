@@ -25,6 +25,17 @@ impl InputSource {
     }
 }
 
+/// How to treat the leading lines of each file / stdin source before sorting.
+///
+/// `lines` is the per-source header height (`0` disables header handling).
+/// When `keep` is `true` the header lines are pinned, unsorted, to the top of
+/// the output; when `false` they are dropped entirely.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct HeaderSpec {
+    pub lines: usize,
+    pub keep: bool,
+}
+
 /// Owns everything needed to drive [`crate::app::render`]: where to read
 /// input, how to format the output, and which collator to sort with.
 #[derive(Debug, Clone)]
@@ -38,6 +49,8 @@ pub struct RuntimeConfig {
     pub unique: bool,
     /// When `true`, reverse the sorted (and possibly de-duplicated) output.
     pub reverse: bool,
+    /// Per-source header handling applied before sorting.
+    pub header: HeaderSpec,
 }
 
 impl RuntimeConfig {
@@ -54,6 +67,7 @@ impl RuntimeConfig {
             collator,
             unique: false,
             reverse: false,
+            header: HeaderSpec::default(),
         })
     }
 
@@ -66,6 +80,12 @@ impl RuntimeConfig {
     /// Builder-style setter for the `reverse` flag.
     pub fn with_reverse(mut self, reverse: bool) -> Self {
         self.reverse = reverse;
+        self
+    }
+
+    /// Builder-style setter for the header-handling spec.
+    pub fn with_header(mut self, header: HeaderSpec) -> Self {
+        self.header = header;
         self
     }
 }

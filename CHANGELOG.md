@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+### Added
+
+- `--skip-header [N]` and `--keep-header [N]` CLI options for header rows in
+  file/stdin input. `--skip-header` drops the first N lines (default 1) of each
+  source before sorting; `--keep-header` pins them, unsorted, to the top of the
+  output. Both apply per file when merging several `-f` inputs, are mutually
+  exclusive, and are rejected with `--text`. Library API: `HeaderSpec` plus
+  `RuntimeConfig::with_header`.
+
 ## [0.2.2] - 2026-06-23
 
 A docs-and-packaging release. The prebuilt release binaries now ship every
