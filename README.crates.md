@@ -4,6 +4,8 @@ Sort Chinese text the way Chinese readers expect.
 
 `hanzi-sort` is a Rust CLI and library for sorting Hanzi by Hanyu Pinyin or by stroke count, with deterministic tie-breaking, phrase-level override rules for polyphonic characters, and terminal-friendly tabular output.
 
+![hanzi-sort sorting Chinese text correctly in the terminal](https://raw.githubusercontent.com/Acture/hanzi-sort/master/docs/hero.gif)
+
 > Migration note  
 > `pinyin-sort` has been renamed to `hanzi-sort`. This is a hard rename: there is no compatibility binary alias.
 

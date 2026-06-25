@@ -12,6 +12,9 @@ homepage = "https://github.com/Acture/hanzi-sort"
 repository = "https://github.com/Acture/hanzi-sort"
 keywords = ["hanzi", "pinyin", "sorting", "cli", "strokes"]
 categories = ["command-line-utilities", "text-processing"]
+# Promo media (README hero GIF, etc.) lives in the repo for README rendering
+# but is kept out of the published crate so `cargo install` stays lean.
+exclude = ["/docs"]
 
 [features]
 default = ["collator-pinyin", "collator-strokes", "collator-names"]
