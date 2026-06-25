@@ -52,6 +52,8 @@ mod jyutping;
 mod zhuyin;
 #[cfg(feature = "collator-radical")]
 mod radical;
+#[cfg(feature = "collator-names")]
+mod name;
 
 pub use collator::{
     AnyCollator, CharToken, Collator, Mapped, SortKey, sort_indices_with, sort_key_of,
@@ -73,3 +75,5 @@ pub use jyutping::JyutpingCollator;
 pub use zhuyin::ZhuyinCollator;
 #[cfg(feature = "collator-radical")]
 pub use radical::RadicalCollator;
+#[cfg(feature = "collator-names")]
+pub use name::NameCollator;

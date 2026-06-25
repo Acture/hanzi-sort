@@ -46,7 +46,8 @@ hanzi-sort -t 重庆 银行 --config ./override.toml
 
 ## Features
 
-- Sort by `pinyin` or `strokes` (default), or opt in to `jyutping`, `zhuyin`, `radical` via cargo features
+- Sort by `pinyin`, `strokes`, or `names` (default), or opt in to `jyutping`, `zhuyin`, `radical` via cargo features
+- `--sort-by names`: surname-aware sorting for name lists (单→Shàn, 解→Xiè, compound 复姓 too)
 - Read from stdin when no input flags are given (`cat names.txt | hanzi-sort`)
 - Keep unknown characters in the comparison key instead of dropping them
 - Break ties by original character so output stays deterministic
@@ -74,9 +75,9 @@ for methodology, caveats, and reproduction.
 
 ## Opt-in collators
 
-A source install defaults to pinyin + strokes. Add the others explicitly, or
-grab a [prebuilt release binary](https://github.com/Acture/hanzi-sort/releases)
-— those bundle all five collators with no extra flags.
+A source install defaults to pinyin + strokes + names. Add the others
+explicitly, or grab a [prebuilt release binary](https://github.com/Acture/hanzi-sort/releases)
+— those bundle every collator with no extra flags.
 
 ```bash
 # pinyin + strokes only (default)

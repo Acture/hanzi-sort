@@ -14,12 +14,14 @@ keywords = ["hanzi", "pinyin", "sorting", "cli", "strokes"]
 categories = ["command-line-utilities", "text-processing"]
 
 [features]
-default = ["collator-pinyin", "collator-strokes"]
+default = ["collator-pinyin", "collator-strokes", "collator-names"]
 collator-pinyin = []
 collator-strokes = []
 collator-jyutping = []
 collator-zhuyin = []
 collator-radical = []
+# Name (surname-aware) sorting reuses the pinyin lookup + encoding.
+collator-names = ["collator-pinyin"]
 
 [dependencies]
 clap = { version = "4.5.39", features = ["default", "derive", "env"] }

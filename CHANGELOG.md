@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+### Added
+
+- `--sort-by names` (姓名模式) — a surname-aware name collator. A built-in,
+  curated 姓氏 table (`data/surnames.csv` → generated `SURNAME_MAP`) applies
+  surname-specific readings to the leading surname character(s) of each entry
+  via longest-prefix matching, so single-char polyphonic surnames (单→Shàn,
+  解→Xiè, 区→Ōu) and compound 复姓 (万俟→Mòqí, 尉迟→Yùchí) sort correctly.
+  Non-name entries sort identically to `--sort-by pinyin`. The reading only
+  applies to the surname position, not given-name polyphones. Library API:
+  `NameCollator` and `AnyCollator::names()`. Gated by the `collator-names`
+  cargo feature (on by default; depends on `collator-pinyin`).
+
 ## [0.2.3] - 2026-06-24
 
 ### Added

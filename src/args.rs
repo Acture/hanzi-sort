@@ -42,6 +42,9 @@ pub enum CliSortMode {
     /// Kangxi radical index plus residual stroke count (Unihan kRSUnicode).
     #[cfg(feature = "collator-radical")]
     Radical,
+    /// Names (姓名): pinyin with surname readings applied to the leading surname.
+    #[cfg(feature = "collator-names")]
+    Names,
 }
 
 #[derive(Subcommand, Debug)]
@@ -78,6 +81,9 @@ const AFTER_HELP: &str = "EXAMPLES:
 
   Drop a CSV-style header row before sorting (or --keep-header to pin it on top):
     hanzi-sort -f names.csv --skip-header
+
+  Sort names so polyphonic surnames read correctly (单 = Shan, not dan):
+    hanzi-sort -f names.txt --sort-by names
 
   Generate shell completions:
     hanzi-sort completions bash > /usr/local/etc/bash_completion.d/hanzi-sort";
@@ -307,6 +313,13 @@ fn build_collator(
                 return Err(reject_override("radical"));
             }
             Ok(AnyCollator::radical())
+        }
+        #[cfg(feature = "collator-names")]
+        CliSortMode::Names => {
+            if config_path.is_some() {
+                return Err(reject_override("names"));
+            }
+            Ok(AnyCollator::names())
         }
     }
 }

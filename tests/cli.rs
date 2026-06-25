@@ -591,3 +591,20 @@ fn rejects_header_option_with_text_input() {
     assert!(!output.status.success());
     assert!(stderr(&output).contains("header options are not supported with --text"));
 }
+
+#[test]
+fn name_mode_sorts_by_surname_reading() {
+    // 单 = Shàn, 区 = Ōu, 解 = Xiè  ->  ou1 < shan4 < xie4.
+    let mut command = binary_command();
+    command.args([
+        "--sort-by", "names", "-t", "单", "区", "解",
+        "--columns", "1", "--entry-width", "2", "--blank-every", "0",
+    ]);
+    command.stdin(Stdio::null());
+    command.stdout(Stdio::piped());
+    command.stderr(Stdio::piped());
+    let output = command.output().expect("CLI command should run");
+
+    assert!(output.status.success(), "stderr: {}", stderr(&output));
+    assert_eq!(stdout(&output), "区\n单\n解");
+}

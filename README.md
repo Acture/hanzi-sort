@@ -104,11 +104,18 @@ Drop a header row before sorting (or `--keep-header` to pin it on top):
 hanzi-sort -f names.csv --skip-header
 ```
 
+Sort a name list so polyphonic surnames read correctly (`单`→Shàn, not dān):
+
+```bash
+hanzi-sort -f names.txt --sort-by names
+```
+
 Run `hanzi-sort --help` for the full option list and a built-in examples block.
 
 ## Features
 
 - Sort by `pinyin` or `strokes`
+- Sort name lists with surname-aware readings (`--sort-by names`): a built-in 姓氏 table fixes polyphonic surnames like `单`→Shàn, `解`→Xiè, `区`→Ōu, plus compound 复姓
 - Keep unknown characters in the comparison key instead of dropping them
 - Break ties by original character so output stays deterministic
 - Read repeated `--text` values or one non-blank record per line from `--file`
@@ -141,6 +148,8 @@ Always available:
   Default. Compares the primary tone3 pinyin for each mapped character, then falls back to the original character.
 - `--sort-by strokes`
   Compares total stroke count per character, then falls back to the original character.
+- `--sort-by names`
+  Surname-aware pinyin for name lists: applies a built-in 姓氏 table to the leading surname character(s) of each entry — longest-prefix, so compound 复姓 like `万俟`→Mòqí are matched as a unit — then ordinary pinyin for the rest. Fixes entries like `单`→Shàn, `解`→Xiè, `区`→Ōu that plain pinyin mis-files. Non-name entries sort identically to `pinyin`.
 
 Bundled in the prebuilt binaries, opt-in for source installs via cargo features (see Install above):
 
@@ -217,7 +226,8 @@ Key APIs:
 - `StrokesCollator` (zero-sized, just construct it)
 - `sort_strings_with<C: Collator>(Vec<String>, &C) -> Vec<String>`
 - `sort_indices_with<C: Collator>(&[String], &C) -> Vec<usize>` for the sort permutation
-- `AnyCollator::pinyin() / strokes() / pinyin_with_override(...)` and `AnyCollator::sort(...)`
+- `AnyCollator::pinyin() / strokes() / names() / pinyin_with_override(...)` and `AnyCollator::sort(...)`
+- `NameCollator` (zero-config; surname-aware name sorting)
 
 ## Performance
 

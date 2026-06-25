@@ -156,6 +156,8 @@ pub enum AnyCollator {
     Zhuyin(crate::zhuyin::ZhuyinCollator),
     #[cfg(feature = "collator-radical")]
     Radical(crate::radical::RadicalCollator),
+    #[cfg(feature = "collator-names")]
+    Name(crate::name::NameCollator),
 }
 
 impl AnyCollator {
@@ -212,6 +214,13 @@ impl AnyCollator {
         Self::Radical(crate::radical::RadicalCollator::new())
     }
 
+    /// Surname-aware name collator (姓名模式): pinyin sort with surname
+    /// readings applied to the leading surname character(s).
+    #[cfg(feature = "collator-names")]
+    pub fn names() -> Self {
+        Self::Name(crate::name::NameCollator::new())
+    }
+
     /// Sort `input` under the selected collator.
     pub fn sort(&self, input: Vec<String>) -> Vec<String> {
         match self {
@@ -225,6 +234,8 @@ impl AnyCollator {
             Self::Zhuyin(c) => sort_strings_with(input, c),
             #[cfg(feature = "collator-radical")]
             Self::Radical(c) => sort_strings_with(input, c),
+            #[cfg(feature = "collator-names")]
+            Self::Name(c) => sort_strings_with(input, c),
         }
     }
 }
